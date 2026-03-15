@@ -1,7 +1,6 @@
 package main
 
 import (
-	"encoding/json"
 	"fmt"
 	"io/fs"
 	"log"
@@ -33,41 +32,42 @@ func filelist(path string) ([]fs.DirEntry, error) {
 	}
 	return entries, nil
 }
-func wsHandler(w http.ResponseWriter, r *http.Request) {
-	// Upgrade HTTP → WebSocket
-	conn, err := upgrader.Upgrade(w, r, nil)
-	if err != nil {
-		log.Println("Upgrade error:", err)
-		return
-	}
-	defer conn.Close()
 
-	log.Println("Client connected:", r.RemoteAddr)
+// func wsHandler(w http.ResponseWriter, r *http.Request) {
+// 	// Upgrade HTTP → WebSocket
+// 	conn, err := upgrader.Upgrade(w, r, nil)
+// 	if err != nil {
+// 		log.Println("Upgrade error:", err)
+// 		return
+// 	}
+// 	defer conn.Close()
 
-	// Send welcome message
-	for {
-		// Read message from browser
-		_, msg, err := conn.ReadMessage()
-		if err != nil {
-			log.Println("Read error:", err)
-			break
-		}
-		var input InputMessage
-		if err := json.Unmarshal(msg, &input); err != nil {
-			fmt.Println("error")
-			continue
-		}
+// 	log.Println("Client connected:", r.RemoteAddr)
 
-		output, err := filelist("fold")
-		for _, entry := range output {
-			models.DirprofileArr = append(models.DirprofileArr, models.Dirprofile{Name: entry.Name(), IsDir: entry.IsDir()})
-		}
-		components.FileStructure(models.DirprofileArr).Render(r.Context(), w)
-		models.DirprofileArr = nil
-	}
+// 	// Send welcome message
+// 	for {
+// 		// Read message from browser
+// 		_, msg, err := conn.ReadMessage()
+// 		if err != nil {
+// 			log.Println("Read error:", err)
+// 			break
+// 		}
+// 		var input InputMessage
+// 		if err := json.Unmarshal(msg, &input); err != nil {
+// 			fmt.Println("error")
+// 			continue
+// 		}
 
-	log.Println("Client disconnected")
-}
+// 		output, err := filelist("fold")
+// 		for _, entry := range output {
+// 			models.DirprofileArr = append(models.DirprofileArr, models.Dirprofile{Name: entry.Name(), IsDir: entry.IsDir()})
+// 		}
+// 		components.FileStructure(models.DirprofileArr).Render(r.Context(), w)
+// 		models.DirprofileArr = nil
+// 	}
+
+// 	log.Println("Client disconnected")
+// }
 
 func browseHandler(w http.ResponseWriter, r *http.Request) {
 	output, _ := filelist("fold")
@@ -108,7 +108,6 @@ func homepageHandler(w http.ResponseWriter, r *http.Request) {
 func main() {
 	mux := http.NewServeMux()
 	mux.HandleFunc("GET /", homepageHandler)
-	// mux.HandleFunc("POST /ws", wsHandler)
 	mux.HandleFunc("POST /browse", browseHandler)
 	mux.Handle("GET /public/", http.StripPrefix("/public/", http.FileServer(http.Dir("public"))))
 	fmt.Println("🚀  GOTTH Todo → http://localhost:8080")

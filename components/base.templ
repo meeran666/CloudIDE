@@ -3,6 +3,19 @@ package components
 
 import "project/models"
 
+templ FileStructure(Dirprofile []models.Dirprofile) {
+	<ul>
+		for _, item:= range Dirprofile {
+			<li>
+				if item.IsDir {
+					<span>> </span>
+				}
+				{ item.Name }
+			</li>
+		}
+	</ul>
+}
+
 templ Base(Dirprofile []models.Dirprofile) {
 	<!DOCTYPE html>
 	<html lang="en">
@@ -15,32 +28,6 @@ templ Base(Dirprofile []models.Dirprofile) {
 			<script src="https://cdnjs.cloudflare.com/ajax/libs/htmx/1.9.10/htmx.min.js"></script>
 			// <script src="https://unpkg.com/htmx-ext-ws@1.9.10/ws.js"></script>
 			<script src="https://cdn.jsdelivr.net/npm/htmx-ext-ws@2.0.4" integrity="sha384-1RwI/nvUSrMRuNj7hX1+27J8XDdCoSLf0EjEyF69nacuWyiJYoQ/j39RT1mSnd2G" crossorigin="anonymous"></script>
-			<script>
-			function connect() {
-				console.log("inside the connect")
-				ws = new WebSocket('ws://localhost:8080/ws');
-				ws.onopen = () => { 
-			        ws.send(JSON.stringify({ path: "path" }));
-				};
-				// ws.onclose = () => {
-				// };
-				// ws.onerror = () => {
-				// };
-				// Receive output from Go backend
-				ws.onmessage = (event) => {
-				const msg = JSON.parse(event.data);
-				console.log("msg")
-				console.log(msg)
-				if (msg.error) {
-					// Red output for errors
-				} else {
-					console.log(msg.dir_porfiles)
-					 document.getElementById('counter-display').innerHTML = msg.dir_porfiles[0].Name
-				}
-			}
-			}
-			// connect();
-				</script>
 		</head>
 		<body>
 			<div x-data="{ open: true }">
@@ -54,32 +41,6 @@ templ Base(Dirprofile []models.Dirprofile) {
 				</div>
 				<div :class="open ? 'translate-x-0' : '-translate-x-[100%]'" class="transition-all duration-300 fixed w-80 h-screen bg-gray-900">
 					<div class="flex flex-col text-white">
-						// <button
-						// 	class="w-15 h-7 bg-slate-600"
-						// 	hx-target="#counter-display"
-						// 	@click.prevent="connect()"
-						// 	title="ws"
-						// >button</button>
-						// <div id="counter-display"></div>
-						////////////////////////
-						// 						<div hx-ext="ws" ws-connect="/ws">
-						// 							<button
-						// 								class="w-15 h-7 bg-slate-600"
-						// 								ws-send
-						// 								title="ws"
-						// 							>button</button>
-						// 							<div id="counter-display"></div>
-						// 						</div>
-						// 						<script>
-						//     document.addEventListener('DOMContentLoaded', function() {
-						//         const container = document.querySelector('[ws-connect]')
-						//         console.log('container:', container) // check if found
-						//         container.addEventListener('htmx:wsConfigSend', function(e) {
-						//             console.log("path wo")
-						//             e.detail.parameters = { path: "path" }
-						//         })
-						//     })
-						// </>
 						<ul
 							x-data="{
                     folders: [
@@ -93,10 +54,8 @@ templ Base(Dirprofile []models.Dirprofile) {
 							<template x-for="folder in folders" :key="folder.path">
 								<li
 									hx-post="/browse"
-									hx-target="#file-list"
-									hx-swap="innerHTML"
+									hx-swap="afterend"
 									:hx-vals='JSON.stringify({ path: folder.path, type: "folder" })'
-									x-init="htmx.process($el)"
 									x-text="'📁 ' + folder.name"
 									class="cursor-pointer p-1 hover:bg-gray-100"
 								></li>
@@ -106,32 +65,10 @@ templ Base(Dirprofile []models.Dirprofile) {
 						<div id="file-list" class="flex-1 p-4">
 							Select a folder...
 						</div>
-						<ul>
-							for _, item:= range Dirprofile {
-								<li>
-									if item.IsDir {
-										<span>> </span>
-									}
-									{ item.Name }
-								</li>
-							}
-						</ul>
+						@FileStructure(Dirprofile)
 					</div>
 				</div>
 			</div>
 		</body>
 	</html>
-}
-
-templ FileStructure(Dirprofile []models.Dirprofile) {
-	<ul>
-		for _, item:= range Dirprofile {
-			<li>
-				if item.IsDir {
-					<span>> </span>
-				}
-				{ item.Name }
-			</li>
-		}
-	</ul>
 }
