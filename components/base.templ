@@ -14,7 +14,7 @@ templ Base(Dirprofile []models.Dirprofile) {
 			<script src="https://cdn.jsdelivr.net/npm/@tailwindcss/browser@4.1.18"></script>
 			<script src="https://cdnjs.cloudflare.com/ajax/libs/htmx/1.9.10/htmx.min.js"></script>
 			// <script src="https://unpkg.com/htmx-ext-ws@1.9.10/ws.js"></script>
-			<script src="https://cdn.jsdelivr.net/npm/htmx-ext-ws@2.0.4" integrity="sha384-1RwI/nvUSrMRuNj7hX1+27J8XDdCoSLf0EjEyF69nacuWyiJYoQ/j39RT1mSnd2G" crossorigin="anonymous"><script>
+			<script src="https://cdn.jsdelivr.net/npm/htmx-ext-ws@2.0.4" integrity="sha384-1RwI/nvUSrMRuNj7hX1+27J8XDdCoSLf0EjEyF69nacuWyiJYoQ/j39RT1mSnd2G" crossorigin="anonymous"></script>
 			<script>
 			function connect() {
 				console.log("inside the connect")
@@ -49,7 +49,7 @@ templ Base(Dirprofile []models.Dirprofile) {
 						class=" w-6 h-6 flex justify-center items-center bg-blue-400 rounded "
 						@click="open = !open"
 					>
-						<img src="/public/sidebar.png" alt="sidebare" class="w-5 h-5"/>
+						<img src="/public/sidebar.png" alt="sidebar" class="w-5 h-5"/>
 					</div>
 				</div>
 				<div :class="open ? 'translate-x-0' : '-translate-x-[100%]'" class="transition-all duration-300 fixed w-80 h-screen bg-gray-900">
@@ -79,26 +79,33 @@ templ Base(Dirprofile []models.Dirprofile) {
 						//             e.detail.parameters = { path: "path" }
 						//         })
 						//     })
-						// </script>
+						// </>
 						<ul
 							x-data="{
-    folders: [
-      { name: 'projects', path: '/projects' },
-      { name: 'documents', path: '/documents' },
-      { name: 'downloads', path: '/downloads' }
-    ]
-  }"
+                    folders: [
+                        { name: 'projects', path: '/projects' },
+                        { name: 'documents', path: '/documents' },
+                        { name: 'downloads', path: '/downloads' }
+                    ]
+                }"
+							class="w-48 border-r p-2"
 						>
 							<template x-for="folder in folders" :key="folder.path">
 								<li
 									hx-post="/browse"
-									:hx-vals='JSON.stringify({ path: folder.path, type: "folder" })'
 									hx-target="#file-list"
 									hx-swap="innerHTML"
+									:hx-vals='JSON.stringify({ path: folder.path, type: "folder" })'
+									x-init="htmx.process($el)"
 									x-text="'📁 ' + folder.name"
+									class="cursor-pointer p-1 hover:bg-gray-100"
 								></li>
 							</template>
 						</ul>
+						<!-- Content Area — OUTSIDE the ul -->
+						<div id="file-list" class="flex-1 p-4">
+							Select a folder...
+						</div>
 						<ul>
 							for _, item:= range Dirprofile {
 								<li>
