@@ -9,7 +9,9 @@ package components
 import "github.com/a-h/templ"
 import templruntime "github.com/a-h/templ/runtime"
 
-func Hello(name string) templ.Component {
+import "project/models"
+
+func Base(Dirprofile []models.Dirprofile) templ.Component {
 	return templruntime.GeneratedTemplate(func(templ_7745c5c3_Input templruntime.GeneratedComponentInput) (templ_7745c5c3_Err error) {
 		templ_7745c5c3_W, ctx := templ_7745c5c3_Input.Writer, templ_7745c5c3_Input.Context
 		if templ_7745c5c3_CtxErr := ctx.Err(); templ_7745c5c3_CtxErr != nil {
@@ -30,7 +32,94 @@ func Hello(name string) templ.Component {
 			templ_7745c5c3_Var1 = templ.NopComponent
 		}
 		ctx = templ.ClearChildren(ctx)
-		templ_7745c5c3_Err = templruntime.WriteString(templ_7745c5c3_Buffer, 1, "<!doctype html><html lang=\"en\"><head><meta charset=\"UTF-8\"><meta name=\"viewport\" content=\"width=device-width, initial-scale=1.0\"><title>Document</title><script defer src=\"https://cdn.jsdelivr.net/npm/alpinejs@3/dist/cdn.min.js\"></script><script src=\"https://cdn.jsdelivr.net/npm/@tailwindcss/browser@4.1.18\"></script></head><body><div x-data=\"{ open: true }\"><div class=\"w-screen h-9 flex items-center justify-end bg-zinc-500\"><div class=\"w-6 h-6 flex justify-center items-center bg-blue-400 rounded\" @click=\"open = !open\"><img src=\"/public/sidebar.png\" alt=\"sidebar\" class=\"w-5 h-5\"></div></div><div :class=\"open ? 'translate-x-0' : '-translate-x-[95%]'\" class=\"fixed w-80 h-screen bg-red-700\"></div></div></body></html>")
+		templ_7745c5c3_Err = templruntime.WriteString(templ_7745c5c3_Buffer, 1, "<!doctype html><html lang=\"en\"><head><meta charset=\"UTF-8\"><meta name=\"viewport\" content=\"width=device-width, initial-scale=1.0\"><title>Document</title><script defer src=\"https://cdn.jsdelivr.net/npm/alpinejs@3/dist/cdn.min.js\"></script><script src=\"https://cdn.jsdelivr.net/npm/@tailwindcss/browser@4.1.18\"></script><script src=\"https://cdnjs.cloudflare.com/ajax/libs/htmx/1.9.10/htmx.min.js\"></script><script src=\"https://cdn.jsdelivr.net/npm/htmx-ext-ws@2.0.4\" integrity=\"sha384-1RwI/nvUSrMRuNj7hX1+27J8XDdCoSLf0EjEyF69nacuWyiJYoQ/j39RT1mSnd2G\" crossorigin=\"anonymous\"><script>\n\t\t\t<script>\n\t\t\tfunction connect() {\n\t\t\t\tconsole.log(\"inside the connect\")\n\t\t\t\tws = new WebSocket('ws://localhost:8080/ws');\n\t\t\t\tws.onopen = () => { \n\t\t\t        ws.send(JSON.stringify({ path: \"path\" }));\n\t\t\t\t};\n\t\t\t\t// ws.onclose = () => {\n\t\t\t\t// };\n\t\t\t\t// ws.onerror = () => {\n\t\t\t\t// };\n\t\t\t\t// Receive output from Go backend\n\t\t\t\tws.onmessage = (event) => {\n\t\t\t\tconst msg = JSON.parse(event.data);\n\t\t\t\tconsole.log(\"msg\")\n\t\t\t\tconsole.log(msg)\n\t\t\t\tif (msg.error) {\n\t\t\t\t\t// Red output for errors\n\t\t\t\t} else {\n\t\t\t\t\tconsole.log(msg.dir_porfiles)\n\t\t\t\t\t document.getElementById('counter-display').innerHTML = msg.dir_porfiles[0].Name\n\t\t\t\t}\n\t\t\t}\n\t\t\t}\n\t\t\t// connect();\n\t\t\t\t</script></head><body><div x-data=\"{ open: true }\"><div class=\"w-screen h-9 flex items-center bg-zinc-500\"><div class=\"w-6 h-6 flex justify-center items-center bg-blue-400 rounded\" @click=\"open = !open\"><img src=\"/public/sidebar.png\" alt=\"sidebare\" class=\"w-5 h-5\"></div></div><div :class=\"open ? 'translate-x-0' : '-translate-x-[100%]'\" class=\"transition-all duration-300 fixed w-80 h-screen bg-gray-900\"><div class=\"flex flex-col text-white\"><ul x-data=\"{\n    folders: [\n      { name: 'projects', path: '/projects' },\n      { name: 'documents', path: '/documents' },\n      { name: 'downloads', path: '/downloads' }\n    ]\n  }\"><template x-for=\"folder in folders\" :key=\"folder.path\"><li hx-post=\"/browse\" :hx-vals='JSON.stringify({ path: folder.path, type: \"folder\" })' hx-target=\"#file-list\" hx-swap=\"innerHTML\" x-text=\"'📁 ' + folder.name\"></li></template></ul><ul>")
+		if templ_7745c5c3_Err != nil {
+			return templ_7745c5c3_Err
+		}
+		for _, item := range Dirprofile {
+			templ_7745c5c3_Err = templruntime.WriteString(templ_7745c5c3_Buffer, 2, "<li>")
+			if templ_7745c5c3_Err != nil {
+				return templ_7745c5c3_Err
+			}
+			if item.IsDir {
+				templ_7745c5c3_Err = templruntime.WriteString(templ_7745c5c3_Buffer, 3, "<span>> </span> ")
+				if templ_7745c5c3_Err != nil {
+					return templ_7745c5c3_Err
+				}
+			}
+			var templ_7745c5c3_Var2 string
+			templ_7745c5c3_Var2, templ_7745c5c3_Err = templ.JoinStringErrs(item.Name)
+			if templ_7745c5c3_Err != nil {
+				return templ.Error{Err: templ_7745c5c3_Err, FileName: `components/base.templ`, Line: 108, Col: 20}
+			}
+			_, templ_7745c5c3_Err = templ_7745c5c3_Buffer.WriteString(templ.EscapeString(templ_7745c5c3_Var2))
+			if templ_7745c5c3_Err != nil {
+				return templ_7745c5c3_Err
+			}
+			templ_7745c5c3_Err = templruntime.WriteString(templ_7745c5c3_Buffer, 4, "</li>")
+			if templ_7745c5c3_Err != nil {
+				return templ_7745c5c3_Err
+			}
+		}
+		templ_7745c5c3_Err = templruntime.WriteString(templ_7745c5c3_Buffer, 5, "</ul></div></div></div></body></html>")
+		if templ_7745c5c3_Err != nil {
+			return templ_7745c5c3_Err
+		}
+		return nil
+	})
+}
+
+func FileStructure(Dirprofile []models.Dirprofile) templ.Component {
+	return templruntime.GeneratedTemplate(func(templ_7745c5c3_Input templruntime.GeneratedComponentInput) (templ_7745c5c3_Err error) {
+		templ_7745c5c3_W, ctx := templ_7745c5c3_Input.Writer, templ_7745c5c3_Input.Context
+		if templ_7745c5c3_CtxErr := ctx.Err(); templ_7745c5c3_CtxErr != nil {
+			return templ_7745c5c3_CtxErr
+		}
+		templ_7745c5c3_Buffer, templ_7745c5c3_IsBuffer := templruntime.GetBuffer(templ_7745c5c3_W)
+		if !templ_7745c5c3_IsBuffer {
+			defer func() {
+				templ_7745c5c3_BufErr := templruntime.ReleaseBuffer(templ_7745c5c3_Buffer)
+				if templ_7745c5c3_Err == nil {
+					templ_7745c5c3_Err = templ_7745c5c3_BufErr
+				}
+			}()
+		}
+		ctx = templ.InitializeContext(ctx)
+		templ_7745c5c3_Var3 := templ.GetChildren(ctx)
+		if templ_7745c5c3_Var3 == nil {
+			templ_7745c5c3_Var3 = templ.NopComponent
+		}
+		ctx = templ.ClearChildren(ctx)
+		templ_7745c5c3_Err = templruntime.WriteString(templ_7745c5c3_Buffer, 6, "<ul>")
+		if templ_7745c5c3_Err != nil {
+			return templ_7745c5c3_Err
+		}
+		for _, item := range Dirprofile {
+			templ_7745c5c3_Err = templruntime.WriteString(templ_7745c5c3_Buffer, 7, "<li>")
+			if templ_7745c5c3_Err != nil {
+				return templ_7745c5c3_Err
+			}
+			if item.IsDir {
+				templ_7745c5c3_Err = templruntime.WriteString(templ_7745c5c3_Buffer, 8, "<span>> </span> ")
+				if templ_7745c5c3_Err != nil {
+					return templ_7745c5c3_Err
+				}
+			}
+			var templ_7745c5c3_Var4 string
+			templ_7745c5c3_Var4, templ_7745c5c3_Err = templ.JoinStringErrs(item.Name)
+			if templ_7745c5c3_Err != nil {
+				return templ.Error{Err: templ_7745c5c3_Err, FileName: `components/base.templ`, Line: 126, Col: 15}
+			}
+			_, templ_7745c5c3_Err = templ_7745c5c3_Buffer.WriteString(templ.EscapeString(templ_7745c5c3_Var4))
+			if templ_7745c5c3_Err != nil {
+				return templ_7745c5c3_Err
+			}
+			templ_7745c5c3_Err = templruntime.WriteString(templ_7745c5c3_Buffer, 9, "</li>")
+			if templ_7745c5c3_Err != nil {
+				return templ_7745c5c3_Err
+			}
+		}
+		templ_7745c5c3_Err = templruntime.WriteString(templ_7745c5c3_Buffer, 10, "</ul>")
 		if templ_7745c5c3_Err != nil {
 			return templ_7745c5c3_Err
 		}
