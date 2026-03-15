@@ -32,17 +32,17 @@ func FileStructure(Dirprofile []models.Dirprofile) templ.Component {
 			templ_7745c5c3_Var1 = templ.NopComponent
 		}
 		ctx = templ.ClearChildren(ctx)
-		templ_7745c5c3_Err = templruntime.WriteString(templ_7745c5c3_Buffer, 1, "<ul>")
+		templ_7745c5c3_Err = templruntime.WriteString(templ_7745c5c3_Buffer, 1, "<ul class=\"w-48 p-2\">")
 		if templ_7745c5c3_Err != nil {
 			return templ_7745c5c3_Err
 		}
 		for _, item := range Dirprofile {
-			templ_7745c5c3_Err = templruntime.WriteString(templ_7745c5c3_Buffer, 2, "<li>")
+			templ_7745c5c3_Err = templruntime.WriteString(templ_7745c5c3_Buffer, 2, "<li hx-post=\"/browse\" hx-swap=\"afterend\" :hx-vals='JSON.stringify({ path: \"fold/\", type: \"folder\" })' class=\"cursor-pointer p-1 hover:bg-gray-100\">")
 			if templ_7745c5c3_Err != nil {
 				return templ_7745c5c3_Err
 			}
 			if item.IsDir {
-				templ_7745c5c3_Err = templruntime.WriteString(templ_7745c5c3_Buffer, 3, "<span>> </span> ")
+				templ_7745c5c3_Err = templruntime.WriteString(templ_7745c5c3_Buffer, 3, "<span>📁 </span> ")
 				if templ_7745c5c3_Err != nil {
 					return templ_7745c5c3_Err
 				}
@@ -50,7 +50,7 @@ func FileStructure(Dirprofile []models.Dirprofile) templ.Component {
 			var templ_7745c5c3_Var2 string
 			templ_7745c5c3_Var2, templ_7745c5c3_Err = templ.JoinStringErrs(item.Name)
 			if templ_7745c5c3_Err != nil {
-				return templ.Error{Err: templ_7745c5c3_Err, FileName: `components/base.templ`, Line: 13, Col: 15}
+				return templ.Error{Err: templ_7745c5c3_Err, FileName: `components/base.templ`, Line: 18, Col: 15}
 			}
 			_, templ_7745c5c3_Err = templ_7745c5c3_Buffer.WriteString(templ.EscapeString(templ_7745c5c3_Var2))
 			if templ_7745c5c3_Err != nil {
@@ -90,7 +90,7 @@ func Base(Dirprofile []models.Dirprofile) templ.Component {
 			templ_7745c5c3_Var3 = templ.NopComponent
 		}
 		ctx = templ.ClearChildren(ctx)
-		templ_7745c5c3_Err = templruntime.WriteString(templ_7745c5c3_Buffer, 6, "<!doctype html><html lang=\"en\"><head><meta charset=\"UTF-8\"><meta name=\"viewport\" content=\"width=device-width, initial-scale=1.0\"><title>Document</title><script defer src=\"https://cdn.jsdelivr.net/npm/alpinejs@3/dist/cdn.min.js\"></script><script src=\"https://cdn.jsdelivr.net/npm/@tailwindcss/browser@4.1.18\"></script><script src=\"https://cdnjs.cloudflare.com/ajax/libs/htmx/1.9.10/htmx.min.js\"></script><script src=\"https://cdn.jsdelivr.net/npm/htmx-ext-ws@2.0.4\" integrity=\"sha384-1RwI/nvUSrMRuNj7hX1+27J8XDdCoSLf0EjEyF69nacuWyiJYoQ/j39RT1mSnd2G\" crossorigin=\"anonymous\"></script></head><body><div x-data=\"{ open: true }\"><div class=\"w-screen h-9 flex items-center bg-zinc-500\"><div class=\"w-6 h-6 flex justify-center items-center bg-blue-400 rounded\" @click=\"open = !open\"><img src=\"/public/sidebar.png\" alt=\"sidebar\" class=\"w-5 h-5\"></div></div><div :class=\"open ? 'translate-x-0' : '-translate-x-[100%]'\" class=\"transition-all duration-300 fixed w-80 h-screen bg-gray-900\"><div class=\"flex flex-col text-white\"><ul x-data=\"{\n                    folders: [\n                        { name: 'projects', path: '/projects' },\n                        { name: 'documents', path: '/documents' },\n                        { name: 'downloads', path: '/downloads' }\n                    ]\n                }\" class=\"w-48 border-r p-2\"><template x-for=\"folder in folders\" :key=\"folder.path\"><li hx-post=\"/browse\" hx-swap=\"afterend\" :hx-vals='JSON.stringify({ path: folder.path, type: \"folder\" })' x-text=\"'📁 ' + folder.name\" class=\"cursor-pointer p-1 hover:bg-gray-100\"></li></template></ul><!-- Content Area — OUTSIDE the ul --><div id=\"file-list\" class=\"flex-1 p-4\">Select a folder...</div>")
+		templ_7745c5c3_Err = templruntime.WriteString(templ_7745c5c3_Buffer, 6, "<!doctype html><html lang=\"en\"><head><meta charset=\"UTF-8\"><meta name=\"viewport\" content=\"width=device-width, initial-scale=1.0\"><title>Document</title><script defer src=\"https://cdn.jsdelivr.net/npm/alpinejs@3/dist/cdn.min.js\"></script><script src=\"https://cdn.jsdelivr.net/npm/@tailwindcss/browser@4.1.18\"></script><script src=\"https://cdnjs.cloudflare.com/ajax/libs/htmx/1.9.10/htmx.min.js\"></script><script src=\"https://cdn.jsdelivr.net/npm/htmx-ext-ws@2.0.4\" integrity=\"sha384-1RwI/nvUSrMRuNj7hX1+27J8XDdCoSLf0EjEyF69nacuWyiJYoQ/j39RT1mSnd2G\" crossorigin=\"anonymous\"></script></head><body><div x-data=\"{ open: true }\"><div class=\"w-screen h-9 flex items-center bg-zinc-500\"><div class=\"w-6 h-6 flex justify-center items-center bg-blue-400 rounded\" @click=\"open = !open\"><img src=\"/public/sidebar.png\" alt=\"sidebar\" class=\"w-5 h-5\"></div></div><div :class=\"open ? 'translate-x-0' : '-translate-x-[100%]'\" class=\"transition-all duration-300 fixed w-80 h-screen bg-gray-900\"><div class=\"flex flex-col text-white\"><!-- Content Area — OUTSIDE the ul --><div id=\"file-list\" class=\"flex-1 p-4\">Select a folder...</div>")
 		if templ_7745c5c3_Err != nil {
 			return templ_7745c5c3_Err
 		}
