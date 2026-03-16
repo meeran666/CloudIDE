@@ -185,7 +185,11 @@ func fileHandler(w http.ResponseWriter, r *http.Request) {
 }
 func filelist(path string) error {
 
-	dir := "/home/zenith/meeran/cloudIDE"
+	dir, err := os.Getwd()
+	if err != nil {
+		log.Fatal(err)
+	}
+	fmt.Println(dir)
 	subpath := dir + "/" + path
 	root := os.DirFS(subpath)
 	entries, err := fs.ReadDir(root, ".")
