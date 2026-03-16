@@ -15,6 +15,9 @@ templ Base(Dirprofile []models.Dirprofile) {
 			<script src="https://cdn.jsdelivr.net/npm/@tailwindcss/browser@4.1.18"></script>
 			<script src="https://cdnjs.cloudflare.com/ajax/libs/htmx/1.9.10/htmx.min.js"></script>
 			<script src="https://cdn.jsdelivr.net/npm/htmx-ext-ws@2.0.4" integrity="sha384-1RwI/nvUSrMRuNj7hX1+27J8XDdCoSLf0EjEyF69nacuWyiJYoQ/j39RT1mSnd2G" crossorigin="anonymous"></script>
+			<script src="https://cdn.jsdelivr.net/npm/xterm@5.3.0/lib/xterm.js" defer></script>
+			<script src="https://cdn.jsdelivr.net/npm/xterm-addon-fit@0.7.0/lib/xterm-addon-fit.js" defer></script>
+			<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/xterm@5.3.0/css/xterm.css"/>
 		</head>
 		<body x-data="{ open: true }">
 			<div class="w-screen h-9 flex  items-center  bg-zinc-500">
@@ -25,15 +28,17 @@ templ Base(Dirprofile []models.Dirprofile) {
 					<img src="/public/sidebar.png" alt="sidebar" class="w-5  h-5"/>
 				</div>
 			</div>
-			<div class="flex">
-				<div :class="open ? 'translate-x-0' : '-translate-x-full'" class="transition-all duration-300 fixed w-80 h-screen bg-gray-900">
-					<div class="flex flex-col text-white">
-						@FileStructure("user1", Dirprofile)
-					</div>
-					<button class="w-17 h-6  bg-amber-400 cursor-pointer" onclick="openFile()">button</button>
+			<div class="flex h-screen">
+				<div
+					:class="open ? 'translate-x-0' : '-translate-x-full'"
+					class="w-80 shrink-0 fixed h-screen transition-transform duration-300 bg-gray-900 text-white"
+				>
+					@FileStructure("user1", Dirprofile)
 				</div>
-				<div :style="`width: ${open ? '16rem' : '0'}`" class="transition-all  duration-300  h-screen "></div>
-				@Editor()
+				<div class="flex grow h-screen flex-col transition-all duration-300 ml-0" :class="open ? 'ml-80' : 'ml-0'">
+					@Editor()
+					@Terminal()
+				</div>
 			</div>
 		</body>
 	</html>
