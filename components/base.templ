@@ -19,20 +19,20 @@ templ Base(Dirprofile []models.Dirprofile) {
 		<body x-data="{ open: true }">
 			<div class="w-screen h-9 flex  items-center  bg-zinc-500">
 				<div
-					class=" w-6 h-6 flex justify-center items-center bg-red-500 rounded "
+					class=" w-6 h-6 flex justify-center items-center  rounded "
 					@click="open = !open"
 				>
 					<img src="/public/sidebar.png" alt="sidebar" class="w-5  h-5"/>
 				</div>
 			</div>
 			<div class="flex">
-				// <div :class="open ? 'translate-x-0' : '-translate-x-full'" class="transition-all duration-300 fixed w-80 h-screen bg-gray-900">
-				// 	<div class="flex flex-col text-white">
-				// 		@FileStructure("user1", Dirprofile)
-				// 	</div>
-				// 	<button class="w-17 h-6  bg-amber-400 cursor-pointer" onclick="openFile()">button</button>
-				// </div>
-				<div :class="open ? 'w-15' : 'w-0'" class="h-screen grow-0"></div>
+				<div :class="open ? 'translate-x-0' : '-translate-x-full'" class="transition-all duration-300 fixed w-80 h-screen bg-gray-900">
+					<div class="flex flex-col text-white">
+						@FileStructure("user1", Dirprofile)
+					</div>
+					<button class="w-17 h-6  bg-amber-400 cursor-pointer" onclick="openFile()">button</button>
+				</div>
+				<div :style="`width: ${open ? '16rem' : '0'}`" class="transition-all  duration-300  h-screen "></div>
 				@Editor()
 			</div>
 		</body>

@@ -5,12 +5,10 @@ package components
 
 //lint:file-ignore SA4006 This context is only used if a nested component is present.
 
-import (
-	"project/models"
+import "github.com/a-h/templ"
+import templruntime "github.com/a-h/templ/runtime"
 
-	"github.com/a-h/templ"
-	templruntime "github.com/a-h/templ/runtime"
-)
+import "project/models"
 
 func Base(Dirprofile []models.Dirprofile) templ.Component {
 	return templruntime.GeneratedTemplate(func(templ_7745c5c3_Input templruntime.GeneratedComponentInput) (templ_7745c5c3_Err error) {
@@ -33,7 +31,15 @@ func Base(Dirprofile []models.Dirprofile) templ.Component {
 			templ_7745c5c3_Var1 = templ.NopComponent
 		}
 		ctx = templ.ClearChildren(ctx)
-		templ_7745c5c3_Err = templruntime.WriteString(templ_7745c5c3_Buffer, 1, "<!doctype html><html lang=\"en\"><head><meta charset=\"UTF-8\"><meta http-equiv=\"X-UA-Compatible\" content=\"IE=edge\"><meta name=\"viewport\" content=\"width=device-width, initial-scale=1.0\"><title>Pines UI</title><style>[x-cloak]{display:none}</style><script defer src=\"https://cdn.jsdelivr.net/npm/alpinejs@3/dist/cdn.min.js\"></script><script src=\"https://cdn.jsdelivr.net/npm/@tailwindcss/browser@4.1.18\"></script><script src=\"https://cdnjs.cloudflare.com/ajax/libs/htmx/1.9.10/htmx.min.js\"></script><script src=\"https://cdn.jsdelivr.net/npm/htmx-ext-ws@2.0.4\" integrity=\"sha384-1RwI/nvUSrMRuNj7hX1+27J8XDdCoSLf0EjEyF69nacuWyiJYoQ/j39RT1mSnd2G\" crossorigin=\"anonymous\"></script></head><body x-data=\"{ open: true }\"><div class=\"w-screen h-9 flex items-center bg-zinc-500\"><div class=\"w-6 h-6 flex justify-center items-center bg-red-500 rounded\" @click=\"open = !open\"><img src=\"/public/sidebar.png\" alt=\"sidebar\" class=\"w-5 h-5\"></div></div><div class=\"flex\"><div :class=\"open ? 'w-15' : 'w-0'\" class=\"h-screen grow-0\"></div>")
+		templ_7745c5c3_Err = templruntime.WriteString(templ_7745c5c3_Buffer, 1, "<!doctype html><html lang=\"en\"><head><meta charset=\"UTF-8\"><meta http-equiv=\"X-UA-Compatible\" content=\"IE=edge\"><meta name=\"viewport\" content=\"width=device-width, initial-scale=1.0\"><title>Pines UI</title><style>[x-cloak]{display:none}</style><script defer src=\"https://cdn.jsdelivr.net/npm/alpinejs@3/dist/cdn.min.js\"></script><script src=\"https://cdn.jsdelivr.net/npm/@tailwindcss/browser@4.1.18\"></script><script src=\"https://cdnjs.cloudflare.com/ajax/libs/htmx/1.9.10/htmx.min.js\"></script><script src=\"https://cdn.jsdelivr.net/npm/htmx-ext-ws@2.0.4\" integrity=\"sha384-1RwI/nvUSrMRuNj7hX1+27J8XDdCoSLf0EjEyF69nacuWyiJYoQ/j39RT1mSnd2G\" crossorigin=\"anonymous\"></script></head><body x-data=\"{ open: true }\"><div class=\"w-screen h-9 flex items-center bg-zinc-500\"><div class=\"w-6 h-6 flex justify-center items-center rounded\" @click=\"open = !open\"><img src=\"/public/sidebar.png\" alt=\"sidebar\" class=\"w-5 h-5\"></div></div><div class=\"flex\"><div :class=\"open ? 'translate-x-0' : '-translate-x-full'\" class=\"transition-all duration-300 fixed w-80 h-screen bg-gray-900\"><div class=\"flex flex-col text-white\">")
+		if templ_7745c5c3_Err != nil {
+			return templ_7745c5c3_Err
+		}
+		templ_7745c5c3_Err = FileStructure("user1", Dirprofile).Render(ctx, templ_7745c5c3_Buffer)
+		if templ_7745c5c3_Err != nil {
+			return templ_7745c5c3_Err
+		}
+		templ_7745c5c3_Err = templruntime.WriteString(templ_7745c5c3_Buffer, 2, "</div><button class=\"w-17 h-6 bg-amber-400 cursor-pointer\" onclick=\"openFile()\">button</button></div><div :style=\"`width: ${open ? '16rem' : '0'}`\" class=\"transition-all duration-300 h-screen\"></div>")
 		if templ_7745c5c3_Err != nil {
 			return templ_7745c5c3_Err
 		}
@@ -41,7 +47,7 @@ func Base(Dirprofile []models.Dirprofile) templ.Component {
 		if templ_7745c5c3_Err != nil {
 			return templ_7745c5c3_Err
 		}
-		templ_7745c5c3_Err = templruntime.WriteString(templ_7745c5c3_Buffer, 2, "</div></body></html>")
+		templ_7745c5c3_Err = templruntime.WriteString(templ_7745c5c3_Buffer, 3, "</div></body></html>")
 		if templ_7745c5c3_Err != nil {
 			return templ_7745c5c3_Err
 		}
