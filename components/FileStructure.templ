@@ -1,0 +1,69 @@
+package components
+
+import (
+	"project/models"
+	"strconv"
+)
+
+templ FileStructure(path string, Dirprofile []models.Dirprofile) {
+	<ul class="w-48 p-2">
+		for _, item := range Dirprofile {
+			{{ newpath := path + "/" + item.Name }}
+			<li
+				hx-post="/browse"
+				hx-target="next #folder-content"
+				hx-swap="innerHTML"
+				hx-vals={ `{"path":"` + newpath + `","isDir":` + strconv.FormatBool(item.IsDir) + `}` }
+				class="cursor-pointer p-1 hover:bg-gray-700"
+				onclick="oppeningDir(event,this)"
+			>
+				if item.IsDir {
+					<span>📁 </span>
+				}
+				{ item.Name }
+			</li>
+			<ul id="folder-content"></ul>
+		}
+	</ul>
+	<script>
+function oppeningDir(event,el) {
+	const hxVals = el.getAttribute('hx-vals')
+	const hxValsObj = JSON.parse(hxVals)
+	console.log("path is")
+	console.log(hxValsObj.path)
+	if (hxValsObj.isDir === false){
+		const path = hxValsObj.path 
+		console.log(path)
+    	fetch("/file",{
+			method:"POST",
+			headers:{ "Content-Type": "application/json" },
+			body: JSON.stringify({
+				path: path
+				})
+			})
+		.then(res => res.text())
+		.then(data => {
+        const editorContainer = document.querySelector('[id^="monaco-editor"]')
+
+        if(editorContainer && editorContainer.editor){
+            editorContainer.editor.setValue(data)
+        }
+
+    })
+		return
+	}
+	let next_el=el.nextElementSibling;
+	
+	console.log(next_el)
+	if (next_el.children.length === 0){
+        // allow HTMX request
+        console.log("send htmx request");
+    }else {
+        // block HTMX request
+		event.stopImmediatePropagation();
+		console.log("inner else")
+		next_el.innerHTML = ""
+    }
+}
+</script>
+}
