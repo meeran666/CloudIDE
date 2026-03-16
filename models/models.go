@@ -9,3 +9,13 @@ type FileRequest struct {
 }
 
 var DirprofileArr = []Dirprofile{}
+
+type InputMessage struct {
+	Command string `json:"command"`
+}
+
+// Message sent back to browser
+type OutputMessage struct {
+	Output string `json:"output"`
+	Error  bool   `json:"error"`
+}
