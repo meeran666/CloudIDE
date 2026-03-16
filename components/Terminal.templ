@@ -18,10 +18,8 @@ templ Terminal() {
 	</div>
 	<script>
       // Wait for xterm.js to load
-      console.log("calling ")
       function initTerminal() {
           if (typeof Terminal === 'undefined' || typeof FitAddon === 'undefined') {
-              console.log("Waiting for xterm.js...");
               setTimeout(initTerminal, 2000);
               return;
           }

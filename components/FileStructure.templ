@@ -29,39 +29,67 @@ templ FileStructure(path string, Dirprofile []models.Dirprofile) {
 function oppeningDir(event,el) {
 	const hxVals = el.getAttribute('hx-vals')
 	const hxValsObj = JSON.parse(hxVals)
-	console.log("path is")
-	console.log(hxValsObj.path)
 	if (hxValsObj.isDir === false){
 		const path = hxValsObj.path 
 		console.log(path)
+        const language = {
+            html: "html",
+            js: "javascript",
+            ts: "javascript",
+            go: "go",
+            css: "css", 
+            json: "json",
+            py: "python" ,
+            rb: "ruby",
+            sh: "shell"
+        };
+        let lastIndex = path.lastIndexOf('/'); 
+        let trimmedString_slash= ""
+        if (lastIndex !== -1) {
+          trimmedString_slash = path.slice(lastIndex); 
+        } else {
+          console.log("No slash found in the string."); 
+        }
+
+        lastIndex = trimmedString_slash.lastIndexOf('.'); 
+        let trimmedString_dot
+        if (lastIndex !== -1) {
+           trimmedString_dot = trimmedString_slash.slice(lastIndex+1); 
+        } else {
+          console.log("No slash found in the string."); 
+        }
+        
     	fetch("/file",{
 			method:"POST",
 			headers:{ "Content-Type": "application/json" },
 			body: JSON.stringify({
 				path: path
 				})
-			})
+		})
 		.then(res => res.text())
 		.then(data => {
-        const editorContainer = document.querySelector('[id^="monaco-editor"]')
+            const editorContainer = document.querySelector('[id^="monaco-editor"]')
 
-        if(editorContainer && editorContainer.editor){
-            editorContainer.editor.setValue(data)
-        }
+            if(editorContainer && editorContainer.editor){
+                editorContainer.editor.setValue(data)
+            }
+            // Change the language to Python
+            const model = editorContainer.editor.getModel();
+            if (model) {
+                monaco.editor.setModelLanguage(model,language[trimmedString_dot]);
+            }
 
-    })
-		return
+        })  
+		event.stopImmediatePropagation();
+	    return
 	}
 	let next_el=el.nextElementSibling;
-	
-	console.log(next_el)
+	console.log("pass the if ")
 	if (next_el.children.length === 0){
         // allow HTMX request
-        console.log("send htmx request");
     }else {
         // block HTMX request
 		event.stopImmediatePropagation();
-		console.log("inner else")
 		next_el.innerHTML = ""
     }
 }
