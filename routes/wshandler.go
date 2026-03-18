@@ -2,13 +2,16 @@ package routes
 
 import (
 	"encoding/json"
+	"fmt"
+	"io"
 	"log"
 	"net/http"
+	"os"
 	"os/exec"
 	"project/models"
 	"runtime"
-	"strings"
 
+	"github.com/creack/pty"
 	"github.com/gorilla/websocket"
 )
 
@@ -28,74 +31,97 @@ func WsHandler(w http.ResponseWriter, r *http.Request) {
 
 	log.Println("Client connected:", r.RemoteAddr)
 
-	// Send welcome message
-	sendOutput(conn, "Connected to Go terminal. Type a command and press Enter.\r\n", false)
+	// Launch a shell with PTY
+	shell := "/bin/sh"
+	if runtime.GOOS == "windows" {
+		// pty does not support Windows; fall back or handle separately
+		sendOutput(conn, "PTY not supported on Windows\r\n", true)
+		return
+	}
+	if sh := os.Getenv("SHELL"); sh != "" {
+		shell = sh
+	}
 
+	cmd := exec.Command(shell)
+	cmd.Env = append(os.Environ(), "TERM=xterm-256color")
+
+	// Start command in a PTY
+	ptmx, err := pty.Start(cmd)
+	if err != nil {
+		log.Println("PTY start error:", err)
+		sendOutput(conn, "Failed to start terminal: "+err.Error()+"\r\n", true)
+		return
+	}
+	defer func() {
+		ptmx.Close()
+		cmd.Wait()
+	}()
+
+	// PTY → WebSocket: stream terminal output to browser
+	go func() {
+		buf := make([]byte, 4096)
+		for {
+			n, err := ptmx.Read(buf)
+			fmt.Println(n)
+			if n > 0 {
+				msg := models.OutputMessage{
+					Output: string(buf[:n]),
+					Error:  false,
+				}
+				data, _ := json.Marshal(msg)
+				fmt.Println("data")
+				fmt.Println(string(data))
+				if writeErr := conn.WriteMessage(websocket.TextMessage, data); writeErr != nil {
+					log.Println("WebSocket write error:", writeErr)
+					return
+				}
+			}
+			if err != nil {
+				if err != io.EOF {
+					log.Println("PTY read error:", err)
+				}
+				return
+			}
+		}
+	}()
+
+	// WebSocket → PTY: forward browser keystrokes/commands to the shell
 	for {
-		// Read message from browser
 		_, msg, err := conn.ReadMessage()
 		if err != nil {
-			log.Println("Read error:", err)
+			log.Println("WebSocket read error:", err)
 			break
 		}
+
 		var input models.InputMessage
 		if err := json.Unmarshal(msg, &input); err != nil {
-			sendOutput(conn, "Invalid message format\r\n", true)
+			// If not JSON, treat raw bytes as terminal input (useful for xterm.js raw mode)
+			if _, writeErr := ptmx.Write(msg); writeErr != nil {
+				log.Println("PTY write error:", writeErr)
+				break
+			}
 			continue
 		}
 
-		cmd := strings.TrimSpace(input.Command)
-		if cmd == "" {
+		// Handle terminal resize
+		if input.Cols > 0 && input.Rows > 0 {
+			pty.Setsize(ptmx, &pty.Winsize{
+				Cols: uint16(input.Cols),
+				Rows: uint16(input.Rows),
+			})
 			continue
 		}
 
-		log.Printf("Running command: %q", cmd)
-
-		// Echo the command back (like a real terminal)
-		// sendOutput(conn, fmt.Sprintf("$ %s\r\n", cmd), false)
-
-		// Handle built-in "clear"
-		if cmd == "clear" {
-			sendOutput(conn, "\033[2J\033[H", false)
-			continue
+		// Write command/input to PTY
+		if input.Command != "" {
+			if _, writeErr := ptmx.Write([]byte(input.Command)); writeErr != nil {
+				log.Println("PTY write error:", writeErr)
+				break
+			}
 		}
-
-		// Run command in shell
-		output, isErr := runCommand(cmd)
-		sendOutput(conn, output, isErr)
 	}
 
 	log.Println("Client disconnected")
-}
-
-func runCommand(cmd string) (string, bool) {
-	var c *exec.Cmd
-
-	if runtime.GOOS == "windows" {
-		c = exec.Command("cmd", "/C", cmd)
-	} else {
-		c = exec.Command("sh", "-c", cmd)
-	}
-
-	// Combine stdout + stderr
-	out, err := c.CombinedOutput()
-	output := string(out)
-
-	// Normalize line endings for xterm.js
-	output = strings.ReplaceAll(output, "\n", "\r\n")
-	if !strings.HasSuffix(output, "\r\n") {
-		output += "\r\n"
-	}
-
-	if err != nil {
-		// Exit error: show output + error message
-		if output == "\r\n" {
-			output = err.Error() + "\r\n"
-		}
-		return output, true
-	}
-
-	return output, false
 }
 
 func sendOutput(conn *websocket.Conn, text string, isError bool) {

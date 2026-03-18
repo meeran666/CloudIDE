@@ -12,6 +12,8 @@ var DirprofileArr = []Dirprofile{}
 
 type InputMessage struct {
 	Command string `json:"command"`
+	Rows    uint16 `json:"rows"`
+	Cols    uint16 `json:"cols"`
 }
 
 // Message sent back to browser

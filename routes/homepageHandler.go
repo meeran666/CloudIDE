@@ -1,7 +1,6 @@
 package routes
 
 import (
-	"fmt"
 	"io/fs"
 	"log"
 	"net/http"
@@ -39,7 +38,6 @@ func filelist(path string) error {
 	if err != nil {
 		log.Fatal(err)
 	}
-	fmt.Println(dir)
 	subpath := dir + "/" + path
 	root := os.DirFS(subpath)
 	entries, err := fs.ReadDir(root, ".")

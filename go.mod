@@ -4,6 +4,7 @@ go 1.25.5
 
 require (
 	github.com/a-h/templ v0.3.1001
+	github.com/creack/pty v1.1.24
 	github.com/fatih/color v1.18.0
 	github.com/gorilla/websocket v1.5.3
 )
