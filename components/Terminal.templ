@@ -64,7 +64,7 @@ templ Terminal() {
 
           function connect() {
               setStatus('connecting');
-              ws = new WebSocket('ws://localhost:8080/ws');
+              ws = new WebSocket('ws://localhost:3001/ws');
 
               ws.onopen = () => { setStatus('connected'); showPrompt(); };
               ws.onclose = () => { setStatus('disconnected'); term.writeln('\r\n\x1b[31mDisconnected from server.\x1b[0m'); };
