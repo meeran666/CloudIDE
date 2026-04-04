@@ -1,0 +1,104 @@
+package components
+
+templ Terminal() {
+	<div class="flex flex-col h-full font-mono bg-[#0d0d0d] overflow-hidden">
+		<!-- Title bar -->
+		<div class="flex items-center  gap-4 shrink-0 bg-[#1a1a1a] border-b border-[#2a2a2a] px-5 py-2.5">
+			<!-- Dots -->
+			<div id="status" class="text-[10px] tracking-widest px-2.5 py-0.5 rounded text-[#febc2e] border border-[#febc2e] uppercase">
+				connecting 
+			</div>
+			<div class="grow"></div>
+			<button class="cursor-pointer w-3 h-3 bg-amber-300 right-0"></button>
+		</div>
+		<!-- Terminal container -->
+		<div id="terminal-container" class="flex-1 p-4 overflow-hidden">
+			<div id="terminal" class="h-full"></div>
+		</div>
+	</div>
+	<script>
+      // Wait for xterm.js to load
+      function initTerminal() {
+          if (typeof Terminal === 'undefined' || typeof FitAddon === 'undefined') {
+              setTimeout(initTerminal, 2000);
+              return;
+          }
+
+          const term = new Terminal({
+              fontFamily: '"JetBrains Mono", monospace',
+              fontSize: 14,
+              lineHeight: 1.5,
+              cursorBlink: true,
+              cursorStyle: 'block',
+              theme: {
+                  background: '#0d0d0d',
+                  foreground: '#e0e0e0',
+                  cursor: '#00ff88',
+                  cursorAccent:'#0d0d0d',
+                  black:'#1a1a1a', red:'#ff5f57', green:'#28c840',
+                  yellow:'#febc2e', blue:'#4da6ff', magenta:'#bf5af2',
+                  cyan:'#5ac8fa', white:'#e0e0e0', brightGreen:'#00ff88'
+              },
+              allowTransparency: true,
+              scrollback: 1000
+          });
+
+          const fitAddon = new FitAddon.FitAddon();
+          term.loadAddon(fitAddon);
+          term.open(document.getElementById('terminal'));
+          fitAddon.fit();
+
+          window.addEventListener('resize', () => fitAddon.fit());
+
+          let inputBuffer = '';
+          let ws = null;
+          const statusEl = document.getElementById('status');
+
+          function setStatus(state) {
+              statusEl.textContent = state;
+              statusEl.className = 'text-[10px] tracking-widest px-2.5 py-0.5 rounded uppercase border ' +
+                    (state === 'connected' ? 'text-[#28c840] border-[#28c840]' :
+                     state === 'disconnected' ? 'text-[#ff5f57] border-[#ff5f57]' :
+                     'text-[#febc2e] border-[#febc2e]');
+          }
+
+          function connect() {
+              setStatus('connecting');
+              ws = new WebSocket('ws://localhost:3000/ws');
+
+              ws.onopen = () => { setStatus('connected');  };
+              ws.onclose = () => { setStatus('disconnected'); term.writeln('\r\n\x1b[31mDisconnected from server.\x1b[0m'); };
+              ws.onerror = () => { setStatus('disconnected'); term.writeln('\r\n\x1b[31mWebSocket error. Is the Go server running?\x1b[0m'); };
+
+              ws.onmessage = (event) => {
+                  const msg = JSON.parse(event.data);
+                  term.write(msg.error ? '\x1b[31m' + msg.output + '\x1b[0m' : msg.output);
+                //   if (!msg.output.includes('\x1b[2J')) showPrompt();
+              };
+          }
+
+          function showPrompt() { term.write('\x1b[32m>\x1b[0m '); }
+
+          term.onKey(({key, domEvent}) => {
+              const code = domEvent.keyCode;
+
+              if (code === 13) {
+                    console.log("what")
+                  term.write('\r\n');
+                  const cmd = inputBuffer.trim();
+                  inputBuffer = '';
+                  if (cmd && ws && ws.readyState === WebSocket.OPEN) ws.send(JSON.stringify({command: cmd}));
+                  else showPrompt();
+              } else if (code === 8) {
+                  if (inputBuffer.length > 0) { inputBuffer = inputBuffer.slice(0, -1); term.write('\b \b'); }
+              } else if (code === 67 && domEvent.ctrlKey) { inputBuffer=''; term.write('^C\r\n'); showPrompt(); }
+              else if (code === 76 && domEvent.ctrlKey) { term.clear();  }
+              else if (!domEvent.ctrlKey && !domEvent.altKey && key) { inputBuffer += key; term.write(key); }
+          });
+
+            connect();
+        }
+
+        initTerminal();
+  </script>
+}
