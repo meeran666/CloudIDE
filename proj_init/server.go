@@ -4,13 +4,17 @@ import (
 	"fmt"
 	"log"
 	"net/http"
+
+	"github.com/gorilla/mux"
 )
 
 // Message from the browser
 
 func main() {
-	mux := http.NewServeMux()
-	mux.HandleFunc("/", HomepageHandler)
-	fmt.Println("🚀  GOTTH Todo → http://localhost:8080")
-	log.Fatal(http.ListenAndServe(":8080", mux))
+	mux := mux.NewRouter()
+	mux.HandleFunc("/", InitHandler)
+	mux.HandleFunc("/container", ContainerHandler).Methods("POST")
+	port := "3003"
+	fmt.Println("🚀 Listening on port:", port)
+	log.Fatal(http.ListenAndServe(":"+port, mux))
 }

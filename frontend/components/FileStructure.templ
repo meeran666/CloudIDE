@@ -31,7 +31,6 @@ function oppeningDir(event,el) {
 	const hxValsObj = JSON.parse(hxVals)
 	if (hxValsObj.isDir === false){
 		const path = hxValsObj.path 
-		console.log(path)
         const language = {
             html: "html",
             js: "javascript",
@@ -84,7 +83,6 @@ function oppeningDir(event,el) {
 	    return
 	}
 	let next_el=el.nextElementSibling;
-	console.log("pass the if ")
 	if (next_el.children.length === 0){
         // allow HTMX request
     }else {

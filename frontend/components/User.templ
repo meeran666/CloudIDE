@@ -1,0 +1,24 @@
+package components
+
+templ User() {
+	<div class="">
+		<form
+			hx-post="/create"
+			hx-target="#body"
+			hx-swap="innerHTML"
+		>
+			<label>Select goletid:</label>
+			<input type="text" name="fname"/>
+			<br/>
+			<br/>
+			<label>Choose a stack:</label>
+			<select name="stack">
+				<option value="node">Node Stack</option>
+				<option value="react">React Stack</option>
+			</select>
+			<br/>
+			<br/>
+			<button type="submit">Submit</button>
+		</form>
+	</div>
+}

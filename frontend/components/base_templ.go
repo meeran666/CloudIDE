@@ -8,9 +8,7 @@ package components
 import "github.com/a-h/templ"
 import templruntime "github.com/a-h/templ/runtime"
 
-import "frontend/models"
-
-func Base(Dirprofile []models.Dirprofile) templ.Component {
+func Base(child templ.Component) templ.Component {
 	return templruntime.GeneratedTemplate(func(templ_7745c5c3_Input templruntime.GeneratedComponentInput) (templ_7745c5c3_Err error) {
 		templ_7745c5c3_W, ctx := templ_7745c5c3_Input.Writer, templ_7745c5c3_Input.Context
 		if templ_7745c5c3_CtxErr := ctx.Err(); templ_7745c5c3_CtxErr != nil {
@@ -31,27 +29,15 @@ func Base(Dirprofile []models.Dirprofile) templ.Component {
 			templ_7745c5c3_Var1 = templ.NopComponent
 		}
 		ctx = templ.ClearChildren(ctx)
-		templ_7745c5c3_Err = templruntime.WriteString(templ_7745c5c3_Buffer, 1, "<!doctype html><html lang=\"en\"><head><meta charset=\"UTF-8\"><meta http-equiv=\"X-UA-Compatible\" content=\"IE=edge\"><meta name=\"viewport\" content=\"width=device-width, initial-scale=1.0\"><title>Cloud IDE</title><style>[x-cloak]{display:none}</style><script src=\"https://cdn.jsdelivr.net/npm/@tailwindcss/browser@4.1.18\"></script><script defer src=\"https://cdn.jsdelivr.net/npm/alpinejs@3/dist/cdn.min.js\"></script><script src=\"https://cdnjs.cloudflare.com/ajax/libs/htmx/1.9.10/htmx.min.js\"></script><script src=\"https://cdn.jsdelivr.net/npm/htmx-ext-ws@2.0.4\" integrity=\"sha384-1RwI/nvUSrMRuNj7hX1+27J8XDdCoSLf0EjEyF69nacuWyiJYoQ/j39RT1mSnd2G\" crossorigin=\"anonymous\"></script><script src=\"https://cdn.jsdelivr.net/npm/xterm@5.3.0/lib/xterm.js\" defer></script><script src=\"https://cdn.jsdelivr.net/npm/xterm-addon-fit@0.7.0/lib/xterm-addon-fit.js\" defer></script><link rel=\"stylesheet\" href=\"https://cdn.jsdelivr.net/npm/xterm@5.3.0/css/xterm.css\"></head><body x-data=\"{ open: true }\" x-cloak class=\"overflow-x-hidden\"><div class=\"w-screen h-9 flex items-center bg-zinc-500\"><div class=\"w-6 h-6 flex justify-center items-center rounded\" @click=\"open = !open\"><img src=\"/public/sidebar.png\" alt=\"sidebar\" class=\"w-5 h-5\"></div></div><div class=\"flex h-screen\"><div :class=\"open ? 'translate-x-0' : '-translate-x-full'\" class=\"w-80 shrink-0 fixed h-screen transition-transform duration-300 bg-gray-900 text-white\">")
+		templ_7745c5c3_Err = templruntime.WriteString(templ_7745c5c3_Buffer, 1, "<!doctype html><html lang=\"en\"><head><meta charset=\"UTF-8\"><meta http-equiv=\"X-UA-Compatible\" content=\"IE=edge\"><meta name=\"viewport\" content=\"width=device-width, initial-scale=1.0\"><title>Cloud IDE</title><style>[x-cloak]{display:none}</style><script src=\"https://cdn.jsdelivr.net/npm/@tailwindcss/browser@4.1.18\"></script><script defer src=\"https://cdn.jsdelivr.net/npm/alpinejs@3/dist/cdn.min.js\"></script><script src=\"https://cdnjs.cloudflare.com/ajax/libs/htmx/1.9.10/htmx.min.js\"></script><script src=\"https://cdn.jsdelivr.net/npm/htmx-ext-ws@2.0.4\" integrity=\"sha384-1RwI/nvUSrMRuNj7hX1+27J8XDdCoSLf0EjEyF69nacuWyiJYoQ/j39RT1mSnd2G\" crossorigin=\"anonymous\"></script><script src=\"https://cdn.jsdelivr.net/npm/xterm@5.3.0/lib/xterm.js\" defer></script><script src=\"https://cdn.jsdelivr.net/npm/xterm-addon-fit@0.7.0/lib/xterm-addon-fit.js\" defer></script><link rel=\"stylesheet\" href=\"https://cdn.jsdelivr.net/npm/xterm@5.3.0/css/xterm.css\"></head><body id=\"body\" x-data=\"{ open: true }\" class=\"overflow-x-hidden\">")
 		if templ_7745c5c3_Err != nil {
 			return templ_7745c5c3_Err
 		}
-		templ_7745c5c3_Err = FileStructure("user1", Dirprofile).Render(ctx, templ_7745c5c3_Buffer)
+		templ_7745c5c3_Err = child.Render(ctx, templ_7745c5c3_Buffer)
 		if templ_7745c5c3_Err != nil {
 			return templ_7745c5c3_Err
 		}
-		templ_7745c5c3_Err = templruntime.WriteString(templ_7745c5c3_Buffer, 2, "</div><div class=\"flex grow h-screen flex-col transition-all duration-300 ml-0\" :class=\"open ? 'ml-80' : 'ml-0'\">")
-		if templ_7745c5c3_Err != nil {
-			return templ_7745c5c3_Err
-		}
-		templ_7745c5c3_Err = Editor().Render(ctx, templ_7745c5c3_Buffer)
-		if templ_7745c5c3_Err != nil {
-			return templ_7745c5c3_Err
-		}
-		templ_7745c5c3_Err = Terminal().Render(ctx, templ_7745c5c3_Buffer)
-		if templ_7745c5c3_Err != nil {
-			return templ_7745c5c3_Err
-		}
-		templ_7745c5c3_Err = templruntime.WriteString(templ_7745c5c3_Buffer, 3, "</div></div></body></html>")
+		templ_7745c5c3_Err = templruntime.WriteString(templ_7745c5c3_Buffer, 2, "</body></html>")
 		if templ_7745c5c3_Err != nil {
 			return templ_7745c5c3_Err
 		}

@@ -1,0 +1,12 @@
+package components
+
+templ LandingPage() {
+	<div class="bg-amber-700 w-50 h-50"></div>
+	<button
+		class="rounded w-10 h-3"
+		hx-get="/signin"
+		hx-target="#body"
+		hx-swap="innerHTML"
+		hx-push-url="true"
+	>buttoner</button>
+}
