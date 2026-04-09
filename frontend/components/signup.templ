@@ -1,0 +1,115 @@
+package components
+
+templ SignupPage() {
+	<div
+		class="flex h-[94vh] items-center justify-center bg-[rgb(2,48,32)]"
+		x-data="signup()"
+	>
+		<div class="w-full max-w-md space-y-8 bg-white p-8 shadow-md md:rounded-lg">
+			<div class="text-center">
+				<h1 class="mb-6 text-4xl font-extrabold tracking-tight lg:text-5xl">
+					Join True AI journey
+				</h1>
+				<p class="mb-4">Sign up to access AI features</p>
+			</div>
+			<form
+				class="space-y-6"
+				hx-post="/signupBackend"
+				hx-target="#form-response"
+				hx-swap="innerHTML"
+				x-on:submit="isSubmitting = true"
+			>
+				<!-- USERNAME -->
+				<div>
+					<label>Username</label>
+					<input
+						name="username"
+						x-model="username"
+						x-on:input.debounce.300ms="checkUsername()"
+						class="flex h-10 w-full rounded-md border px-3 py-2 text-sm"
+					/>
+					<!-- Loader -->
+					<div x-show="isChecking" class="text-sm">Checking...</div>
+					<!-- Message -->
+					<p
+						x-show="message"
+						x-text="message"
+						:class="message === 'Username is unique' ? 'text-green-500' : 'text-red-500'"
+						class="text-sm"
+					></p>
+				</div>
+				<!-- EMAIL -->
+				<div>
+					<label>Email</label>
+					<input
+						type="email"
+						name="email"
+						x-model="email"
+						required
+						class="flex h-10 w-full rounded-md border px-3 py-2 text-sm"
+					/>
+				</div>
+				<!-- PASSWORD -->
+				<div>
+					<label>Password</label>
+					<input
+						type="password"
+						name="password"
+						x-model="password"
+						required
+						class="flex h-10 w-full rounded-md border px-3 py-2 text-sm"
+					/>
+				</div>
+				<!-- BUTTON -->
+				<button
+					type="submit"
+					class="bg-black text-white h-10 w-full rounded-md"
+					:disabled="isSubmitting"
+				>
+					<span x-show="!isSubmitting">Sign Up</span>
+					<span x-show="isSubmitting">Please wait...</span>
+				</button>
+			</form>
+			<!-- RESPONSE (errors etc) -->
+			<div id="form-response" class="text-center text-sm mt-4"></div>
+			<div class="mt-4 text-center">
+				<p>
+					Already a member?
+					<a href="/sign-in" class="text-blue-600 hover:text-blue-800">
+						Sign in
+					</a>
+				</p>
+			</div>
+		</div>
+	</div>
+	<script>
+		function signup() {
+			return {
+				username: '',
+                email:'',
+                password:'',
+				message: '',
+				isChecking: false,
+				isSubmitting: false,
+
+				async checkUsername() {
+					if (!this.username) return;
+
+					this.isChecking = true;
+					this.message = '';
+
+					try {
+						const res = await fetch(`/check-username-unique?username=${this.username}`);
+						const data = await res.json(); // assuming plain text response
+						this.message = data.message;
+					} catch (e) {
+                        console.log()
+						this.message = "Error checking username";
+					} finally {
+						this.isChecking = false;
+					}
+				}
+			}
+		}
+	</script>
+}

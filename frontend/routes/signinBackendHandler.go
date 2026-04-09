@@ -12,12 +12,6 @@ import (
 var jwtKey = []byte("my_secret_key")
 
 func SigninBackendHandler(w http.ResponseWriter, r *http.Request) {
-	// // Add this middleware or inside your handlers
-
-	// var req struct {
-	// 	Username string `json:"username"`
-	// 	Password string `json:"password"`
-	// }
 	err := r.ParseForm()
 	if err != nil {
 		http.Error(w, "Invalid form", http.StatusBadRequest)
@@ -26,12 +20,7 @@ func SigninBackendHandler(w http.ResponseWriter, r *http.Request) {
 
 	identifier := r.FormValue("identifier")
 	password := r.FormValue("password")
-	// // 1. Decode request body
-	// if err := json.NewDecoder(r.Body).Decode(&req); err != nil {
-	// 	fmt.Println("value909")
-	// 	http.Error(w, "Invalid request body", http.StatusBadRequest)
-	// 	return
-	// }
+
 	db := helpers.DbConn()
 
 	// 2. Find user in DB
@@ -81,7 +70,5 @@ func SigninBackendHandler(w http.ResponseWriter, r *http.Request) {
 		MaxAge:   86400, // 24 hours
 	})
 
-	// 🔥 HERE is where HX-Redirect goes
-	w.Header().Set("HX-Redirect", "/user")
 	w.WriteHeader(http.StatusOK)
 }

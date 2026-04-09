@@ -2,14 +2,11 @@ package main
 
 import (
 	"context"
-	"encoding/json"
 	"fmt"
 	"log"
-	"net/http"
 	"os"
 	"strings"
 
-	"github.com/gorilla/mux"
 	"gopkg.in/yaml.v3"
 
 	appsv1 "k8s.io/api/apps/v1"
@@ -22,11 +19,6 @@ import (
 	"k8s.io/client-go/kubernetes"
 	"k8s.io/client-go/tools/clientcmd"
 )
-
-type RequestBody struct {
-	UserID string `json:"userId"`
-	ReplID string `json:"replId"`
-}
 
 // Read & parse YAML
 func readAndParseKubeYaml(filePath string, replId string) ([]map[string]interface{}, error) {
@@ -60,8 +52,8 @@ func readAndParseKubeYaml(filePath string, replId string) ([]map[string]interfac
 	return manifests, nil
 }
 
-func ContainerHandler() {
-
+func ContainerHandler(golet_id string) {
+	fmt.Println("value29")
 	// Load kubeconfig
 	kubeconfig := os.Getenv("KUBECONFIG")
 	if kubeconfig == "" {
@@ -78,81 +70,65 @@ func ContainerHandler() {
 		log.Fatal(err)
 	}
 
-	router := mux.NewRouter()
+	namespace := "default"
 
-	router.HandleFunc("/start", func(w http.ResponseWriter, r *http.Request) {
+	manifests, err := readAndParseKubeYaml("./service.yaml", golet_id)
+	if err != nil {
+		// http.Error(w, err.Error(), 500)
+		fmt.Println(err)
+		return
+	}
 
-		var body RequestBody
-		err := json.NewDecoder(r.Body).Decode(&body)
-		if err != nil {
-			http.Error(w, err.Error(), http.StatusBadRequest)
-			return
+	for _, manifest := range manifests {
+		kind, ok := manifest["kind"].(string)
+		if !ok {
+			continue
 		}
 
-		namespace := "default"
+		switch kind {
 
-		manifests, err := readAndParseKubeYaml("./service.yaml", body.ReplID)
-		if err != nil {
-			http.Error(w, err.Error(), 500)
-			return
-		}
+		case "Deployment":
+			var deployment appsv1.Deployment
+			bytes, _ := yaml.Marshal(manifest)
+			yaml.Unmarshal(bytes, &deployment)
 
-		for _, manifest := range manifests {
-			kind, ok := manifest["kind"].(string)
-			if !ok {
-				continue
+			_, err := clientset.AppsV1().
+				Deployments(namespace).
+				Create(context.TODO(), &deployment, metav1.CreateOptions{})
+
+			if err != nil {
+				log.Println("Deployment error:", err)
 			}
 
-			switch kind {
+		case "Service":
+			var service corev1.Service
+			bytes, _ := yaml.Marshal(manifest)
+			yaml.Unmarshal(bytes, &service)
 
-			case "Deployment":
-				var deployment appsv1.Deployment
-				bytes, _ := yaml.Marshal(manifest)
-				yaml.Unmarshal(bytes, &deployment)
+			_, err := clientset.CoreV1().
+				Services(namespace).
+				Create(context.TODO(), &service, metav1.CreateOptions{})
 
-				_, err := clientset.AppsV1().
-					Deployments(namespace).
-					Create(context.TODO(), &deployment, metav1.CreateOptions{})
-
-				if err != nil {
-					log.Println("Deployment error:", err)
-				}
-
-			case "Service":
-				var service corev1.Service
-				bytes, _ := yaml.Marshal(manifest)
-				yaml.Unmarshal(bytes, &service)
-
-				_, err := clientset.CoreV1().
-					Services(namespace).
-					Create(context.TODO(), &service, metav1.CreateOptions{})
-
-				if err != nil {
-					log.Println("Service error:", err)
-				}
-
-			case "Ingress":
-				var ingress networkingv1.Ingress
-				bytes, _ := yaml.Marshal(manifest)
-				yaml.Unmarshal(bytes, &ingress)
-
-				_, err := clientset.NetworkingV1().
-					Ingresses(namespace).
-					Create(context.TODO(), &ingress, metav1.CreateOptions{})
-
-				if err != nil {
-					log.Println("Ingress error:", err)
-				}
-
-			default:
-				log.Println("Unsupported kind:", kind)
+			if err != nil {
+				log.Println("Service error:", err)
 			}
-		}
 
-		w.Header().Set("Content-Type", "application/json")
-		json.NewEncoder(w).Encode(map[string]string{
-			"message": "Resources created successfully",
-		})
-	})
+		case "Ingress":
+			var ingress networkingv1.Ingress
+			bytes, _ := yaml.Marshal(manifest)
+			yaml.Unmarshal(bytes, &ingress)
+
+			_, err := clientset.NetworkingV1().
+				Ingresses(namespace).
+				Create(context.TODO(), &ingress, metav1.CreateOptions{})
+
+			if err != nil {
+				log.Println("Ingress error:", err)
+			}
+
+		default:
+			log.Println("Unsupported kind:", kind)
+		}
+	}
 
 }

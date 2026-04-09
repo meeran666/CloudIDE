@@ -8,10 +8,7 @@ import (
 )
 
 func BrowseHandler(w http.ResponseWriter, r *http.Request) {
-	if r.Method != http.MethodPost {
-		http.Error(w, "Method not allowed", http.StatusMethodNotAllowed)
-		return
-	}
+
 	path := r.FormValue("path")
 	resp, err := http.Get("http://localhost:3000/browse")
 	if err != nil {
