@@ -13,7 +13,7 @@ import (
 func main() {
 	mux := mux.NewRouter()
 	// mux.HandleFunc("/user_creation", userCreationHandler).Methods("POST")
-	mux.HandleFunc("/user_creation", InitHandler)
+	mux.HandleFunc("/user_creation", InitHandler).Methods("POST")
 	// mux.HandleFunc("/container", ContainerHandler).Methods("POST")
 	port := "3003"
 	fmt.Println("🚀 Listening on port:", port)

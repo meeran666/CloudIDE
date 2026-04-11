@@ -1,7 +1,6 @@
 package main
 
 import (
-	"encoding/json"
 	"fmt"
 	"io"
 	"net/http"
@@ -10,8 +9,8 @@ import (
 )
 
 type RequestBody struct {
-	User_id  string `json:"user_id"`
 	Golet_id string `json:"golet_id"`
+	Stack    string `json:"stack"`
 }
 
 func copyFile(src, dst string) error {
@@ -76,25 +75,38 @@ func createDistination(path string) error {
 }
 
 func InitHandler(w http.ResponseWriter, r *http.Request) {
-	var body RequestBody
 
-	err := json.NewDecoder(r.Body).Decode(&body)
-	if err != nil {
-		http.Error(w, err.Error(), http.StatusBadRequest)
-		return
-	}
-	golet_id := body.Golet_id
-	// golet_id := "my_computer_contain_golet"
-	source := "../base_stacks/node_stack" // folder whose contents you want to copy
+	// err := r.ParseForm()
+	// if err != nil {
+	// 	fmt.Println(err.Error())
+	// 	http.Error(w, err.Error(), 400)
+	// 	return
+	// }
 
-	destination := "../user_environment/" + body.User_id // change this
-	err = createDistination(destination)
-	err = copyDirContents(source, destination)
-	if err != nil {
-		fmt.Println("Copy failed:", err)
-		return
-	}
-	fmt.Println("All files and folders copied successfully")
-	ContainerHandler(golet_id)
+	// // Get values
+	// golet_id := r.FormValue("golet_id")
+	// stack := r.FormValue("stack")
 
+	// // golet_id := "my_computer_contain_golet"
+
+	// source := "../base_stacks/" + stack
+	// destination := "../user_environment/" + golet_id
+	// err = createDistination(destination)
+	// err = copyDirContents(source, destination)
+	// os.Exit(0)
+	// if err != nil {
+	// 	fmt.Println("Copy failed:" + err.Error())
+	// 	http.Error(w, "Copy failed:"+err.Error(), 400)
+
+	// 	return
+	// }
+	// fmt.Println("All files and folders copied successfully")
+	// err = ContainerHandler(golet_id)
+	// if err != nil {
+	// 	fmt.Println("service creation failed:" + err.Error())
+	// 	http.Error(w, "service creation failed:"+err.Error(), 400)
+	// 	return
+	// }
+	fmt.Println("service created successfully")
+	w.WriteHeader(http.StatusCreated)
 }

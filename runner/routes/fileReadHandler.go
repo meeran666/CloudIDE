@@ -2,7 +2,6 @@ package routes
 
 import (
 	"encoding/json"
-	"fmt"
 	"net/http"
 	"os"
 	"runner/models"
@@ -11,21 +10,7 @@ import (
 )
 
 func FileReadHandler(w http.ResponseWriter, r *http.Request) {
-	fmt.Println("value1")
-	// CORS headers
-	w.Header().Set("Access-Control-Allow-Origin", "*")
-	w.Header().Set("Access-Control-Allow-Headers", "Content-Type")
 
-	//  Handle OPTIONS (preflight)
-	if r.Method == http.MethodOptions {
-		w.WriteHeader(http.StatusOK)
-		return
-	}
-
-	//  Now POST will come here
-	if r.Method == http.MethodGet {
-		fmt.Println("POST received")
-	}
 	var req models.FileRequest
 
 	err := json.NewDecoder(r.Body).Decode(&req)
@@ -34,7 +19,11 @@ func FileReadHandler(w http.ResponseWriter, r *http.Request) {
 		http.Error(w, "invalid json", http.StatusBadRequest)
 		return
 	}
-	file_path := "../user_environment/" + req.Path
+	//this is for dev
+	// file_path := "../user_environment/" + req.Path
+
+	//this is for prod
+	file_path := req.Path
 	data, err := os.ReadFile(file_path)
 	if err != nil {
 		http.Error(w, "file not found", 404)

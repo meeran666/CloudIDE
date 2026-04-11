@@ -15,12 +15,15 @@ spec:
         app: service_name
     spec:
       volumes:
+        # Local machine folder mounted into Pod
+        - name: local-code
+          hostPath:
+            path: /node_workspace
+            type: Directory
+
+        # Writable workspace
         - name: workspace-volume
           emptyDir: {}
-
-        - name: code-volume
-          configMap:
-            name: service-code
 
       initContainers:
         - name: copy-local-code
@@ -29,9 +32,9 @@ spec:
           args:
             - >
               cp -r /config/* /workspace/ &&
-              echo "Code copied from ConfigMap";
+              echo "Code copied from local machine";
           volumeMounts:
-            - name: code-volume
+            - name: local-code
               mountPath: /config
 
             - name: workspace-volume
@@ -53,6 +56,7 @@ spec:
             limits:
               cpu: "1"
               memory: "1Gi"
+
 ---
 apiVersion: v1
 kind: Service
@@ -70,6 +74,7 @@ spec:
       name: user
       port: 3000
       targetPort: 3000
+
 ---
 apiVersion: networking.k8s.io/v1
 kind: Ingress
@@ -78,23 +83,24 @@ metadata:
 spec:
   ingressClassName: nginx
   rules:
-  - host: service_name.moviemania.wiki
-    http:
-      paths:
-      - path: /
-        pathType: Prefix
-        backend:
-          service:
-            name: service_name
-            port:
-              number: 3003
-  - host: service_name.autogpt-cloud.com
-    http:
-      paths:
-      - path: /
-        pathType: Prefix
-        backend:
-          service:
-            name: service_name
-            port:
-              number: 3000 
+    - host: localhost
+      http:
+        paths:
+          - path: /
+            pathType: Prefix
+            backend:
+              service:
+                name: service_name
+                port:
+                  number: 3003
+
+    - host: service_name.moviemania.wiki
+      http:
+        paths:
+          - path: /
+            pathType: Prefix
+            backend:
+              service:
+                name: service_name
+                port:
+                  number: 3000

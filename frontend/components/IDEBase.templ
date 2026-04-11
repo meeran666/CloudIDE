@@ -16,7 +16,7 @@ templ IDEBase(Dirprofile []models.Dirprofile) {
 			:class="open ? 'translate-x-0' : '-translate-x-full'"
 			class="w-80 shrink-0 fixed h-screen transition-transform duration-300 bg-gray-900 text-white"
 		>
-			@FileStructure("user1", Dirprofile)
+			@FileStructure("/workspace", Dirprofile)
 		</div>
 		<div class="flex grow h-screen flex-col transition-all duration-300 ml-0" :class="open ? 'ml-80' : 'ml-0'">
 			@Editor()

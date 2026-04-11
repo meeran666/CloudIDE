@@ -58,7 +58,7 @@ function oppeningDir(event,el) {
           console.log("No slash found in the string."); 
         }
         
-    	fetch("http://localhost:3000/file",{
+    	fetch("/file",{
 			method:"POST",
 			headers:{ "Content-Type": "application/json" },
 			body: JSON.stringify({

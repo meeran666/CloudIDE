@@ -52,8 +52,7 @@ func readAndParseKubeYaml(filePath string, replId string) ([]map[string]interfac
 	return manifests, nil
 }
 
-func ContainerHandler(golet_id string) {
-	fmt.Println("value29")
+func ContainerHandler(golet_id string) error {
 	// Load kubeconfig
 	kubeconfig := os.Getenv("KUBECONFIG")
 	if kubeconfig == "" {
@@ -62,21 +61,19 @@ func ContainerHandler(golet_id string) {
 
 	config, err := clientcmd.BuildConfigFromFlags("", kubeconfig)
 	if err != nil {
-		log.Fatal(err)
+		return err
 	}
 
 	clientset, err := kubernetes.NewForConfig(config)
 	if err != nil {
-		log.Fatal(err)
+		return err
 	}
 
 	namespace := "default"
 
 	manifests, err := readAndParseKubeYaml("./service.yaml", golet_id)
 	if err != nil {
-		// http.Error(w, err.Error(), 500)
-		fmt.Println(err)
-		return
+		return err
 	}
 
 	for _, manifest := range manifests {
@@ -97,7 +94,8 @@ func ContainerHandler(golet_id string) {
 				Create(context.TODO(), &deployment, metav1.CreateOptions{})
 
 			if err != nil {
-				log.Println("Deployment error:", err)
+				return err
+
 			}
 
 		case "Service":
@@ -110,7 +108,8 @@ func ContainerHandler(golet_id string) {
 				Create(context.TODO(), &service, metav1.CreateOptions{})
 
 			if err != nil {
-				log.Println("Service error:", err)
+				return err
+
 			}
 
 		case "Ingress":
@@ -123,12 +122,12 @@ func ContainerHandler(golet_id string) {
 				Create(context.TODO(), &ingress, metav1.CreateOptions{})
 
 			if err != nil {
-				log.Println("Ingress error:", err)
+				return err
 			}
 
 		default:
 			log.Println("Unsupported kind:", kind)
 		}
 	}
-
+	return nil
 }

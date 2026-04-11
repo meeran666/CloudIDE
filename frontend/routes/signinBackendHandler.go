@@ -69,6 +69,7 @@ func SigninBackendHandler(w http.ResponseWriter, r *http.Request) {
 		Path:     "/",
 		MaxAge:   86400, // 24 hours
 	})
+	w.Header().Set("HX-Redirect", "/user")
 
 	w.WriteHeader(http.StatusOK)
 }

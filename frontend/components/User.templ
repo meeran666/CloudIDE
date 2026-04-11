@@ -3,12 +3,12 @@ package components
 templ User() {
 	<div class="">
 		<form
-			hx-post="/create"
+			hx-get="/userBackend"
 			hx-target="#body"
 			hx-swap="innerHTML"
 		>
 			<label>Select goletid:</label>
-			<input type="text" name="fname"/>
+			<input type="text" name="container_name"/>
 			<br/>
 			<br/>
 			<label>Choose a stack:</label>

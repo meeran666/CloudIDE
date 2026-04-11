@@ -14,15 +14,17 @@ func main() {
 	mux.HandleFunc("/signupBackend", routes.SignupBackendHandler).Methods("POST")
 	mux.HandleFunc("/signup", routes.SignupHandler).Methods("GET")
 	mux.HandleFunc("/check-username-unique", routes.CheckUsernameUniqueHandler).Methods("GET")
-
 	mux.HandleFunc("/signin", routes.SigninHandler).Methods("GET")
 	mux.HandleFunc("/verifyAccount", routes.VerifyAccountHandler).Methods("GET")
 	mux.HandleFunc("/verify-code-backend", routes.VerifyCodeBackendHandler).Methods("POST")
 	mux.HandleFunc("/signinBackend", routes.SigninBackendHandler).Methods("POST")
 	mux.HandleFunc("/", routes.LandingPageHandler).Methods("GET")
 	mux.HandleFunc("/user", routes.AuthMiddleware(routes.UserHandler)).Methods("GET")
-	mux.HandleFunc("/start", routes.IDEHandler).Methods("POST")
-	mux.HandleFunc("/create", routes.IDEHandler).Methods("POST")
+	mux.HandleFunc("/userBackend", routes.AuthMiddleware(routes.UserBackendHandler)).Methods("GET")
+	mux.HandleFunc("/file", routes.AuthMiddleware(routes.FileHandler)).Methods("POST")
+	mux.HandleFunc("/ws", routes.AuthMiddleware(routes.WsHandler)).Methods("GET")
+
+	mux.HandleFunc("/start", routes.IDEHandler).Methods("GET")
 	mux.HandleFunc("/browse", routes.BrowseHandler).Methods("POST")
 	mux.PathPrefix("/public/").Handler(
 		http.StripPrefix("/public/", http.FileServer(http.Dir("public"))),

@@ -35,7 +35,7 @@ func IDEBase(Dirprofile []models.Dirprofile) templ.Component {
 		if templ_7745c5c3_Err != nil {
 			return templ_7745c5c3_Err
 		}
-		templ_7745c5c3_Err = FileStructure("user1", Dirprofile).Render(ctx, templ_7745c5c3_Buffer)
+		templ_7745c5c3_Err = FileStructure("/workspace", Dirprofile).Render(ctx, templ_7745c5c3_Buffer)
 		if templ_7745c5c3_Err != nil {
 			return templ_7745c5c3_Err
 		}
