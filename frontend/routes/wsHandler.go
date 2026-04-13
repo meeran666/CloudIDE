@@ -23,7 +23,7 @@ func connectToServiceServer(golet_id string) (*websocket.Conn, error) {
 }
 func WsHandler(w http.ResponseWriter, r *http.Request) {
 
-	golet_id := "service"
+	golet_id := "weber"
 	// Upgrade frontend connection
 	clientConn, err := upgrader.Upgrade(w, r, nil)
 	if err != nil {

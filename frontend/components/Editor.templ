@@ -85,4 +85,30 @@ templ Editor() {
 			</div>
 		</div>
 	</div>
+	<script>
+	let timeout
+editor.onDidChangeModelContent((event) => {
+	clearTimeout(timeout);
+timeout = setTimeout(() => {
+    event.changes.forEach(change => {
+        const payload = {
+            line: change.range.startLineNumber,
+            column: change.range.startColumn,
+            text: change.text,
+            endLine: change.range.endLineNumber,
+            endColumn: change.range.endColumn
+        };
+
+        fetch('/api/save-change', {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json'
+            },
+            body: JSON.stringify(payload)
+          })
+        });
+    }, 500); // waits until user stops typing
+});
+
+	</script>
 }

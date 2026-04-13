@@ -86,14 +86,12 @@ func InitHandler(w http.ResponseWriter, r *http.Request) {
 	// // Get values
 	// golet_id := r.FormValue("golet_id")
 	// stack := r.FormValue("stack")
-
-	// // golet_id := "my_computer_contain_golet"
+	// fmt.Println(golet_id)
 
 	// source := "../base_stacks/" + stack
 	// destination := "../user_environment/" + golet_id
 	// err = createDistination(destination)
 	// err = copyDirContents(source, destination)
-	// os.Exit(0)
 	// if err != nil {
 	// 	fmt.Println("Copy failed:" + err.Error())
 	// 	http.Error(w, "Copy failed:"+err.Error(), 400)

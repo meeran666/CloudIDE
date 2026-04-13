@@ -10,9 +10,9 @@ import (
 
 func IDEHandler(w http.ResponseWriter, r *http.Request) {
 	golet_id := r.URL.Query().Get("golet_id")
-	golet_id = "service"
-	apiUrl := "http://" + golet_id + ".localhost:3006"
-	resp, err := http.Get(apiUrl)
+	golet_id = "weber"
+	targetURL := "http://" + golet_id + ".localhost:3006"
+	resp, err := http.Get(targetURL)
 
 	if err != nil {
 		fmt.Println(err)

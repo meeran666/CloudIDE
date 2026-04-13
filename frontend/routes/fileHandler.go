@@ -7,7 +7,7 @@ import (
 )
 
 func FileHandler(w http.ResponseWriter, r *http.Request) {
-	golet_id := "service"
+	golet_id := "weber"
 	// Read incoming body
 	body, err := io.ReadAll(r.Body)
 	if err != nil {

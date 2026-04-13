@@ -34,8 +34,8 @@ func filelist(path string) error {
 
 func HomepageHandler(w http.ResponseWriter, r *http.Request) {
 
-	// err := filelist("../user_environment/user1")
-	err := filelist("/workspace")
+	err := filelist("../user_environment/user1")
+	err := filelist("")
 	if err != nil {
 		color.Red("Error: %v", err)
 		http.Error(w, "Not Found", http.StatusNotFound)

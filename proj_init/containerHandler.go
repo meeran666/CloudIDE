@@ -35,6 +35,7 @@ func readAndParseKubeYaml(filePath string, replId string) ([]map[string]interfac
 		var doc map[string]interface{}
 		err := decoder.Decode(&doc)
 		if err != nil {
+			fmt.Println("what")
 			break
 		}
 
