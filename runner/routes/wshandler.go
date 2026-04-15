@@ -2,7 +2,6 @@ package routes
 
 import (
 	"encoding/json"
-	"fmt"
 	"io"
 	"log"
 	"net/http"
@@ -69,14 +68,12 @@ func WsHandler(w http.ResponseWriter, r *http.Request) {
 		buf := make([]byte, 4096)
 		for {
 			n, err := ptmx.Read(buf)
+
 			if n > 0 {
 				msg := models.OutputMessage{
 					Output: string(buf[:n]),
 					Error:  false,
 				}
-				fmt.Println(buf[:n])
-				fmt.Println("value")
-				fmt.Printf("%q\n", buf[:n])
 				data, _ := json.Marshal(msg)
 				if writeErr := conn.WriteMessage(websocket.TextMessage, data); writeErr != nil {
 					log.Println("WebSocket write error:", writeErr)
@@ -96,6 +93,7 @@ func WsHandler(w http.ResponseWriter, r *http.Request) {
 	for {
 
 		_, msg, err := conn.ReadMessage()
+
 		if err != nil {
 			log.Println("WebSocket read error:", err)
 			break
@@ -123,9 +121,7 @@ func WsHandler(w http.ResponseWriter, r *http.Request) {
 
 		// Write command/input to PTY
 		if input.Command != "" {
-			fmt.Println("input.Command")
 
-			fmt.Println(input.Command)
 			if _, writeErr := ptmx.Write([]byte(input.Command + "\n")); writeErr != nil {
 				log.Println("PTY write error:", writeErr)
 				break

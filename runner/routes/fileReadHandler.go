@@ -20,10 +20,10 @@ func FileReadHandler(w http.ResponseWriter, r *http.Request) {
 		return
 	}
 	//this is for dev
-	// file_path := "../user_environment/" + req.Path
+	file_path := "../user_environment/user1" + req.Path
 
 	//this is for prod
-	file_path := req.Path
+	// file_path := req.Path
 	data, err := os.ReadFile(file_path)
 	if err != nil {
 		http.Error(w, "file not found", 404)

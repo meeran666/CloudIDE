@@ -1,5 +1,7 @@
 package models
 
+import "net/http/httputil"
+
 type Dirprofile struct {
 	Name  string
 	IsDir bool
@@ -21,3 +23,5 @@ type OutputMessage struct {
 	Output string `json:"output"`
 	Error  bool   `json:"error"`
 }
+
+var Proxy *httputil.ReverseProxy

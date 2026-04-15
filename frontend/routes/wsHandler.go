@@ -12,7 +12,11 @@ var upgrader = websocket.Upgrader{
 }
 
 func connectToServiceServer(golet_id string) (*websocket.Conn, error) {
-	targetURL := "ws://" + golet_id + ".localhost:3006/ws"
+	//dev part
+	targetURL := "ws://localhost:3003/ws"
+
+	//prod part
+	// targetURL := "ws://" + golet_id + ".localhost:3006/ws"
 
 	conn, _, err := websocket.DefaultDialer.Dial(targetURL, nil)
 	if err != nil {

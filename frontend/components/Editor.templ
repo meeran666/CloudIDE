@@ -86,29 +86,64 @@ templ Editor() {
 		</div>
 	</div>
 	<script>
-	let timeout
-editor.onDidChangeModelContent((event) => {
-	clearTimeout(timeout);
-timeout = setTimeout(() => {
-    event.changes.forEach(change => {
-        const payload = {
-            line: change.range.startLineNumber,
-            column: change.range.startColumn,
-            text: change.text,
-            endLine: change.range.endLineNumber,
-            endColumn: change.range.endColumn
-        };
+document.addEventListener('DOMContentLoaded', function() {
+    const waitForEditor = setInterval(function() {
+        const editorElements = document.querySelectorAll('[id^="monaco-editor"]');
+        editorElements.forEach(function(el) {
+            if (el.editor && !el._saveListenerAttached) {
+				
+                el._saveListenerAttached = true;
+                let timeout;
+                let changedLines = new Set();
 
-        fetch('/api/save-change', {
-            method: 'POST',
-            headers: {
-                'Content-Type': 'application/json'
-            },
-            body: JSON.stringify(payload)
-          })
+                el.editor.onDidChangeModelContent((event) => {
+					const alpineRoot = el.closest('[x-data]');
+    
+    			// Access Alpine's internal data and toggle open
+				const data = Alpine.$data(el.closest('[x-data]'));
+				
+                    event.changes.forEach(change => {
+                        // Collect all affected line numbers
+                        for (let line = change.range.startLineNumber; line <= change.range.endLineNumber; line++) {
+                            changedLines.add(line);
+                        }
+                    });
+
+                    clearTimeout(timeout);
+                    timeout = setTimeout(() => {
+                        if (changedLines.size === 0) return;
+
+                        const model = el.editor.getModel();
+
+                        // Build payload with full line content
+                        const lines = [...changedLines].map(lineNumber => ({
+                            line: lineNumber,
+                            content: model.getLineContent(lineNumber),
+							file_path: data.selected_file_path 
+							
+                        }));
+
+                        changedLines.clear();
+
+                        const payload = { lines };
+
+                        fetch('/save-change', {
+                            method: 'POST',
+                            headers: { 'Content-Type': 'application/json' },
+                            body: JSON.stringify(payload)
+                        })
+                        .then(res => {
+                            if (!res.ok) console.error('Save failed:', res.status);
+                        })
+                        .catch(err => console.error('Save error:', err));
+
+                    }, 500);
+                });
+
+                clearInterval(waitForEditor);
+            }
         });
-    }, 500); // waits until user stops typing
+    }, 100);
 });
-
-	</script>
+</script>
 }

@@ -7,7 +7,6 @@ import (
 )
 
 func FileHandler(w http.ResponseWriter, r *http.Request) {
-	golet_id := "weber"
 	// Read incoming body
 	body, err := io.ReadAll(r.Body)
 	if err != nil {
@@ -16,8 +15,13 @@ func FileHandler(w http.ResponseWriter, r *http.Request) {
 	}
 	defer r.Body.Close()
 
-	// Create new request to target server (3006)
-	targetURL := "http://" + golet_id + ".localhost:3006/file"
+	// prod part
+	// golet_id := "weber"
+	// targetURL := "http://" + golet_id + ".localhost:3006/file"
+	//dev part
+
+	targetURL := "http://localhost:3003/file"
+
 	req, err := http.NewRequest("POST", targetURL, bytes.NewBuffer(body))
 	if err != nil {
 		http.Error(w, "failed to create request", 500)

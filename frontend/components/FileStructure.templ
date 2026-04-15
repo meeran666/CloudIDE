@@ -28,13 +28,23 @@ templ FileStructure(path string, Dirprofile []models.Dirprofile) {
 	<script>
 function oppeningDir(event,el) {
 	const hxVals = el.getAttribute('hx-vals')
+	
 	const hxValsObj = JSON.parse(hxVals)
 	if (hxValsObj.isDir === false){
-		const path = hxValsObj.path 
+		const path = hxValsObj.path
+		// change the value of state file_path
+		// Get the Alpine component root (the element that has x-data)
+    	const alpineRoot = el.closest('[x-data]');
+    
+    	// Access Alpine's internal data and toggle open
+		const data = Alpine.$data(el.closest('[x-data]'));
+		data.selected_file_path=path
+
+		
         const language = {
             html: "html",
             js: "javascript",
-            ts: "javascript",
+            ts: "typescript",
             go: "go",
             css: "css", 
             json: "json",

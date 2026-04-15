@@ -11,11 +11,11 @@ import (
 func BrowseHandler(w http.ResponseWriter, r *http.Request) {
 	path := r.FormValue("path")
 	//you have to find the golet id in backend by database
-	golet_id := "weber"
-	fmt.Println("path")
-	fmt.Println(path)
-	// 2. Target URL
-	targetURL := "http://" + golet_id + ".localhost:3006/browse" + "?path=" + path
+	//production part
+	// golet_id := "weber"
+	// targetURL := "http://" + golet_id + ".localhost:3006/browse" + "?path=" + path
+	//dev part
+	targetURL := "http://localhost:3003/browse?path=" + path
 	resp, err := http.Get(targetURL)
 	if err != nil {
 		fmt.Println(err)
