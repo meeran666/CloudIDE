@@ -15,7 +15,6 @@ func SigninHandler(w http.ResponseWriter, r *http.Request) {
 	} else {
 		// Return full page (with navbar)
 		components.Base(components.Signin()).Render(r.Context(), w)
-		// components.Signin().Render(r.Context(), w)
 	}
 
 }

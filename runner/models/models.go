@@ -1,5 +1,11 @@
 package models
 
+// dev part
+const BaseDir = "../user_environment/weber"
+
+// prod part
+// const BaseDir = "/workspace"
+
 type Dirprofile struct {
 	Name  string
 	IsDir bool

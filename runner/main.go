@@ -18,6 +18,7 @@ func main() {
 	mux.HandleFunc("/browse", routes.BrowseHandler).Methods("GET")
 	mux.HandleFunc("/file", routes.FileReadHandler).Methods("POST")
 	mux.HandleFunc("/save-change", routes.ChangeHandler).Methods("POST")
+	mux.HandleFunc("/delete-service", routes.DeleteServiceHandler).Methods("POST")
 
 	port := "3003"
 	fmt.Println("🚀 Listening on port:", port)

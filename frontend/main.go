@@ -13,7 +13,7 @@ func main() {
 	mux := mux.NewRouter()
 	mux.HandleFunc("/signupBackend", routes.SignupBackendHandler).Methods("POST")
 	mux.HandleFunc("/signup", routes.SignupHandler).Methods("GET")
-	mux.HandleFunc("/service-delete", routes.ByPassToDeleteServiceHandler).Methods("GET")
+	mux.HandleFunc("/delete-service", routes.ByPassToDeleteServiceHandler).Methods("POST")
 	mux.HandleFunc("/check-username-unique", routes.CheckUsernameUniqueHandler).Methods("GET")
 	mux.HandleFunc("/signin", routes.SigninHandler).Methods("GET")
 	mux.HandleFunc("/save-change", routes.ChangeHandler).Methods("POST")

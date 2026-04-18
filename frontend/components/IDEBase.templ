@@ -2,7 +2,7 @@ package components
 
 import "frontend/models"
 
-templ IDEBase(Dirprofile []models.Dirprofile) {
+templ IDEBase(Dirprofile []models.Dirprofile, golet_id string) {
 	<div class="w-screen h-9 flex  items-center  bg-zinc-500">
 		<div
 			class=" w-6 h-6 flex justify-center items-center  rounded "
@@ -11,16 +11,52 @@ templ IDEBase(Dirprofile []models.Dirprofile) {
 			<img src="/public/sidebar.png" alt="sidebar" class="w-5  h-5"/>
 		</div>
 	</div>
-	<div class="flex h-screen">
+	<div id="templ_component_wrapper" class="flex h-screen" x-data={ `{ golet_id: "` + golet_id + `" }` }>
 		<div
 			:class="open ? 'translate-x-0' : '-translate-x-full'"
 			class="w-80 shrink-0 fixed h-screen transition-transform duration-300 bg-gray-900 text-white"
 		>
-			@FileStructure("", Dirprofile)
+			@FileStructure("", Dirprofile, golet_id)
 		</div>
-		<div class="flex grow h-screen flex-col transition-all duration-300 ml-0" :class="open ? 'ml-80' : 'ml-0'">
+		<div x-data="{ tab: 'editor' }" class="flex grow h-screen flex-col transition-all duration-300 ml-0" :class="open ? 'ml-80' : 'ml-0'">
+			<div class="h-5 w-80 bg-amber-500 flex gap-2">
+				<span class="w-40 h-5 grow-0 bg-amber-800">editor + terminal</span>
+				<span class="w-20 h-5 grow-0 bg-amber-800">preview </span>
+			</div>
 			@Editor()
 			@Terminal()
 		</div>
 	</div>
+	<script>
+ document.addEventListener('alpine:initialized', () => {
+        // Alpine is ready now
+        const golet_id = Alpine.$data(
+            document.getElementById('templ_component_wrapper')
+        ).golet_id;
+
+        let idleTimer;
+        const IDLE_TIME = 1 * 5 * 1000;
+
+        function onIdle() {
+            console.log("onidle")
+            fetch('/delete-service?golet_id=' + golet_id, {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/json' },
+            })
+            .then(res => console.log('Saved on idle'))
+            .catch(err => console.error('Save failed:', err))
+        }
+
+        function resetTimer() {
+            clearTimeout(idleTimer);
+            idleTimer = setTimeout(onIdle, IDLE_TIME);
+        }
+
+        ['mousemove', 'keydown', 'click', 'scroll', 'touchstart'].forEach(event => {
+            document.addEventListener(event, resetTimer)
+        })
+
+        resetTimer()
+    })
+	</script>
 }

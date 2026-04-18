@@ -10,6 +10,8 @@ import (
 
 func BrowseHandler(w http.ResponseWriter, r *http.Request) {
 	path := r.FormValue("path")
+	golet_id := r.FormValue("golet_id")
+
 	//you have to find the golet id in backend by database
 	//production part
 	// golet_id := "weber"
@@ -32,13 +34,13 @@ func BrowseHandler(w http.ResponseWriter, r *http.Request) {
 	// 	http.Error(w, err.Error(), 400)
 	// }
 	// defer resp.Body.Close()
-
 	err = json.NewDecoder(resp.Body).Decode(&models.DirprofileArr)
+	fmt.Println(models.DirprofileArr)
 	if err != nil {
 		fmt.Println(err)
 		// do a response of err to frontend in future
 	}
 
-	components.FileStructure(path, models.DirprofileArr).Render(r.Context(), w)
+	components.FileStructure(path, models.DirprofileArr, golet_id).Render(r.Context(), w)
 	models.DirprofileArr = nil
 }

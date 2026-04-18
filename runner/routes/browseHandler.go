@@ -9,7 +9,6 @@ import (
 )
 
 func BrowseHandler(w http.ResponseWriter, r *http.Request) {
-
 	path := r.FormValue("path")
 	err := filelist(path)
 

@@ -5,6 +5,7 @@ import (
 	"fmt"
 	"net/http"
 	"os"
+	"runner/models"
 	"strings"
 )
 
@@ -18,26 +19,40 @@ type ChangePayload struct {
 	Lines []LineChange `json:"lines"`
 }
 
+func saveToFile(payload ChangePayload, filename string) error {
+	file, err := os.OpenFile(filename, os.O_APPEND|os.O_CREATE|os.O_WRONLY, 0644)
+	if err != nil {
+		return err
+	}
+	defer file.Close()
+
+	for _, line := range payload.Lines {
+		data, err := json.Marshal(line)
+		if err != nil {
+			return err
+		}
+
+		// write JSON object + comma + newline
+		_, err = file.WriteString(string(data) + ",\n")
+		if err != nil {
+			return err
+		}
+	}
+
+	return nil
+}
 func ChangeHandler(w http.ResponseWriter, r *http.Request) {
 	var payload ChangePayload
+
 	if err := json.NewDecoder(r.Body).Decode(&payload); err != nil {
 		http.Error(w, "Invalid JSON: "+err.Error(), http.StatusBadRequest)
 		return
 	}
-	path := "../user_environment/user1"
-
-	// filePath := "../user_environment/user1/down.html"
-	// filePath := path + payload.Lines[]
-	// content, err := os.ReadFile(filePath)
-	// if err != nil {
-	// 	http.Error(w, err.Error(), http.StatusInternalServerError)
-	// 	return
-	// }
 
 	// Apply each line change
 	for _, change := range payload.Lines {
 
-		filePath := path + change.File_path
+		filePath := models.BaseDir + change.File_path
 		content, err := os.ReadFile(filePath)
 		if err != nil {
 			http.Error(w, err.Error(), http.StatusInternalServerError)
@@ -64,5 +79,7 @@ func ChangeHandler(w http.ResponseWriter, r *http.Request) {
 	}
 
 	fmt.Println("File updated successfully")
+	saveToFile(payload, "file.txt")
+
 	w.WriteHeader(http.StatusOK)
 }

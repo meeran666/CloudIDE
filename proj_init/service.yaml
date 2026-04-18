@@ -15,31 +15,20 @@ spec:
         app: service_name
     spec:
       volumes:
-        # Local machine folder mounted into Pod
-        - name: local-code
-          hostPath:
-            path: /node_workspace/service_name
-            type: Directory
-
-        # Writable workspace
         - name: workspace-volume
           emptyDir: {}
 
       initContainers:
-        - name: copy-local-code
-          image: busybox
-          command: ["/bin/sh", "-c"]
-          args:
-            - >
-              cp -r /config/* /workspace/ &&
-              echo "Code copied from local machine";
+        - name: file-fetcher
+          image: meeran666/file_accepter
+          env:
+            - name: BASE_FOLDER
+              value: "user1"
+            - name: MODE
+              value: "init"
           volumeMounts:
-            - name: local-code
-              mountPath: /config
-
             - name: workspace-volume
               mountPath: /workspace
-
       containers:
         - name: runner
           image: meeran666/ide_image

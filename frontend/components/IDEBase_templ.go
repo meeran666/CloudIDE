@@ -10,7 +10,7 @@ import templruntime "github.com/a-h/templ/runtime"
 
 import "frontend/models"
 
-func IDEBase(Dirprofile []models.Dirprofile) templ.Component {
+func IDEBase(Dirprofile []models.Dirprofile, golet_id string) templ.Component {
 	return templruntime.GeneratedTemplate(func(templ_7745c5c3_Input templruntime.GeneratedComponentInput) (templ_7745c5c3_Err error) {
 		templ_7745c5c3_W, ctx := templ_7745c5c3_Input.Writer, templ_7745c5c3_Input.Context
 		if templ_7745c5c3_CtxErr := ctx.Err(); templ_7745c5c3_CtxErr != nil {
@@ -31,15 +31,28 @@ func IDEBase(Dirprofile []models.Dirprofile) templ.Component {
 			templ_7745c5c3_Var1 = templ.NopComponent
 		}
 		ctx = templ.ClearChildren(ctx)
-		templ_7745c5c3_Err = templruntime.WriteString(templ_7745c5c3_Buffer, 1, "<div class=\"w-screen h-9 flex items-center bg-zinc-500\"><div class=\"w-6 h-6 flex justify-center items-center rounded\" @click=\"open = !open\"><img src=\"/public/sidebar.png\" alt=\"sidebar\" class=\"w-5 h-5\"></div></div><div class=\"flex h-screen\"><div :class=\"open ? 'translate-x-0' : '-translate-x-full'\" class=\"w-80 shrink-0 fixed h-screen transition-transform duration-300 bg-gray-900 text-white\">")
+		templ_7745c5c3_Err = templruntime.WriteString(templ_7745c5c3_Buffer, 1, "<div class=\"w-screen h-9 flex items-center bg-zinc-500\"><div class=\"w-6 h-6 flex justify-center items-center rounded\" @click=\"open = !open\"><img src=\"/public/sidebar.png\" alt=\"sidebar\" class=\"w-5 h-5\"></div></div><div id=\"templ_component_wrapper\" class=\"flex h-screen\" x-data=\"")
 		if templ_7745c5c3_Err != nil {
 			return templ_7745c5c3_Err
 		}
-		templ_7745c5c3_Err = FileStructure("", Dirprofile).Render(ctx, templ_7745c5c3_Buffer)
+		var templ_7745c5c3_Var2 string
+		templ_7745c5c3_Var2, templ_7745c5c3_Err = templ.JoinStringErrs(`{ golet_id: "` + golet_id + `" }`)
+		if templ_7745c5c3_Err != nil {
+			return templ.Error{Err: templ_7745c5c3_Err, FileName: `components/IDEBase.templ`, Line: 14, Col: 100}
+		}
+		_, templ_7745c5c3_Err = templ_7745c5c3_Buffer.WriteString(templ.EscapeString(templ_7745c5c3_Var2))
 		if templ_7745c5c3_Err != nil {
 			return templ_7745c5c3_Err
 		}
-		templ_7745c5c3_Err = templruntime.WriteString(templ_7745c5c3_Buffer, 2, "</div><div class=\"flex grow h-screen flex-col transition-all duration-300 ml-0\" :class=\"open ? 'ml-80' : 'ml-0'\">")
+		templ_7745c5c3_Err = templruntime.WriteString(templ_7745c5c3_Buffer, 2, "\"><div :class=\"open ? 'translate-x-0' : '-translate-x-full'\" class=\"w-80 shrink-0 fixed h-screen transition-transform duration-300 bg-gray-900 text-white\">")
+		if templ_7745c5c3_Err != nil {
+			return templ_7745c5c3_Err
+		}
+		templ_7745c5c3_Err = FileStructure("", Dirprofile, golet_id).Render(ctx, templ_7745c5c3_Buffer)
+		if templ_7745c5c3_Err != nil {
+			return templ_7745c5c3_Err
+		}
+		templ_7745c5c3_Err = templruntime.WriteString(templ_7745c5c3_Buffer, 3, "</div><div x-data=\"{ tab: 'editor' }\" class=\"flex grow h-screen flex-col transition-all duration-300 ml-0\" :class=\"open ? 'ml-80' : 'ml-0'\"><div class=\"h-5 w-80 bg-amber-500 flex gap-2\"><span class=\"w-40 h-5 grow-0 bg-amber-800\">editor + terminal</span> <span class=\"w-20 h-5 grow-0 bg-amber-800\">preview </span></div>")
 		if templ_7745c5c3_Err != nil {
 			return templ_7745c5c3_Err
 		}
@@ -51,7 +64,7 @@ func IDEBase(Dirprofile []models.Dirprofile) templ.Component {
 		if templ_7745c5c3_Err != nil {
 			return templ_7745c5c3_Err
 		}
-		templ_7745c5c3_Err = templruntime.WriteString(templ_7745c5c3_Buffer, 3, "</div></div>")
+		templ_7745c5c3_Err = templruntime.WriteString(templ_7745c5c3_Buffer, 4, "</div></div><script>\n document.addEventListener('alpine:initialized', () => {\n        // Alpine is ready now\n        const golet_id = Alpine.$data(\n            document.getElementById('templ_component_wrapper')\n        ).golet_id;\n\n        let idleTimer;\n        const IDLE_TIME = 1 * 5 * 1000;\n\n        function onIdle() {\n            console.log(\"onidle\")\n            fetch('/delete-service?golet_id=' + golet_id, {\n                method: 'POST',\n                headers: { 'Content-Type': 'application/json' },\n            })\n            .then(res => console.log('Saved on idle'))\n            .catch(err => console.error('Save failed:', err))\n        }\n\n        function resetTimer() {\n            clearTimeout(idleTimer);\n            idleTimer = setTimeout(onIdle, IDLE_TIME);\n        }\n\n        ['mousemove', 'keydown', 'click', 'scroll', 'touchstart'].forEach(event => {\n            document.addEventListener(event, resetTimer)\n        })\n\n        resetTimer()\n    })\n\t</script>")
 		if templ_7745c5c3_Err != nil {
 			return templ_7745c5c3_Err
 		}

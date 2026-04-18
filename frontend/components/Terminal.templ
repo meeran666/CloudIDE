@@ -64,7 +64,9 @@ templ Terminal() {
 
           function connect() {
               setStatus('connecting');
-              ws = new WebSocket('/ws');
+              const golet_id = Alpine.$data(document.getElementById('templ_component_wrapper')).golet_id;
+              const url ='/ws?golet_id='+ golet_id
+              ws = new WebSocket(url);
 
               ws.onopen = () => { setStatus('connected');  };
               ws.onclose = () => { setStatus('disconnected'); term.writeln('\r\n\x1b[31mDisconnected from server.\x1b[0m'); };
@@ -83,7 +85,6 @@ templ Terminal() {
               const code = domEvent.keyCode;
 
               if (code === 13) {
-                    console.log("what")
                   term.write('\r\n');
                   const cmd = inputBuffer.trim();
                   inputBuffer = '';

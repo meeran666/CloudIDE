@@ -9,9 +9,9 @@ import (
 )
 
 func IDEHandler(w http.ResponseWriter, r *http.Request) {
+
+	golet_id := r.URL.Query().Get("golet_id")
 	// prod part
-	// golet_id := r.URL.Query().Get("golet_id")
-	// golet_id = "weber"
 	// targetURL := "http://" + golet_id + ".localhost:3006"
 	// dev part
 	targetURL := "http://localhost:3003"
@@ -29,7 +29,7 @@ func IDEHandler(w http.ResponseWriter, r *http.Request) {
 	}
 
 	// components.IDEBase(models.DirprofileArr).Render(r.Context(), w)
-	components.Base(components.IDEBase(models.DirprofileArr)).Render(r.Context(), w)
+	components.Base(components.IDEBase(models.DirprofileArr, golet_id)).Render(r.Context(), w)
 
 	models.DirprofileArr = nil
 

@@ -1,7 +1,7 @@
 package components
 
 templ Editor() {
-	<div class="grow flex h-[70%]">
+	<div class="grow flex h-[70%] ">
 		<div class="flex grow  h-full w-full max-w-full">
 			<div
 				x-data="{
@@ -127,7 +127,9 @@ document.addEventListener('DOMContentLoaded', function() {
 
                         const payload = { lines };
 
-                        fetch('/save-change', {
+						const golet_id = Alpine.$data(document.getElementById('templ_component_wrapper')).golet_id;
+
+                        fetch('/save-change?golet_id='+golet_id, {
                             method: 'POST',
                             headers: { 'Content-Type': 'application/json' },
                             body: JSON.stringify(payload)
@@ -137,7 +139,7 @@ document.addEventListener('DOMContentLoaded', function() {
                         })
                         .catch(err => console.error('Save error:', err));
 
-                    }, 500);
+                    }, 100);
                 });
 
                 clearInterval(waitForEditor);

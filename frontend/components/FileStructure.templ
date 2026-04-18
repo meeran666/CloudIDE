@@ -5,7 +5,7 @@ import (
 	"strconv"
 )
 
-templ FileStructure(path string, Dirprofile []models.Dirprofile) {
+templ FileStructure(path string, Dirprofile []models.Dirprofile, golet_id string) {
 	<ul class="w-48 p-2">
 		for _, item := range Dirprofile {
 			{{ newpath := path + "/" + item.Name }}
@@ -67,11 +67,13 @@ function oppeningDir(event,el) {
         } else {
           console.log("No slash found in the string."); 
         }
-        
-    	fetch("/file",{
+		
+		const golet_id = Alpine.$data(document.getElementById('templ_component_wrapper')).golet_id;
+    	fetch("/file?golet_id="+golet_id,{
 			method:"POST",
 			headers:{ "Content-Type": "application/json" },
 			body: JSON.stringify({
+
 			path: path
 				})
 		})

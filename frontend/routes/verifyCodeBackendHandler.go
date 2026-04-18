@@ -24,14 +24,11 @@ func writeJSON(w http.ResponseWriter, status int, payload interface{}) {
 func VerifyCodeBackendHandler(w http.ResponseWriter, r *http.Request) {
 	username := r.FormValue("username")
 	code := r.FormValue("code")
-	//  Decode JSON
-	// Decide lookup field
 	db := helpers.DbConn()
 	var user User
 	query := db.Model(&User{})
 	query = query.Where("username = ?", username)
 	result := query.First(&user)
-	fmt.Println(result)
 	if errors.Is(result.Error, gorm.ErrRecordNotFound) {
 		writeJSON(w, http.StatusOK, map[string]interface{}{
 			"success": true,

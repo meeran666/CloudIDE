@@ -26,7 +26,6 @@ func sendOutput(conn *websocket.Conn, text string, isError bool) {
 }
 
 func WsHandler(w http.ResponseWriter, r *http.Request) {
-
 	// Upgrade HTTP → WebSocket
 	conn, err := upgrader.Upgrade(w, r, nil)
 	if err != nil {

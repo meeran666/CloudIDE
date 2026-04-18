@@ -12,6 +12,7 @@ var upgrader = websocket.Upgrader{
 }
 
 func connectToServiceServer(golet_id string) (*websocket.Conn, error) {
+
 	//dev part
 	targetURL := "ws://localhost:3003/ws"
 
@@ -20,14 +21,15 @@ func connectToServiceServer(golet_id string) (*websocket.Conn, error) {
 
 	conn, _, err := websocket.DefaultDialer.Dial(targetURL, nil)
 	if err != nil {
+
 		return nil, err
 	}
 
 	return conn, nil
 }
-func WsHandler(w http.ResponseWriter, r *http.Request) {
 
-	golet_id := "weber"
+func WsHandler(w http.ResponseWriter, r *http.Request) {
+	golet_id := r.FormValue("golet_id")
 	// Upgrade frontend connection
 	clientConn, err := upgrader.Upgrade(w, r, nil)
 	if err != nil {

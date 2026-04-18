@@ -8,8 +8,8 @@ import (
 	"net/url"
 )
 
-func Proxy() {
-	target, err := url.Parse("http://localhost:3003")
+func Proxy(golet_id string, targetURL string) {
+	target, err := url.Parse(targetURL)
 	if err != nil {
 		log.Fatal("Invalid target URL:", err)
 	}
@@ -19,4 +19,5 @@ func Proxy() {
 		log.Println("Proxy error:", err)
 		http.Error(w, "Backend unavailable", http.StatusBadGateway)
 	}
+
 }

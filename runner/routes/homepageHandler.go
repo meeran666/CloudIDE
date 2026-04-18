@@ -17,10 +17,11 @@ func filelist(path string) error {
 	if err != nil {
 		log.Fatal(err)
 	}
-	subpath := dir + "/" + path
+	// dev part
+	subpath := dir + "/" + models.BaseDir + "/" + path
 
-	//this is production part
-	// subpath := path
+	// prod part
+	// subpath := models.BaseDir + "/" + path
 
 	root := os.DirFS(subpath)
 	entries, err := fs.ReadDir(root, ".")
@@ -36,9 +37,7 @@ func filelist(path string) error {
 
 func HomepageHandler(w http.ResponseWriter, r *http.Request) {
 	// dev part
-	err := filelist("../user_environment/user1")
-	// prod part
-	// err := filelist("/workspace")
+	err := filelist("")
 	if err != nil {
 		color.Red("Error: %v", err)
 		http.Error(w, "Not Found", http.StatusNotFound)

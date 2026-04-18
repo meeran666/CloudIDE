@@ -10,11 +10,8 @@ import (
 func UserBackendHandler(w http.ResponseWriter, r *http.Request) {
 	// sending the request to orchestrator server for creating user space folder
 	data := url.Values{}
-	container_name := r.FormValue("container_name")
-	_ = container_name
-
+	golet_id := r.FormValue("golet_id")
 	stack := r.FormValue("stack")
-	golet_id := "golet_id565"
 
 	data.Set("golet_id", golet_id)
 	data.Set("stack", stack)

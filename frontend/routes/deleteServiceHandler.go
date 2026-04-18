@@ -8,8 +8,13 @@ import (
 )
 
 func ByPassToDeleteServiceHandler(w http.ResponseWriter, r *http.Request) {
-	log.Printf("Proxying: %s /save-change → localhost:3003/save-change", r.Method)
+	golet_id := r.FormValue("golet_id")
+	targetURL := "http://localhost:3003"
+
+	log.Printf("Proxying: %s /delete-service → localhost:3003/delete-service", r.Method)
+
 	models.Proxy = nil
-	helpers.Proxy()
+	helpers.Proxy(golet_id, targetURL)
 	models.Proxy.ServeHTTP(w, r)
+
 }
