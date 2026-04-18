@@ -1,6 +1,7 @@
 package helpers
 
 import (
+	"fmt"
 	"frontend/models"
 	"log"
 	"net/http"
@@ -9,7 +10,9 @@ import (
 )
 
 func Proxy(golet_id string, targetURL string) {
+
 	target, err := url.Parse(targetURL)
+	fmt.Println(targetURL)
 	if err != nil {
 		log.Fatal("Invalid target URL:", err)
 	}

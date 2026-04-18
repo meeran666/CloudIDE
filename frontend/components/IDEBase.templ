@@ -18,13 +18,26 @@ templ IDEBase(Dirprofile []models.Dirprofile, golet_id string) {
 		>
 			@FileStructure("", Dirprofile, golet_id)
 		</div>
-		<div x-data="{ tab: 'editor' }" class="flex grow h-screen flex-col transition-all duration-300 ml-0" :class="open ? 'ml-80' : 'ml-0'">
+		<div x-data="{ tab: 'editor' }" class="grow h-screen transition-all duration-300 ml-0" :class="open ? 'ml-80' : 'ml-0'">
 			<div class="h-5 w-80 bg-amber-500 flex gap-2">
-				<span class="w-40 h-5 grow-0 bg-amber-800">editor + terminal</span>
-				<span class="w-20 h-5 grow-0 bg-amber-800">preview </span>
+				<span
+					class="w-40 h-5 grow-0 bg-amber-400"
+					:class="{ 'bg-amber-900': tab === 'editor' }"
+					@click="tab = 'editor'"
+				>editor + terminal</span>
+				<span
+					class="w-20 h-5 grow-0 bg-amber-400"
+					:class="{ 'bg-amber-900': tab === 'preview' }"
+					@click="tab = 'preview'"
+				>preview </span>
 			</div>
-			@Editor()
-			@Terminal()
+			<div x-show="tab === 'editor'" class="flex flex-col h-screen">
+				@Editor()
+				@Terminal()
+			</div>
+			<div x-show="tab === 'preview'">
+				@Preview()
+			</div>
 		</div>
 	</div>
 	<script>

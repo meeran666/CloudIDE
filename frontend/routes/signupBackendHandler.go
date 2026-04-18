@@ -92,7 +92,7 @@ func SignupBackendHandler(w http.ResponseWriter, r *http.Request) {
 	// if err := db.AutoMigrate(&User{}); err != nil {
 	// 	log.Fatal("Migration failed:", err)
 	// }
-	//
+
 	r.ParseForm()
 	username := r.FormValue("username")
 	email := r.FormValue("email")

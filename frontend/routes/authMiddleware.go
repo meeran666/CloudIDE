@@ -1,6 +1,8 @@
 package routes
 
 import (
+	"context"
+	"frontend/models"
 	"net/http"
 
 	"github.com/golang-jwt/jwt/v5"
@@ -9,6 +11,7 @@ import (
 func AuthMiddleware(next http.HandlerFunc) http.HandlerFunc {
 	return func(w http.ResponseWriter, r *http.Request) {
 		cookie, err := r.Cookie("token")
+
 		if err != nil {
 			http.Redirect(w, r, "/login", http.StatusSeeOther)
 			return
@@ -24,7 +27,9 @@ func AuthMiddleware(next http.HandlerFunc) http.HandlerFunc {
 			http.Error(w, "Invalid token", http.StatusUnauthorized)
 			return
 		}
+
+		ctx := context.WithValue(r.Context(), models.UserContextKey, claims)
 		// pass to next handler
-		next(w, r)
+		next(w, r.WithContext(ctx))
 	}
 }

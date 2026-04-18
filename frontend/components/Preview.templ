@@ -1,5 +1,7 @@
 package components
 
-templ preview() {
-	<div class="">wowow</div>
+templ Preview() {
+	<div class="h-80  bg-white">
+		<iframe class="w-full h-full" :src="'/preview.html?golet_id=' + golet_id"></iframe>
+	</div>
 }

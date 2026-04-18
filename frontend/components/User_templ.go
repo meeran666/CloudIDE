@@ -29,7 +29,7 @@ func User() templ.Component {
 			templ_7745c5c3_Var1 = templ.NopComponent
 		}
 		ctx = templ.ClearChildren(ctx)
-		templ_7745c5c3_Err = templruntime.WriteString(templ_7745c5c3_Buffer, 1, "<div class=\"\"><form hx-get=\"/userBackend\" hx-target=\"#body\" hx-swap=\"innerHTML\"><label>Select goletid:</label> <input type=\"text\" placeholder=\"weber\" name=\"golet_id\" value=\"weber\"><br><br><label>Choose a stack:</label> <select name=\"stack\"><option value=\"node\">Node Stack</option> <option value=\"react\">React Stack</option></select><br><br><button type=\"submit\">Submit</button></form></div>")
+		templ_7745c5c3_Err = templruntime.WriteString(templ_7745c5c3_Buffer, 1, "<div class=\"\"><form hx-get=\"/userBackend\" hx-target=\"#body\" hx-swap=\"innerHTML\"><label>Select workspace name:</label> <input type=\"text\" placeholder=\"weber\" name=\"workspace_name\" value=\"weber\"><br><br><label>Choose a stack:</label> <select name=\"stack\"><option value=\"Node\">Node Stack</option> <option value=\"React\">React Stack</option></select><br><br><button type=\"submit\">Submit</button></form></div>")
 		if templ_7745c5c3_Err != nil {
 			return templ_7745c5c3_Err
 		}

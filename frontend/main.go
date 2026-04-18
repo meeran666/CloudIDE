@@ -25,6 +25,8 @@ func main() {
 	mux.HandleFunc("/userBackend", routes.AuthMiddleware(routes.UserBackendHandler)).Methods("GET")
 	mux.HandleFunc("/file", routes.AuthMiddleware(routes.FileHandler)).Methods("POST")
 	mux.HandleFunc("/ws", routes.AuthMiddleware(routes.WsHandler)).Methods("GET")
+	mux.HandleFunc("/preview.html", routes.PreviewProxy).Methods("GET")
+	mux.HandleFunc("/file-create", routes.AuthMiddleware(routes.FileCreateHandler)).Methods("POST")
 
 	mux.HandleFunc("/start", routes.IDEHandler).Methods("GET")
 	mux.HandleFunc("/browse", routes.BrowseHandler).Methods("POST")

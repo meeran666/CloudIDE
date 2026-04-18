@@ -52,7 +52,7 @@ func IDEBase(Dirprofile []models.Dirprofile, golet_id string) templ.Component {
 		if templ_7745c5c3_Err != nil {
 			return templ_7745c5c3_Err
 		}
-		templ_7745c5c3_Err = templruntime.WriteString(templ_7745c5c3_Buffer, 3, "</div><div x-data=\"{ tab: 'editor' }\" class=\"flex grow h-screen flex-col transition-all duration-300 ml-0\" :class=\"open ? 'ml-80' : 'ml-0'\"><div class=\"h-5 w-80 bg-amber-500 flex gap-2\"><span class=\"w-40 h-5 grow-0 bg-amber-800\">editor + terminal</span> <span class=\"w-20 h-5 grow-0 bg-amber-800\">preview </span></div>")
+		templ_7745c5c3_Err = templruntime.WriteString(templ_7745c5c3_Buffer, 3, "</div><div x-data=\"{ tab: 'editor' }\" class=\"grow h-screen transition-all duration-300 ml-0\" :class=\"open ? 'ml-80' : 'ml-0'\"><div class=\"h-5 w-80 bg-amber-500 flex gap-2\"><span class=\"w-40 h-5 grow-0 bg-amber-400\" :class=\"{ 'bg-amber-900': tab === 'editor' }\" @click=\"tab = 'editor'\">editor + terminal</span> <span class=\"w-20 h-5 grow-0 bg-amber-400\" :class=\"{ 'bg-amber-900': tab === 'preview' }\" @click=\"tab = 'preview'\">preview </span></div><div x-show=\"tab === 'editor'\" class=\"flex flex-col h-screen\">")
 		if templ_7745c5c3_Err != nil {
 			return templ_7745c5c3_Err
 		}
@@ -64,7 +64,15 @@ func IDEBase(Dirprofile []models.Dirprofile, golet_id string) templ.Component {
 		if templ_7745c5c3_Err != nil {
 			return templ_7745c5c3_Err
 		}
-		templ_7745c5c3_Err = templruntime.WriteString(templ_7745c5c3_Buffer, 4, "</div></div><script>\n document.addEventListener('alpine:initialized', () => {\n        // Alpine is ready now\n        const golet_id = Alpine.$data(\n            document.getElementById('templ_component_wrapper')\n        ).golet_id;\n\n        let idleTimer;\n        const IDLE_TIME = 1 * 5 * 1000;\n\n        function onIdle() {\n            console.log(\"onidle\")\n            fetch('/delete-service?golet_id=' + golet_id, {\n                method: 'POST',\n                headers: { 'Content-Type': 'application/json' },\n            })\n            .then(res => console.log('Saved on idle'))\n            .catch(err => console.error('Save failed:', err))\n        }\n\n        function resetTimer() {\n            clearTimeout(idleTimer);\n            idleTimer = setTimeout(onIdle, IDLE_TIME);\n        }\n\n        ['mousemove', 'keydown', 'click', 'scroll', 'touchstart'].forEach(event => {\n            document.addEventListener(event, resetTimer)\n        })\n\n        resetTimer()\n    })\n\t</script>")
+		templ_7745c5c3_Err = templruntime.WriteString(templ_7745c5c3_Buffer, 4, "</div><div x-show=\"tab === 'preview'\">")
+		if templ_7745c5c3_Err != nil {
+			return templ_7745c5c3_Err
+		}
+		templ_7745c5c3_Err = Preview().Render(ctx, templ_7745c5c3_Buffer)
+		if templ_7745c5c3_Err != nil {
+			return templ_7745c5c3_Err
+		}
+		templ_7745c5c3_Err = templruntime.WriteString(templ_7745c5c3_Buffer, 5, "</div></div></div><script>\n document.addEventListener('alpine:initialized', () => {\n        // Alpine is ready now\n        const golet_id = Alpine.$data(\n            document.getElementById('templ_component_wrapper')\n        ).golet_id;\n\n        let idleTimer;\n        const IDLE_TIME = 1 * 5 * 1000;\n\n        function onIdle() {\n            console.log(\"onidle\")\n            fetch('/delete-service?golet_id=' + golet_id, {\n                method: 'POST',\n                headers: { 'Content-Type': 'application/json' },\n            })\n            .then(res => console.log('Saved on idle'))\n            .catch(err => console.error('Save failed:', err))\n        }\n\n        function resetTimer() {\n            clearTimeout(idleTimer);\n            idleTimer = setTimeout(onIdle, IDLE_TIME);\n        }\n\n        ['mousemove', 'keydown', 'click', 'scroll', 'touchstart'].forEach(event => {\n            document.addEventListener(event, resetTimer)\n        })\n\n        resetTimer()\n    })\n\t</script>")
 		if templ_7745c5c3_Err != nil {
 			return templ_7745c5c3_Err
 		}

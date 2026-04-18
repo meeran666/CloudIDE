@@ -25,3 +25,7 @@ type OutputMessage struct {
 }
 
 var Proxy *httputil.ReverseProxy
+
+type contextKey string
+
+const UserContextKey = contextKey("user")
