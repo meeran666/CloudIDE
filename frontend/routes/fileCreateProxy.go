@@ -21,5 +21,4 @@ func FileCreateProxy(w http.ResponseWriter, r *http.Request) {
 
 	models.Proxy.ServeHTTP(w, r)
 
-	log.Println("Proxy running on :3000 → forwarding to :3001")
 }

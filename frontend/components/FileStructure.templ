@@ -26,20 +26,32 @@ templ FileStructure(path string, Dirprofile []models.Dirprofile, golet_id string
 		}
 	</ul>
 	<script>
-function oppeningDir(event,el) {
-	const hxVals = el.getAttribute('hx-vals')
-	
-	const hxValsObj = JSON.parse(hxVals)
-	if (hxValsObj.isDir === false){
-		const path = hxValsObj.path
-		// change the value of state file_path
-		// Get the Alpine component root (the element that has x-data)
-    	const alpineRoot = el.closest('[x-data]');
-    
-    	// Access Alpine's internal data and toggle open
-		const data = Alpine.$data(el.closest('[x-data]'));
-		data.selected_file_path=path
+function selected_element_color(previous_el,thisel){
+	if (previous_el.id !== "file_structure_root") {
+		previous_el.style.backgroundColor = "transparent";
 
+	}
+	thisel.style.backgroundColor = "red";
+
+}
+function oppeningDir(event,thisel) {
+	const hxVals = thisel.getAttribute('hx-vals')
+	const hxValsObj = JSON.parse(hxVals)
+	const path = hxValsObj.path
+
+	let file_structure_element = document.querySelector("#file_structure_editor_wrapper");	
+	
+	//adding selected element to colour and removing colour of the previous element
+	selected_element_color(Alpine.$data(file_structure_element).selected_element,thisel) 
+
+	//updating the selected item 
+	Alpine.$data(file_structure_element).selected_element=thisel
+	const golet_id = Alpine.$data(file_structure_element).golet_id;
+	
+	// inserting_file_creation_path(hxValsObj,file_structure_element)
+
+	if (hxValsObj.isDir === false){
+		
 		
         const language = {
             html: "html",
@@ -68,12 +80,10 @@ function oppeningDir(event,el) {
           console.log("No slash found in the string."); 
         }
 		
-		const golet_id = Alpine.$data(document.getElementById('templ_component_wrapper')).golet_id;
     	fetch("/file?golet_id="+golet_id,{
 			method:"POST",
 			headers:{ "Content-Type": "application/json" },
 			body: JSON.stringify({
-
 			path: path
 				})
 		})
@@ -94,8 +104,9 @@ function oppeningDir(event,el) {
 		event.stopImmediatePropagation();
 	    return
 	}
-	let next_el=el.nextElementSibling;
+	let next_el=thisel.nextElementSibling;
 	if (next_el.children.length === 0){
+
         // allow HTMX request
     }else {
         // block HTMX request

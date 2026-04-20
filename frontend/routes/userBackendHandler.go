@@ -43,6 +43,7 @@ func updateStackInfo(workspace_name, stack, username string) error {
 
 func UserBackendHandler(w http.ResponseWriter, r *http.Request) {
 	claims, ok := r.Context().Value(models.UserContextKey).(jwt.MapClaims)
+
 	if !ok {
 		http.Error(w, "No user data", http.StatusUnauthorized)
 	}
@@ -58,7 +59,7 @@ func UserBackendHandler(w http.ResponseWriter, r *http.Request) {
 		if errors.As(err, &pgErr) {
 			switch pgErr.ConstraintName {
 			case "idx_user_workspace":
-				fmt.Println("workspace already exists for this user")
+				fmt.Println("workspace already exists for this name")
 				http.Error(w, ":"+err.Error(), 409)
 
 			}
@@ -69,7 +70,7 @@ func UserBackendHandler(w http.ResponseWriter, r *http.Request) {
 	data.Set("golet_id", golet_id)
 	data.Set("stack", stack)
 	// 2. Target URL
-	apiUrl := "http://localhost:3003/user_creation"
+	apiUrl := "http://localhost:3002/user_creation"
 
 	// 3. Create request with encoded body
 	req, err := http.NewRequest("POST", apiUrl, strings.NewReader(data.Encode()))
@@ -92,7 +93,8 @@ func UserBackendHandler(w http.ResponseWriter, r *http.Request) {
 
 	defer resp.Body.Close()
 	// updateUserInfo()
-	w.Header().Set("HX-Redirect", "/start?golet_id="+golet_id)
+	fmt.Println(workspace_name)
+	w.Header().Set("HX-Redirect", "/start?golet_id="+golet_id+"&workspace_name="+workspace_name)
 
 	fmt.Println("Status:", resp.Status)
 }

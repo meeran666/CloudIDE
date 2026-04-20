@@ -97,11 +97,11 @@ document.addEventListener('DOMContentLoaded', function() {
                 let changedLines = new Set();
 
                 el.editor.onDidChangeModelContent((event) => {
-					const alpineRoot = el.closest('[x-data]');
     
     			// Access Alpine's internal data and toggle open
-				const data = Alpine.$data(el.closest('[x-data]'));
-				
+				const file_structure_element = document.querySelector("#file_structure_editor_wrapper");	
+				const selected_element = Alpine.$data(file_structure_element).selected_element;
+				const data = JSON.parse(selected_element.getAttribute('hx-vals'));
                     event.changes.forEach(change => {
                         // Collect all affected line numbers
                         for (let line = change.range.startLineNumber; line <= change.range.endLineNumber; line++) {
@@ -119,7 +119,7 @@ document.addEventListener('DOMContentLoaded', function() {
                         const lines = [...changedLines].map(lineNumber => ({
                             line: lineNumber,
                             content: model.getLineContent(lineNumber),
-							file_path: data.selected_file_path 
+							file_path: data.path 
 							
                         }));
 
@@ -127,7 +127,7 @@ document.addEventListener('DOMContentLoaded', function() {
 
                         const payload = { lines };
 
-						const golet_id = Alpine.$data(document.getElementById('templ_component_wrapper')).golet_id;
+						const golet_id = Alpine.$data(document.getElementById('file_structure_editor_wrapper')).golet_id;
 
                         fetch('/save-change?golet_id='+golet_id, {
                             method: 'POST',

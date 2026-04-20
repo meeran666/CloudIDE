@@ -14,7 +14,6 @@ import (
 func writeJSON(w http.ResponseWriter, status int, payload interface{}) {
 	w.Header().Set("Content-Type", "application/json")
 	w.WriteHeader(status)
-	fmt.Println(payload)
 	err := json.NewEncoder(w).Encode(payload)
 	if err != nil {
 		// http.Error(w, "Failed to encode response", http.StatusInternalServerError)

@@ -30,7 +30,6 @@ func createFile(path string) error {
 	return nil
 }
 func FileCreateHandler(w http.ResponseWriter, r *http.Request) {
-
 	var req CreateRequest
 	err := json.NewDecoder(r.Body).Decode(&req)
 	if err != nil {

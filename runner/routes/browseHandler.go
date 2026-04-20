@@ -22,5 +22,4 @@ func BrowseHandler(w http.ResponseWriter, r *http.Request) {
 
 	// Encode and return JSON
 	json.NewEncoder(w).Encode(models.DirprofileArr)
-	models.DirprofileArr = nil
 }

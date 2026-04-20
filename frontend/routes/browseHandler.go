@@ -9,6 +9,7 @@ import (
 )
 
 func BrowseHandler(w http.ResponseWriter, r *http.Request) {
+
 	path := r.FormValue("path")
 	golet_id := r.FormValue("golet_id")
 
@@ -24,7 +25,6 @@ func BrowseHandler(w http.ResponseWriter, r *http.Request) {
 		http.Error(w, err.Error(), 400)
 
 	}
-
 	defer resp.Body.Close()
 	fmt.Println("Status:", resp.Status)
 
@@ -35,7 +35,6 @@ func BrowseHandler(w http.ResponseWriter, r *http.Request) {
 	// }
 	// defer resp.Body.Close()
 	err = json.NewDecoder(resp.Body).Decode(&models.DirprofileArr)
-	fmt.Println(models.DirprofileArr)
 	if err != nil {
 		fmt.Println(err)
 		// do a response of err to frontend in future

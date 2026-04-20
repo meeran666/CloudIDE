@@ -64,7 +64,7 @@ templ Terminal() {
 
           function connect() {
               setStatus('connecting');
-              const golet_id = Alpine.$data(document.getElementById('templ_component_wrapper')).golet_id;
+              const golet_id = Alpine.$data(document.getElementById('file_structure_editor_wrapper')).golet_id;
               const url ='/ws?golet_id='+ golet_id
               ws = new WebSocket(url);
 

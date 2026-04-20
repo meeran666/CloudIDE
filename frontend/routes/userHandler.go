@@ -16,12 +16,9 @@ func stacksInfo(username string) error {
 
 	err := db.Where("username = ?", username).Find(&stacks).Error
 	if err != nil {
-		fmt.Println("value23")
 		return err
 	}
-	fmt.Println("value345")
 
-	fmt.Println(stacks)
 	return nil
 }
 
@@ -34,7 +31,6 @@ func UserHandler(w http.ResponseWriter, r *http.Request) {
 	}
 
 	username := claims["username"].(string)
-	fmt.Println(username)
 	err := stacksInfo(username)
 	if err != nil {
 		fmt.Println("Error:", err)

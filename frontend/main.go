@@ -29,7 +29,7 @@ func main() {
 	mux.HandleFunc("/file-create", routes.FileCreateProxy).Methods("POST")
 	mux.HandleFunc("/file-delete", routes.FileDeleteProxy).Methods("POST")
 
-	mux.HandleFunc("/start", routes.IDEHandler).Methods("GET")
+	mux.HandleFunc("/start", routes.AuthMiddleware(routes.IDEHandler)).Methods("GET")
 	mux.HandleFunc("/browse", routes.BrowseHandler).Methods("POST")
 	mux.PathPrefix("/public/").Handler(
 		http.StripPrefix("/public/", http.FileServer(http.Dir("public"))),
