@@ -14,22 +14,27 @@ templ IDEBase(Dirprofile []models.Dirprofile, golet_id, workspace_name string) {
 	<div
 		id="file_structure_editor_wrapper"
 		x-data={ `{ golet_id: "` + golet_id + `", selected_element: null }` }
-		x-init="$nextTick(() => { selected_element = $refs.file_structure_root })"
+		x-init="$nextTick(() => { selected_element = $refs.file_structure_header })"
 		class="flex h-screen"
 	>
 		<div
-			id="file_structure_root"
-			x-ref="file_structure_root"
 			:class="open ? 'translate-x-0' : '-translate-x-full'"
-			hx-vals='{"path": ""}'
 			class="w-80 shrink-0 fixed h-screen transition-transform duration-300 bg-gray-900 text-white"
 		>
-			<div class="w-full h-7 border-black border-2 text-white flex gap-3 items-center">
+			<li
+				x-ref="file_structure_header"
+				hx-vals={ `{"path": "" ,"isDir": "true"}` }
+				class="w-48 px-2  border-black border-2 text-white flex gap-3 items-center"
+			>
 				{ workspace_name }
 				<img src="/public/create_file.png" alt="create_file" class="text-white w-4  h-4" onclick="create_directory(this)"/>
 				<img src="/public/create_folder.png" alt="create_folder" class="text-white w-4  h-4" onclick="create_directory(this)"/>
-			</div>
-			@FileStructure("", Dirprofile, golet_id)
+			</li>
+			<ul
+				class="w-full h-7"
+			>
+				@FileStructure("", Dirprofile, golet_id)
+			</ul>
 		</div>
 		<div x-data="{ tab: 'editor' }" class="grow h-screen transition-all duration-300 ml-0" :class="open ? 'ml-80' : 'ml-0'">
 			<div class="h-5 w-80 bg-amber-500 flex gap-2">
@@ -59,59 +64,49 @@ templ IDEBase(Dirprofile []models.Dirprofile, golet_id, workspace_name string) {
 	<script>
 
  document.addEventListener('alpine:initialized', () => {
-		function file_create_fetch(el, event, selected_element,isDir) {
+		function file_create_fetch(input, event, selected_element,isDirfunction) {
 			const data = JSON.parse(selected_element.getAttribute('hx-vals'));
 			if (event.key === "Enter") {
 				let payload = null
-				if (isDir === true) {
-
+				if (isDirfunction === true || data.isDir === true) {
 					payload = {
 						path: data.path,
-						name: el.value,
-						dir: isDir
+						name: input.value,
+						dir: isDirfunction
 					};
 				
 				}else{
 					let lastIndex = data.path.lastIndexOf('/'); 
 					trimmedString = data.path.slice(0,lastIndex); 
-					console.log("inside down",el.value,trimmedString)
 
 					payload = {
 						path: trimmedString,
-						name: el.value,
-						dir: isDir
+						name: input.value,
+						dir: isDirfunction
 					};
 				}
 				
-					// fetch('/file-create?golet_id=' + golet_id, {
-					// 	method: 'POST',
-					// 	headers: { 'Content-Type': 'application/json' },
-					// 	body: JSON.stringify(payload)
-					// });
+				fetch('/file-create?golet_id=' + golet_id, {
+					method: 'POST',
+					headers: { 'Content-Type': 'application/json' },
+					body: JSON.stringify(payload)
+				});
 
 
-					//removing the replacing the input element from div 
-					const file_element_li = document.createElement("li");
-					file_element_li.innerHTML=el.value
-					file_element_li.className = "w-full h-4 bg-gray-800 text-white px-2 py-1";
-					const file_element_ul =  document.createElement("ul");
-					file_element_ul.id = "folder-content"
-					if (selected_element.getAttribute('id') === "file_structure_root" ){
-						const child =selected_element.firstElementChild
-						const furtherchild= child.firstElementChild
-						console.log("furtherchild",furtherchild)
-						furtherchild.appendChild(file_element_li)
-						furtherchild.appendChild(file_element_ul)
-					}else{
-						const parent_el=selected_element.parentElement;
-						parent_el.appendChild(file_element_li);
-						parent_el.appendChild(file_element_ul)
+				//removing the replacing the input element from div 
+				const file_element_li = document.createElement("li");
+				if (isDirfunction){
+					file_element_li.innerHTML+="<span>📁 </span>";
+				}
+				file_element_li.innerHTML+=input.value
+				file_element_li.className = "cursor-pointer p-1 hover:bg-gray-700";
+				const file_element_ul =  document.createElement("ul");
+				file_element_ul.id = "folder-content"
 
-					}
-					const parentElement=el.parentElement
-					console.log(parentElement)
-					el.remove()
-					parentElement.appendChild(file_element)
+				const parentElement=input.parentElement
+				input.remove()
+				parentElement.appendChild(file_element_li)
+				parentElement.appendChild(file_element_ul)
 					
 			}
 		}
@@ -135,14 +130,12 @@ templ IDEBase(Dirprofile []models.Dirprofile, golet_id, workspace_name string) {
    				file_create_fetch(this, event, selected_element,true);
 			});
 			}
-
-			if (selected_element.getAttribute('id') === "file_structure_root" ){
-				selected_element.appendChild(input)
+			const data = JSON.parse(selected_element.getAttribute('hx-vals'));
+			if (data.isDir){
+				selected_element.nextElementSibling.appendChild(input)
 			}else{
-				const parent_el=selected_element.parentElement;
-				parent_el.appendChild(input);
-				
-
+				const parentElement=selected_element.parentElement
+				parentElement.appendChild(input);
 			}
 			
 		}

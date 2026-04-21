@@ -6,31 +6,48 @@ import (
 )
 
 templ FileStructure(path string, Dirprofile []models.Dirprofile, golet_id string) {
-	<ul class="w-48 p-2">
-		for _, item := range Dirprofile {
-			{{ newpath := path + "/" + item.Name }}
-			<li
-				hx-post="/browse"
-				hx-target="next #folder-content"
-				hx-swap="innerHTML"
-				hx-vals={ `{"path":"` + newpath + `","isDir":` + strconv.FormatBool(item.IsDir) + `}` }
-				class="cursor-pointer p-1 hover:bg-gray-700"
-				onclick="oppeningDir(event,this)"
-			>
-				if item.IsDir {
-					<span>📁 </span>
-				}
-				{ item.Name }
-			</li>
-			<ul id="folder-content"></ul>
-		}
-	</ul>
-	<script>
-function selected_element_color(previous_el,thisel){
-	if (previous_el.id !== "file_structure_root") {
-		previous_el.style.backgroundColor = "transparent";
-
+	for _, item := range Dirprofile {
+		{{ newpath := path + "/" + item.Name }}
+		<li
+			hx-post="/browse"
+			hx-target="next #folder-content"
+			hx-swap="innerHTML"
+			hx-vals={ `{"path":"` + newpath + `","isDir":` + strconv.FormatBool(item.IsDir) + `}` }
+			class="cursor-pointer p-1 w-48 hover:bg-gray-700 flex"
+			onclick="oppeningDir(event,this)"
+		>
+			if item.IsDir {
+				<span>📁 </span>
+			}
+			{ item.Name }
+			<img src="/public/trash-bin.png" alt="trash-bin" class="ml-auto text-white w-4  h-4" onclick="delete_dir(event,this)"/>
+		</li>
+		<ul
+			class="w-48 px-2"
+			id="folder-content"
+		></ul>
 	}
+	<script>
+function delete_dir(event , thisel){
+	event.stopImmediatePropagation();
+	let file_structure_element = document.querySelector("#file_structure_editor_wrapper");	
+	const golet_id = Alpine.$data(file_structure_element).golet_id;
+
+	const parentel=thisel.parentElement.getAttribute('hx-vals')
+	const data = JSON.parse(parentel);
+	fetch("/file-delete?golet_id="+golet_id,{
+			method:"POST",
+			headers:{ "Content-Type": "application/json" },
+			body: JSON.stringify({
+			path: data.path
+				})
+	})
+	thisel.parentElement.nextElementSibling.remove()
+	thisel.parentElement.remove()
+	
+}
+function selected_element_color(previous_el,thisel){
+	previous_el.style.backgroundColor = "transparent";
 	thisel.style.backgroundColor = "red";
 
 }

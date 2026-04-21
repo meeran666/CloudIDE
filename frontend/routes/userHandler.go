@@ -10,8 +10,7 @@ import (
 	"github.com/golang-jwt/jwt/v5"
 )
 
-func stacksInfo(username string) error {
-	var stacks []Stack
+func stacksInfo(username string, stacks *[]models.Stack) error {
 	db := helpers.DbConn()
 
 	err := db.Where("username = ?", username).Find(&stacks).Error
@@ -23,6 +22,7 @@ func stacksInfo(username string) error {
 }
 
 func UserHandler(w http.ResponseWriter, r *http.Request) {
+	var stacks []models.Stack
 
 	claims, ok := r.Context().Value(models.UserContextKey).(jwt.MapClaims)
 
@@ -31,11 +31,11 @@ func UserHandler(w http.ResponseWriter, r *http.Request) {
 	}
 
 	username := claims["username"].(string)
-	err := stacksInfo(username)
+	err := stacksInfo(username, &stacks)
 	if err != nil {
 		fmt.Println("Error:", err)
 		http.Error(w, ":"+err.Error(), 400)
 
 	}
-	components.Base(components.User()).Render(r.Context(), w)
+	components.Base(components.User(stacks)).Render(r.Context(), w)
 }

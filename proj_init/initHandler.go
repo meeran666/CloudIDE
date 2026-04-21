@@ -76,35 +76,35 @@ func createDistination(path string) error {
 
 func InitHandler(w http.ResponseWriter, r *http.Request) {
 
-	// err := r.ParseForm()
-	// if err != nil {
-	// 	fmt.Println(err.Error())
-	// 	http.Error(w, err.Error(), 400)
-	// 	return
-	// }
+	err := r.ParseForm()
+	if err != nil {
+		fmt.Println(err.Error())
+		http.Error(w, err.Error(), 400)
+		return
+	}
 
-	// // Get values
-	// golet_id := r.FormValue("golet_id")
-	// stack := r.FormValue("stack")
-	// fmt.Println(golet_id)
+	// Get values
+	golet_id := r.FormValue("golet_id")
+	stack := r.FormValue("stack")
+	fmt.Println(golet_id)
 
-	// source := "../base_stacks/" + stack
-	// destination := "../user_environment/" + golet_id
-	// err = createDistination(destination)
-	// err = copyDirContents(source, destination)
-	// if err != nil {
-	// 	fmt.Println("Copy failed:" + err.Error())
-	// 	http.Error(w, "Copy failed:"+err.Error(), 400)
+	source := "../base_stacks/" + stack
+	destination := "../user_environment/" + golet_id
+	err = createDistination(destination)
+	err = copyDirContents(source, destination)
+	if err != nil {
+		fmt.Println("Copy failed:" + err.Error())
+		http.Error(w, "Copy failed:"+err.Error(), 400)
 
-	// 	return
-	// }
-	// fmt.Println("All files and folders copied successfully")
-	// err = ContainerHandler(golet_id)
-	// if err != nil {
-	// 	fmt.Println("service creation failed:" + err.Error())
-	// 	http.Error(w, "service creation failed:"+err.Error(), 400)
-	// 	return
-	// }
+		return
+	}
+	fmt.Println("All files and folders copied successfully")
+	err = ContainerCreater(golet_id)
+	if err != nil {
+		fmt.Println("service creation failed:" + err.Error())
+		http.Error(w, "service creation failed:"+err.Error(), 400)
+		return
+	}
 	fmt.Println("service created successfully")
 	w.WriteHeader(http.StatusCreated)
 }

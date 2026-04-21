@@ -1,12 +1,41 @@
 package components
 
 templ LandingPage() {
-	<div class="bg-amber-700 w-50 h-50"></div>
-	<button
-		class="rounded w-10 h-3"
-		hx-get="/signin"
-		hx-target="#body"
-		hx-swap="innerHTML"
-		hx-push-url="true"
-	>buttoner</button>
+	<div
+		x-data="{}"
+		class="min-h-screen flex items-center justify-center 
+		       bg-gradient-to-br from-slate-900 via-slate-800 to-slate-900 
+		       text-white relative overflow-hidden"
+	>
+		<!-- Background glow -->
+		<div class="absolute w-[500px] h-[500px] bg-blue-500/20 blur-3xl rounded-full top-[-100px] left-[-100px]"></div>
+		<div class="absolute w-[400px] h-[400px] bg-purple-500/20 blur-3xl rounded-full bottom-[-100px] right-[-100px]"></div>
+		<!-- Center Card -->
+		<div
+			class="relative z-10 flex flex-col items-center gap-6 
+			       bg-slate-800/70 backdrop-blur-xl 
+			       px-10 py-12 rounded-3xl shadow-2xl border border-slate-700"
+		>
+			<!-- Logo / Title -->
+			<h1 class="text-3xl font-semibold tracking-wide">
+				Cloud IDE
+			</h1>
+			<p class="text-slate-400 text-sm text-center max-w-xs">
+				Code anywhere. Build instantly. Deploy effortlessly.
+			</p>
+			<!-- Sign In Button -->
+			<button
+				class="mt-4 px-6 py-2 rounded-xl 
+				       bg-blue-600 hover:bg-blue-500 
+				       transition duration-200 
+				       font-medium shadow-lg hover:shadow-blue-500/30"
+				hx-get="/signin"
+				hx-target="#body"
+				hx-swap="innerHTML"
+				hx-push-url="true"
+			>
+				Sign In
+			</button>
+		</div>
+	</div>
 }

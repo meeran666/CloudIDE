@@ -20,7 +20,7 @@ func main() {
 	mux.HandleFunc("/save-change", routes.ChangeHandler).Methods("POST")
 	mux.HandleFunc("/delete-service", routes.DeleteServiceHandler).Methods("POST")
 	mux.HandleFunc("/file-create", routes.FileCreateHandler).Methods("POST")
-	mux.HandleFunc("/file-delete", routes.FileDeleteHandler).Methods("GET")
+	mux.HandleFunc("/file-delete", routes.FileDeleteHandler).Methods("POST")
 
 	port := "3003"
 	fmt.Println("🚀 Listening on port:", port)

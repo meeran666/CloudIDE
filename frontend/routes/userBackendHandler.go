@@ -14,13 +14,6 @@ import (
 	"github.com/jackc/pgx/v5/pgconn"
 )
 
-type Stack struct {
-	Username      string `gorm:"not null;uniqueIndex:idx_user_workspace"`
-	WorkspaceName string `gorm:"not null;uniqueIndex:idx_user_workspace"`
-	Stack         string `gorm:"check:stack IN ('React','Node');not null"`
-	Lastupdated   time.Time
-}
-
 func updateStackInfo(workspace_name, stack, username string) error {
 	db := helpers.DbConn()
 	// Auto migrate (optional but useful)
@@ -28,7 +21,7 @@ func updateStackInfo(workspace_name, stack, username string) error {
 	// 	log.Fatal("Migration failed:", err)
 	// }
 
-	newStack := Stack{
+	newStack := models.Stack{
 		Username:      username,
 		WorkspaceName: workspace_name,
 		Stack:         stack,
@@ -64,8 +57,8 @@ func UserBackendHandler(w http.ResponseWriter, r *http.Request) {
 
 			}
 		}
-
 	}
+
 	golet_id := "weber"
 	data.Set("golet_id", golet_id)
 	data.Set("stack", stack)

@@ -103,7 +103,7 @@ templ SignupPage() {
 						const data = await res.json(); // assuming plain text response
 						this.message = data.message;
 					} catch (e) {
-                        console.log()
+						console.log(e)
 						this.message = "Error checking username";
 					} finally {
 						this.isChecking = false;
