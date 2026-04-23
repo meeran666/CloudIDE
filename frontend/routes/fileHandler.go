@@ -16,11 +16,11 @@ func FileHandler(w http.ResponseWriter, r *http.Request) {
 	defer r.Body.Close()
 
 	// prod part
-	// golet_id := "weber"
-	// targetURL := "http://" + golet_id + ".localhost:3006/file"
-	//dev part
+	golet_id := "weber"
+	targetURL := "http://" + golet_id + ".localhost:3006/file"
 
-	targetURL := "http://localhost:3003/file"
+	//dev part
+	// targetURL := "http://localhost:3003/file"
 
 	req, err := http.NewRequest("POST", targetURL, bytes.NewBuffer(body))
 	if err != nil {

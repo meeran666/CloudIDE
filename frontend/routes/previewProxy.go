@@ -1,24 +1,43 @@
 package routes
 
 import (
-	"frontend/helpers"
-	"frontend/models"
+	"fmt"
 	"log"
 	"net/http"
+	"net/http/httputil"
+	"net/url"
+	"strings"
 )
 
 func PreviewProxy(w http.ResponseWriter, r *http.Request) {
-	golet_id := r.FormValue("golet_id")
-	//dev part
-	targetURL := "http://localhost:5501"
-	//prod part
-	// targetURL := "http://" + golet_id + ".localhost:3000"
+	parts := strings.Split(r.URL.Path, "/")
 
-	log.Printf("Proxying: %s /preview.html → localhost:5501/preview.html", r.Method)
-	models.Proxy = nil
+	if len(parts) < 3 {
+		http.Error(w, "Invalid preview path", http.StatusBadRequest)
+		return
+	}
 
-	helpers.Proxy(golet_id, targetURL)
+	golet_id := parts[2]
+	targetURL := "http://" + "down." + golet_id + ".localhost:3006"
+	target, _ := url.Parse(targetURL)
+	fmt.Println(targetURL)
 
-	models.Proxy.ServeHTTP(w, r)
+	proxy := &httputil.ReverseProxy{
+		Rewrite: func(pr *httputil.ProxyRequest) {
+			pr.SetURL(target)
+
+			prefix := "/preview/" + golet_id
+			pr.Out.URL.Path = strings.TrimPrefix(pr.In.URL.Path, prefix)
+
+			if pr.Out.URL.Path == "" {
+				pr.Out.URL.Path = "/"
+			}
+		},
+		ErrorHandler: func(w http.ResponseWriter, r *http.Request, err error) {
+			log.Println("Proxy error:", err)
+			http.Error(w, "Bad Gateway", http.StatusBadGateway)
+		},
+	}
+	proxy.ServeHTTP(w, r)
 
 }

@@ -20,7 +20,6 @@ func ZipHandler(w http.ResponseWriter, r *http.Request) {
 	// Step 2: Build safe path
 	folderPath := filepath.Join(baseDir, folderName)
 	cleanPath := filepath.Clean(folderPath)
-
 	// Security check (prevent ../ attack)
 	if !strings.HasPrefix(cleanPath, baseDir) {
 		http.Error(w, "invalid folder path", http.StatusBadRequest)

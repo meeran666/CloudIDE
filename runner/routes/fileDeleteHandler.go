@@ -2,11 +2,9 @@ package routes
 
 import (
 	"encoding/json"
-	"fmt"
 	"net/http"
 	"os"
 	"path/filepath"
-	"runner/models"
 	"strings"
 )
 
@@ -15,7 +13,6 @@ type DeleteRequest struct {
 }
 
 func FileDeleteHandler(w http.ResponseWriter, r *http.Request) {
-	fmt.Println("value23")
 	var req DeleteRequest
 	err := json.NewDecoder(r.Body).Decode(&req)
 	if err != nil {
@@ -28,7 +25,7 @@ func FileDeleteHandler(w http.ResponseWriter, r *http.Request) {
 		return
 	}
 
-	baseDir := filepath.Clean(models.BaseDir)
+	baseDir := filepath.Clean("/workspace")
 
 	// Build full path safely
 	fullPath := filepath.Join(baseDir, req.Path)

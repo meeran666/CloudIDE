@@ -2,7 +2,9 @@ package main
 
 import (
 	"context"
+	"encoding/json"
 	"fmt"
+	"io"
 	"log"
 	"os"
 	"strings"
@@ -35,8 +37,11 @@ func readAndParseKubeYaml(filePath string, replId string) ([]map[string]interfac
 		var doc map[string]interface{}
 		err := decoder.Decode(&doc)
 		if err != nil {
-			fmt.Println("what")
-			break
+			if err == io.EOF {
+				return manifests, nil
+			}
+			fmt.Println(err)
+			return manifests, err
 		}
 
 		docBytes, _ := yaml.Marshal(doc)
@@ -45,12 +50,11 @@ func readAndParseKubeYaml(filePath string, replId string) ([]map[string]interfac
 		var finalDoc map[string]interface{}
 		yaml.Unmarshal([]byte(docString), &finalDoc)
 
-		fmt.Println(docString)
+		// fmt.Println(docString)
 
 		manifests = append(manifests, finalDoc)
 	}
 
-	return manifests, nil
 }
 
 func ContainerCreater(golet_id string) error {
@@ -64,7 +68,6 @@ func ContainerCreater(golet_id string) error {
 	if err != nil {
 		return err
 	}
-
 	clientset, err := kubernetes.NewForConfig(config)
 	if err != nil {
 		return err
@@ -73,10 +76,11 @@ func ContainerCreater(golet_id string) error {
 	namespace := "default"
 
 	manifests, err := readAndParseKubeYaml("./service.yaml", golet_id)
+
 	if err != nil {
 		return err
 	}
-
+	fmt.Println(manifests)
 	for _, manifest := range manifests {
 		kind, ok := manifest["kind"].(string)
 		if !ok {
@@ -87,8 +91,11 @@ func ContainerCreater(golet_id string) error {
 
 		case "Deployment":
 			var deployment appsv1.Deployment
-			bytes, _ := yaml.Marshal(manifest)
-			yaml.Unmarshal(bytes, &deployment)
+			// bytes, _ := yaml.Marshal(manifest)
+			// yaml.Unmarshal(bytes, &deployment)
+			jsonBytes, _ := json.Marshal(manifest)
+			json.Unmarshal(jsonBytes, &deployment)
+			fmt.Println(deployment)
 
 			_, err := clientset.AppsV1().
 				Deployments(namespace).
@@ -101,8 +108,9 @@ func ContainerCreater(golet_id string) error {
 
 		case "Service":
 			var service corev1.Service
-			bytes, _ := yaml.Marshal(manifest)
-			yaml.Unmarshal(bytes, &service)
+			jsonBytes, _ := json.Marshal(manifest)
+			json.Unmarshal(jsonBytes, &service)
+			fmt.Println(service)
 
 			_, err := clientset.CoreV1().
 				Services(namespace).
@@ -115,8 +123,8 @@ func ContainerCreater(golet_id string) error {
 
 		case "Ingress":
 			var ingress networkingv1.Ingress
-			bytes, _ := yaml.Marshal(manifest)
-			yaml.Unmarshal(bytes, &ingress)
+			jsonBytes, _ := json.Marshal(manifest)
+			json.Unmarshal(jsonBytes, &ingress)
 
 			_, err := clientset.NetworkingV1().
 				Ingresses(namespace).

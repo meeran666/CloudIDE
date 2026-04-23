@@ -9,9 +9,13 @@ import (
 
 func ChangeHandler(w http.ResponseWriter, r *http.Request) {
 	golet_id := r.FormValue("golet_id")
-	targetURL := "http://localhost:3003"
+	//dev part
+	// targetURL := "http://localhost:3003"
 
-	log.Printf("Proxying: %s /save-change → localhost:3003/save-change", r.Method)
+	//prod part
+	targetURL := "http://" + golet_id + ".localhost:3006"
+
+	log.Printf("Proxying: %s /save-change → localhost:3006/save-change", r.Method)
 	models.Proxy = nil
 
 	helpers.Proxy(golet_id, targetURL)

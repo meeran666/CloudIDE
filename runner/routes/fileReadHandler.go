@@ -20,11 +20,11 @@ func FileReadHandler(w http.ResponseWriter, r *http.Request) {
 		return
 	}
 	//this is for dev
-	file_path := models.BaseDir + req.Path
+	// file_path := models.BaseDir + req.Path
 
 	//this is for prod
-	// file_path := req.Path
-	data, err := os.ReadFile(file_path)
+	file_path := req.Path
+	data, err := os.ReadFile("/workspace" + file_path)
 	if err != nil {
 		http.Error(w, "file not found", 404)
 		return

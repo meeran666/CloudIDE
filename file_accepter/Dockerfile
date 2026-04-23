@@ -26,7 +26,7 @@ WORKDIR /root/
 COPY --from=builder /go-api-app .
 
 # Expose the port your Go API listens on (e.g., 8080)
-EXPOSE 3001
+EXPOSE 3000
 
 # Command to run the executable when the container starts
 CMD ["./go-api-app"]

@@ -1,7 +1,7 @@
 package models
 
 // dev part
-const BaseDir = "../user_environment/weber"
+const BaseDir = "../user_environment"
 
 // prod part
 // const BaseDir = "/workspace"

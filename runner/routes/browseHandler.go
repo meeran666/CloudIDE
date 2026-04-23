@@ -10,6 +10,7 @@ import (
 
 func BrowseHandler(w http.ResponseWriter, r *http.Request) {
 	path := r.FormValue("path")
+	path = "/workspace" + path
 	err := filelist(path)
 
 	if err != nil {

@@ -8,10 +8,12 @@ import (
 	"os"
 )
 
-// const remoteServerURL = "http://192.168.1.5:3004/get-folder-zip"
-const remoteServerURL = "http://localhost:3004/get-folder-zip"
+const remoteServerURL = "http://100.66.155.68:3004/get-folder-zip"
+
+// const remoteServerURL = "http://localhost:3004/get-folder-zip"
 
 func main() {
+	// time.Sleep(80 * time.Second)
 	// Step 1: Read env variable
 	folderName := os.Getenv("BASE_FOLDER")
 	if folderName == "" {
@@ -61,9 +63,9 @@ func main() {
 
 	// Step 5: Extract ZIP
 	//dev part
-	destDir := "./workspace"
+	// destDir := "./workspace"
 	//prod part
-	// destDir := "/workspace"
+	destDir := "/workspace"
 
 	err = unzip(zipPath, destDir)
 	if err != nil {
@@ -72,7 +74,6 @@ func main() {
 	}
 
 	fmt.Println("Extraction completed to:", destDir)
-	os.Exit(0)
 
 	// Optional: Start your server after setup
 }

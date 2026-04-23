@@ -5,7 +5,6 @@ import (
 	"fmt"
 	"net/http"
 	"os"
-	"runner/models"
 	"strings"
 )
 
@@ -52,7 +51,7 @@ func ChangeHandler(w http.ResponseWriter, r *http.Request) {
 	// Apply each line change
 	for _, change := range payload.Lines {
 
-		filePath := models.BaseDir + change.File_path
+		filePath := "/workspace" + change.File_path
 		content, err := os.ReadFile(filePath)
 		if err != nil {
 			http.Error(w, err.Error(), http.StatusInternalServerError)

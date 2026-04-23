@@ -43,7 +43,6 @@ func applyLineChange(change LineChange, golet_id string) error {
 
 	// write back
 	output := strings.Join(lines, "\n")
-	fmt.Println(file_path)
 	return os.WriteFile(file_path, []byte(output), 0644)
 }
 func SaveProgress(w http.ResponseWriter, r *http.Request) {

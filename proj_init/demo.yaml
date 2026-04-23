@@ -15,31 +15,20 @@
 #         app: service_name
 #     spec:
 #       volumes:
-#         # Local machine folder mounted into Pod
-#         - name: local-code
-#           hostPath:
-#             path: /node_workspace/service_name
-#             type: Directory
-
-#         # Writable workspace
 #         - name: workspace-volume
 #           emptyDir: {}
 
 #       initContainers:
-#         - name: copy-local-code
-#           image: file_accepter
-#           command: ["/bin/sh", "-c"]
-#           args:
-#             - >
-#               cp -r /config/* /workspace/ &&
-#               echo "Code copied from local machine";
+#         - name: file-fetcher
+#           image: meeran666/file_accepter
+#           env:
+#             - name: BASE_FOLDER
+#               value: "user1"
+#             - name: MODE
+#               value: "init"
 #           volumeMounts:
-#             - name: local-code
-#               mountPath: /config
-
 #             - name: workspace-volume
 #               mountPath: /workspace
-
 #       containers:
 #         - name: runner
 #           image: meeran666/ide_image
@@ -104,6 +93,10 @@
 #                 name: service_name
 #                 port:
 #                   number: 3000
+
+
+
+
 apiVersion: apps/v1
 kind: Deployment
 metadata:
@@ -130,7 +123,7 @@ spec:
           image: meeran666/file_accepter
           env:
             - name: BASE_FOLDER
-              value: "user1"
+              value: "weber"
             - name: MODE
               value: "init"
           volumeMounts:
@@ -141,7 +134,7 @@ spec:
         - name: runner
           image: meeran666/ide_image
           ports:
-            - containerPort: 3003
+            - containerPort: 3006
             - containerPort: 3000
           volumeMounts:
             - name: workspace-volume
@@ -164,8 +157,8 @@ spec:
   ports:
     - protocol: TCP
       name: ws
-      port: 3003
-      targetPort: 3003
+      port: 3006
+      targetPort: 3006
     - protocol: TCP
       name: user
       port: 3000
@@ -188,7 +181,7 @@ spec:
               service:
                 name: weber
                 port:
-                  number: 3003
+                  number: 3006
 
     - host: down.weber.localhost
       http:

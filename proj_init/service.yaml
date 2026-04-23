@@ -13,7 +13,8 @@ spec:
     metadata:
       labels:
         app: service_name
-    spec:
+    spec:   
+
       volumes:
         - name: workspace-volume
           emptyDir: {}
@@ -23,17 +24,18 @@ spec:
           image: meeran666/file_accepter
           env:
             - name: BASE_FOLDER
-              value: "user1"
+              value: service_name
             - name: MODE
               value: "init"
           volumeMounts:
             - name: workspace-volume
               mountPath: /workspace
+
       containers:
         - name: runner
           image: meeran666/ide_image
           ports:
-            - containerPort: 3003
+            - containerPort: 3006
             - containerPort: 3000
           volumeMounts:
             - name: workspace-volume
@@ -45,7 +47,6 @@ spec:
             limits:
               cpu: "1"
               memory: "1Gi"
-
 ---
 apiVersion: v1
 kind: Service
@@ -57,8 +58,8 @@ spec:
   ports:
     - protocol: TCP
       name: ws
-      port: 3003
-      targetPort: 3003
+      port: 3006
+      targetPort: 3006
     - protocol: TCP
       name: user
       port: 3000
@@ -81,7 +82,7 @@ spec:
               service:
                 name: service_name
                 port:
-                  number: 3003
+                  number: 3006
 
     - host: down.service_name.localhost
       http:

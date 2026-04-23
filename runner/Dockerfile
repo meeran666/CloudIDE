@@ -17,7 +17,7 @@ RUN CGO_ENABLED=0 go build -o /go-api-app .
 
 # --- Run Stage ---
 # Use a minimal base image, like scratch or alpine, for the final image
-FROM alpine:latest
+FROM golang:latest
 
 # Set the working directory to root
 WORKDIR /root/
@@ -26,7 +26,7 @@ WORKDIR /root/
 COPY --from=builder /go-api-app .
 
 # Expose the port your Go API listens on (e.g., 8080)
-EXPOSE 3001
+EXPOSE 3000
 
 # Command to run the executable when the container starts
 CMD ["./go-api-app"]

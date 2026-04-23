@@ -14,10 +14,10 @@ import (
 	"github.com/jackc/pgx/v5/pgconn"
 )
 
-func updateStackInfo(workspace_name, stack, username string) error {
+func updateStackInfo(workspace_name, stack, username string) (string, error) {
 	db := helpers.DbConn()
-	// Auto migrate (optional but useful)
-	// if err := db.AutoMigrate(&Stack{}); err != nil {
+	// Auto migrate
+	// if err := db.AutoMigrate(&models.Stack{}); err != nil {
 	// 	log.Fatal("Migration failed:", err)
 	// }
 
@@ -28,10 +28,10 @@ func updateStackInfo(workspace_name, stack, username string) error {
 		Lastupdated:   time.Now(),
 	}
 	if err := db.Create(&newStack).Error; err != nil {
-		return err
+		return "", err
 	}
 
-	return nil
+	return newStack.GoletID.String(), nil
 }
 
 func UserBackendHandler(w http.ResponseWriter, r *http.Request) {
@@ -46,7 +46,7 @@ func UserBackendHandler(w http.ResponseWriter, r *http.Request) {
 	data := url.Values{}
 	workspace_name := r.FormValue("workspace_name")
 	stack := r.FormValue("stack")
-	err := updateStackInfo(workspace_name, stack, username)
+	golet_id, err := updateStackInfo(workspace_name, stack, username)
 	if err != nil {
 		var pgErr *pgconn.PgError
 		if errors.As(err, &pgErr) {
@@ -58,8 +58,8 @@ func UserBackendHandler(w http.ResponseWriter, r *http.Request) {
 			}
 		}
 	}
-
-	golet_id := "weber"
+	golet_id = username + "-" + golet_id
+	// golet_id := "weber"
 	data.Set("golet_id", golet_id)
 	data.Set("stack", stack)
 	// 2. Target URL
@@ -70,6 +70,7 @@ func UserBackendHandler(w http.ResponseWriter, r *http.Request) {
 	if err != nil {
 		fmt.Println("Error:", err)
 		http.Error(w, ":"+err.Error(), 400)
+		return
 
 	}
 	// 4. Set mandatory header
@@ -81,12 +82,10 @@ func UserBackendHandler(w http.ResponseWriter, r *http.Request) {
 	if err != nil {
 		fmt.Println("Error:", err)
 		http.Error(w, ":"+err.Error(), 400)
-
+		return
 	}
 
 	defer resp.Body.Close()
-	// updateUserInfo()
-	fmt.Println(workspace_name)
 	w.Header().Set("HX-Redirect", "/start?golet_id="+golet_id+"&workspace_name="+workspace_name)
 
 	fmt.Println("Status:", resp.Status)

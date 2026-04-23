@@ -8,8 +8,10 @@ import (
 templ FileStructure(path string, Dirprofile []models.Dirprofile, golet_id string) {
 	for _, item := range Dirprofile {
 		{{ newpath := path + "/" + item.Name }}
+		// {{ hx_post := "http://" + golet_id + ".localhost:3001/browse" }}
+		{{ hx_post := "/browse?golet_id=" + golet_id }}
 		<li
-			hx-post="/browse"
+			hx-post={ hx_post }
 			hx-target="next #folder-content"
 			hx-swap="innerHTML"
 			hx-vals={ `{"path":"` + newpath + `","isDir":` + strconv.FormatBool(item.IsDir) + `}` }
@@ -35,7 +37,7 @@ function delete_dir(event , thisel){
 
 	const parentel=thisel.parentElement.getAttribute('hx-vals')
 	const data = JSON.parse(parentel);
-	fetch("/file-delete?golet_id="+golet_id,{
+	fetch("/file_delete?golet_id="+golet_id,{
 			method:"POST",
 			headers:{ "Content-Type": "application/json" },
 			body: JSON.stringify({
@@ -96,7 +98,6 @@ function oppeningDir(event,thisel) {
         } else {
           console.log("No slash found in the string."); 
         }
-		
     	fetch("/file?golet_id="+golet_id,{
 			method:"POST",
 			headers:{ "Content-Type": "application/json" },

@@ -129,7 +129,7 @@ document.addEventListener('DOMContentLoaded', function() {
 
 						const golet_id = Alpine.$data(document.getElementById('file_structure_editor_wrapper')).golet_id;
 
-                        fetch('/save-change?golet_id='+golet_id, {
+                        fetch('/save_change?golet_id='+golet_id, {
                             method: 'POST',
                             headers: { 'Content-Type': 'application/json' },
                             body: JSON.stringify(payload)

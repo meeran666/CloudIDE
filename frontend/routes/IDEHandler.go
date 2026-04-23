@@ -12,13 +12,12 @@ func IDEHandler(w http.ResponseWriter, r *http.Request) {
 
 	golet_id := r.URL.Query().Get("golet_id")
 	workspace_name := r.URL.Query().Get("workspace_name")
-	fmt.Println("workspace_name", workspace_name)
-	// prod part
-	// targetURL := "http://" + golet_id + ".localhost:3006"
-	// dev part
-	targetURL := "http://localhost:3003"
-	resp, err := http.Get(targetURL)
 
+	// prod part
+	targetURL := "http://" + golet_id + ".localhost:3006"
+	// dev part
+	// targetURL := "http://localhost:3003"
+	resp, err := http.Get(targetURL)
 	if err != nil {
 		fmt.Println(err)
 	}
@@ -30,7 +29,6 @@ func IDEHandler(w http.ResponseWriter, r *http.Request) {
 		fmt.Println(err)
 	}
 
-	// components.IDEBase(models.DirprofileArr).Render(r.Context(), w)
 	components.Base(components.IDEBase(models.DirprofileArr, golet_id, workspace_name)).Render(r.Context(), w)
 
 	models.DirprofileArr = nil

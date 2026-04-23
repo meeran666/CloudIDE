@@ -36,44 +36,62 @@ func FileStructure(path string, Dirprofile []models.Dirprofile, golet_id string)
 		ctx = templ.ClearChildren(ctx)
 		for _, item := range Dirprofile {
 			newpath := path + "/" + item.Name
-			templ_7745c5c3_Err = templruntime.WriteString(templ_7745c5c3_Buffer, 1, "<li hx-post=\"/browse\" hx-target=\"next #folder-content\" hx-swap=\"innerHTML\" hx-vals=\"")
+			templ_7745c5c3_Err = templruntime.WriteString(templ_7745c5c3_Buffer, 1, " ")
+			if templ_7745c5c3_Err != nil {
+				return templ_7745c5c3_Err
+			}
+			hx_post := "/browse?golet_id=" + golet_id
+			templ_7745c5c3_Err = templruntime.WriteString(templ_7745c5c3_Buffer, 2, "<li hx-post=\"")
 			if templ_7745c5c3_Err != nil {
 				return templ_7745c5c3_Err
 			}
 			var templ_7745c5c3_Var2 string
-			templ_7745c5c3_Var2, templ_7745c5c3_Err = templ.JoinStringErrs(`{"path":"` + newpath + `","isDir":` + strconv.FormatBool(item.IsDir) + `}`)
+			templ_7745c5c3_Var2, templ_7745c5c3_Err = templ.JoinStringErrs(hx_post)
 			if templ_7745c5c3_Err != nil {
-				return templ.Error{Err: templ_7745c5c3_Err, FileName: `components/FileStructure.templ`, Line: 15, Col: 88}
+				return templ.Error{Err: templ_7745c5c3_Err, FileName: `components/FileStructure.templ`, Line: 14, Col: 20}
 			}
 			_, templ_7745c5c3_Err = templ_7745c5c3_Buffer.WriteString(templ.EscapeString(templ_7745c5c3_Var2))
 			if templ_7745c5c3_Err != nil {
 				return templ_7745c5c3_Err
 			}
-			templ_7745c5c3_Err = templruntime.WriteString(templ_7745c5c3_Buffer, 2, "\" class=\"cursor-pointer p-1 w-48 hover:bg-gray-700 flex\" onclick=\"oppeningDir(event,this)\">")
+			templ_7745c5c3_Err = templruntime.WriteString(templ_7745c5c3_Buffer, 3, "\" hx-target=\"next #folder-content\" hx-swap=\"innerHTML\" hx-vals=\"")
 			if templ_7745c5c3_Err != nil {
 				return templ_7745c5c3_Err
 			}
-			if item.IsDir {
-				templ_7745c5c3_Err = templruntime.WriteString(templ_7745c5c3_Buffer, 3, "<span>📁 </span> ")
-				if templ_7745c5c3_Err != nil {
-					return templ_7745c5c3_Err
-				}
-			}
 			var templ_7745c5c3_Var3 string
-			templ_7745c5c3_Var3, templ_7745c5c3_Err = templ.JoinStringErrs(item.Name)
+			templ_7745c5c3_Var3, templ_7745c5c3_Err = templ.JoinStringErrs(`{"path":"` + newpath + `","isDir":` + strconv.FormatBool(item.IsDir) + `}`)
 			if templ_7745c5c3_Err != nil {
-				return templ.Error{Err: templ_7745c5c3_Err, FileName: `components/FileStructure.templ`, Line: 22, Col: 14}
+				return templ.Error{Err: templ_7745c5c3_Err, FileName: `components/FileStructure.templ`, Line: 17, Col: 88}
 			}
 			_, templ_7745c5c3_Err = templ_7745c5c3_Buffer.WriteString(templ.EscapeString(templ_7745c5c3_Var3))
 			if templ_7745c5c3_Err != nil {
 				return templ_7745c5c3_Err
 			}
-			templ_7745c5c3_Err = templruntime.WriteString(templ_7745c5c3_Buffer, 4, " <img src=\"/public/trash-bin.png\" alt=\"trash-bin\" class=\"ml-auto text-white w-4 h-4\" onclick=\"delete_dir(event,this)\"></li><ul class=\"w-48 px-2\" id=\"folder-content\"></ul>")
+			templ_7745c5c3_Err = templruntime.WriteString(templ_7745c5c3_Buffer, 4, "\" class=\"cursor-pointer p-1 w-48 hover:bg-gray-700 flex\" onclick=\"oppeningDir(event,this)\">")
+			if templ_7745c5c3_Err != nil {
+				return templ_7745c5c3_Err
+			}
+			if item.IsDir {
+				templ_7745c5c3_Err = templruntime.WriteString(templ_7745c5c3_Buffer, 5, "<span>📁 </span> ")
+				if templ_7745c5c3_Err != nil {
+					return templ_7745c5c3_Err
+				}
+			}
+			var templ_7745c5c3_Var4 string
+			templ_7745c5c3_Var4, templ_7745c5c3_Err = templ.JoinStringErrs(item.Name)
+			if templ_7745c5c3_Err != nil {
+				return templ.Error{Err: templ_7745c5c3_Err, FileName: `components/FileStructure.templ`, Line: 24, Col: 14}
+			}
+			_, templ_7745c5c3_Err = templ_7745c5c3_Buffer.WriteString(templ.EscapeString(templ_7745c5c3_Var4))
+			if templ_7745c5c3_Err != nil {
+				return templ_7745c5c3_Err
+			}
+			templ_7745c5c3_Err = templruntime.WriteString(templ_7745c5c3_Buffer, 6, " <img src=\"/public/trash-bin.png\" alt=\"trash-bin\" class=\"ml-auto text-white w-4 h-4\" onclick=\"delete_dir(event,this)\"></li><ul class=\"w-48 px-2\" id=\"folder-content\"></ul>")
 			if templ_7745c5c3_Err != nil {
 				return templ_7745c5c3_Err
 			}
 		}
-		templ_7745c5c3_Err = templruntime.WriteString(templ_7745c5c3_Buffer, 5, "<script>\nfunction delete_dir(event , thisel){\n\tevent.stopImmediatePropagation();\n\tlet file_structure_element = document.querySelector(\"#file_structure_editor_wrapper\");\t\n\tconst golet_id = Alpine.$data(file_structure_element).golet_id;\n\n\tconst parentel=thisel.parentElement.getAttribute('hx-vals')\n\tconst data = JSON.parse(parentel);\n\tfetch(\"/file-delete?golet_id=\"+golet_id,{\n\t\t\tmethod:\"POST\",\n\t\t\theaders:{ \"Content-Type\": \"application/json\" },\n\t\t\tbody: JSON.stringify({\n\t\t\tpath: data.path\n\t\t\t\t})\n\t})\n\tthisel.parentElement.nextElementSibling.remove()\n\tthisel.parentElement.remove()\n\t\n}\nfunction selected_element_color(previous_el,thisel){\n\tprevious_el.style.backgroundColor = \"transparent\";\n\tthisel.style.backgroundColor = \"red\";\n\n}\nfunction oppeningDir(event,thisel) {\n\tconst hxVals = thisel.getAttribute('hx-vals')\n\tconst hxValsObj = JSON.parse(hxVals)\n\tconst path = hxValsObj.path\n\n\tlet file_structure_element = document.querySelector(\"#file_structure_editor_wrapper\");\t\n\t\n\t//adding selected element to colour and removing colour of the previous element\n\tselected_element_color(Alpine.$data(file_structure_element).selected_element,thisel) \n\n\t//updating the selected item \n\tAlpine.$data(file_structure_element).selected_element=thisel\n\tconst golet_id = Alpine.$data(file_structure_element).golet_id;\n\t\n\t// inserting_file_creation_path(hxValsObj,file_structure_element)\n\n\tif (hxValsObj.isDir === false){\n\t\t\n\t\t\n        const language = {\n            html: \"html\",\n            js: \"javascript\",\n            ts: \"typescript\",\n            go: \"go\",\n            css: \"css\", \n            json: \"json\",\n            py: \"python\" ,\n            rb: \"ruby\",\n            sh: \"shell\"\n        };\n        let lastIndex = path.lastIndexOf('/'); \n        let trimmedString_slash= \"\"\n        if (lastIndex !== -1) {\n          trimmedString_slash = path.slice(lastIndex); \n        } else {\n          console.log(\"No slash found in the string.\"); \n        }\n\n        lastIndex = trimmedString_slash.lastIndexOf('.'); \n        let trimmedString_dot\n        if (lastIndex !== -1) {\n           trimmedString_dot = trimmedString_slash.slice(lastIndex+1); \n        } else {\n          console.log(\"No slash found in the string.\"); \n        }\n\t\t\n    \tfetch(\"/file?golet_id=\"+golet_id,{\n\t\t\tmethod:\"POST\",\n\t\t\theaders:{ \"Content-Type\": \"application/json\" },\n\t\t\tbody: JSON.stringify({\n\t\t\tpath: path\n\t\t\t\t})\n\t\t})\n\t\t.then(res => res.text())\n\t\t.then(data => {\n            const editorContainer = document.querySelector('[id^=\"monaco-editor\"]')\n\n            if(editorContainer && editorContainer.editor){\n                editorContainer.editor.setValue(data)\n            }\n            // Change the language to Python\n            const model = editorContainer.editor.getModel();\n            if (model) {\n                monaco.editor.setModelLanguage(model,language[trimmedString_dot]);\n            }\n\n        })  \n\t\tevent.stopImmediatePropagation();\n\t    return\n\t}\n\tlet next_el=thisel.nextElementSibling;\n\tif (next_el.children.length === 0){\n\n        // allow HTMX request\n    }else {\n        // block HTMX request\n\t\tevent.stopImmediatePropagation();\n\t\tnext_el.innerHTML = \"\"\n    }\n}\n</script>")
+		templ_7745c5c3_Err = templruntime.WriteString(templ_7745c5c3_Buffer, 7, "<script>\nfunction delete_dir(event , thisel){\n\tevent.stopImmediatePropagation();\n\tlet file_structure_element = document.querySelector(\"#file_structure_editor_wrapper\");\t\n\tconst golet_id = Alpine.$data(file_structure_element).golet_id;\n\n\tconst parentel=thisel.parentElement.getAttribute('hx-vals')\n\tconst data = JSON.parse(parentel);\n\tfetch(\"/file_delete?golet_id=\"+golet_id,{\n\t\t\tmethod:\"POST\",\n\t\t\theaders:{ \"Content-Type\": \"application/json\" },\n\t\t\tbody: JSON.stringify({\n\t\t\tpath: data.path\n\t\t\t\t})\n\t})\n\tthisel.parentElement.nextElementSibling.remove()\n\tthisel.parentElement.remove()\n\t\n}\nfunction selected_element_color(previous_el,thisel){\n\tprevious_el.style.backgroundColor = \"transparent\";\n\tthisel.style.backgroundColor = \"red\";\n\n}\nfunction oppeningDir(event,thisel) {\n\tconst hxVals = thisel.getAttribute('hx-vals')\n\tconst hxValsObj = JSON.parse(hxVals)\n\tconst path = hxValsObj.path\n\n\tlet file_structure_element = document.querySelector(\"#file_structure_editor_wrapper\");\t\n\t\n\t//adding selected element to colour and removing colour of the previous element\n\tselected_element_color(Alpine.$data(file_structure_element).selected_element,thisel) \n\n\t//updating the selected item \n\tAlpine.$data(file_structure_element).selected_element=thisel\n\tconst golet_id = Alpine.$data(file_structure_element).golet_id;\n\t\n\t// inserting_file_creation_path(hxValsObj,file_structure_element)\n\n\tif (hxValsObj.isDir === false){\n\t\t\n\t\t\n        const language = {\n            html: \"html\",\n            js: \"javascript\",\n            ts: \"typescript\",\n            go: \"go\",\n            css: \"css\", \n            json: \"json\",\n            py: \"python\" ,\n            rb: \"ruby\",\n            sh: \"shell\"\n        };\n        let lastIndex = path.lastIndexOf('/'); \n        let trimmedString_slash= \"\"\n        if (lastIndex !== -1) {\n          trimmedString_slash = path.slice(lastIndex); \n        } else {\n          console.log(\"No slash found in the string.\"); \n        }\n\n        lastIndex = trimmedString_slash.lastIndexOf('.'); \n        let trimmedString_dot\n        if (lastIndex !== -1) {\n           trimmedString_dot = trimmedString_slash.slice(lastIndex+1); \n        } else {\n          console.log(\"No slash found in the string.\"); \n        }\n    \tfetch(\"/file?golet_id=\"+golet_id,{\n\t\t\tmethod:\"POST\",\n\t\t\theaders:{ \"Content-Type\": \"application/json\" },\n\t\t\tbody: JSON.stringify({\n\t\t\tpath: path\n\t\t\t\t})\n\t\t})\n\t\t.then(res => res.text())\n\t\t.then(data => {\n            const editorContainer = document.querySelector('[id^=\"monaco-editor\"]')\n\n            if(editorContainer && editorContainer.editor){\n                editorContainer.editor.setValue(data)\n            }\n            // Change the language to Python\n            const model = editorContainer.editor.getModel();\n            if (model) {\n                monaco.editor.setModelLanguage(model,language[trimmedString_dot]);\n            }\n\n        })  \n\t\tevent.stopImmediatePropagation();\n\t    return\n\t}\n\tlet next_el=thisel.nextElementSibling;\n\tif (next_el.children.length === 0){\n\n        // allow HTMX request\n    }else {\n        // block HTMX request\n\t\tevent.stopImmediatePropagation();\n\t\tnext_el.innerHTML = \"\"\n    }\n}\n</script>")
 		if templ_7745c5c3_Err != nil {
 			return templ_7745c5c3_Err
 		}

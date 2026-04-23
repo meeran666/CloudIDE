@@ -6,7 +6,6 @@ import (
 	"net/http"
 	"os"
 	"path/filepath"
-	"runner/models"
 )
 
 type CreateRequest struct {
@@ -40,14 +39,7 @@ func FileCreateHandler(w http.ResponseWriter, r *http.Request) {
 	// Prevent path traversal (important)
 
 	path := filepath.Clean(req.Path)
-	fullPath := filepath.Join(models.BaseDir, path, req.Name)
-	// Optional: restrict to workspace root
-	// root := "./workspace"
-	// if !strings.HasPrefix(fullPath, root) {
-	//     http.Error(w, "invalid path", http.StatusForbidden)
-	//     return
-	// }
-
+	fullPath := filepath.Join("/workspace", path, req.Name)
 	if req.Dir {
 		err = os.MkdirAll(fullPath, 0755)
 	} else {

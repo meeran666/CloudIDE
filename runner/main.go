@@ -17,12 +17,12 @@ func main() {
 	mux.HandleFunc("/ws", routes.WsHandler).Methods("GET")
 	mux.HandleFunc("/browse", routes.BrowseHandler).Methods("GET")
 	mux.HandleFunc("/file", routes.FileReadHandler).Methods("POST")
-	mux.HandleFunc("/save-change", routes.ChangeHandler).Methods("POST")
-	mux.HandleFunc("/delete-service", routes.DeleteServiceHandler).Methods("POST")
-	mux.HandleFunc("/file-create", routes.FileCreateHandler).Methods("POST")
-	mux.HandleFunc("/file-delete", routes.FileDeleteHandler).Methods("POST")
+	mux.HandleFunc("/save_change", routes.ChangeHandler).Methods("POST")
+	mux.HandleFunc("/delete_service", routes.DeleteServiceHandler).Methods("POST")
+	mux.HandleFunc("/file_create", routes.FileCreateHandler).Methods("POST")
+	mux.HandleFunc("/file_delete", routes.FileDeleteHandler).Methods("POST")
 
-	port := "3003"
+	port := "3006"
 	fmt.Println("🚀 Listening on port:", port)
 	log.Fatal(http.ListenAndServe(":"+port, mux))
 }

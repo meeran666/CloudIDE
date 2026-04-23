@@ -10,11 +10,11 @@ import (
 func FileDeleteProxy(w http.ResponseWriter, r *http.Request) {
 	golet_id := r.FormValue("golet_id")
 	//dev part
-	targetURL := "http://localhost:3003"
+	// targetURL := "http://localhost:3003"
 	//prod part
-	// targetURL := "http://" + golet_id + ".localhost:3000"
+	targetURL := "http://" + golet_id + ".localhost:3006"
 
-	log.Printf("Proxying: %s /file-delete → localhost:3003/file-delete", r.Method)
+	log.Printf("Proxying: %s /file_delete → localhost:3006/file_delete", r.Method)
 	models.Proxy = nil
 
 	helpers.Proxy(golet_id, targetURL)

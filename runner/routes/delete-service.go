@@ -15,9 +15,9 @@ func DeleteServiceHandler(w http.ResponseWriter, r *http.Request) {
 	}
 	defer file.Close()
 	//dev part
-	URL := "http://localhost:3004/save-progress?golet_id=" + golet_id
+	// URL := "http://localhost:3004/save-progress?golet_id=" + golet_id
 	//prod part
-	// URL := "http://192.168.1.5:3004/save-progress?golet_id=" + golet_id
+	URL := "http://100.66.155.68:3004/save-progress?golet_id=" + golet_id
 	req, err := http.NewRequest("POST", URL, file)
 	if err != nil {
 		panic(err)

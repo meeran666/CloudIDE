@@ -3,7 +3,6 @@ package routes
 import (
 	"encoding/json"
 	"io/fs"
-	"log"
 	"net/http"
 	"os"
 	"runner/models"
@@ -12,16 +11,16 @@ import (
 )
 
 func filelist(path string) error {
-	//this is devlopment part
-	dir, err := os.Getwd()
-	if err != nil {
-		log.Fatal(err)
-	}
+
 	// dev part
-	subpath := dir + "/" + models.BaseDir + "/" + path
+	// dir, err := os.Getwd()
+	// if err != nil {
+	// 	log.Fatal(err)
+	// }
+	// subpath := dir + "/" + models.BaseDir + "/" + path
 
 	// prod part
-	// subpath := models.BaseDir + "/" + path
+	subpath := path
 
 	root := os.DirFS(subpath)
 	entries, err := fs.ReadDir(root, ".")
@@ -36,8 +35,11 @@ func filelist(path string) error {
 }
 
 func HomepageHandler(w http.ResponseWriter, r *http.Request) {
+
 	// dev part
-	err := filelist("")
+	// golet_id := "weber"
+
+	err := filelist("/workspace")
 	if err != nil {
 		color.Red("Error: %v", err)
 		http.Error(w, "Not Found", http.StatusNotFound)

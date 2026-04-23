@@ -3,6 +3,8 @@ package models
 import (
 	"net/http/httputil"
 	"time"
+
+	"github.com/google/uuid"
 )
 
 type Dirprofile struct {
@@ -32,6 +34,7 @@ type Stack struct {
 	WorkspaceName string `gorm:"not null;uniqueIndex:idx_user_workspace"`
 	Stack         string `gorm:"check:stack IN ('React','Node');not null"`
 	Lastupdated   time.Time
+	GoletID       uuid.UUID `gorm:"type:uuid;default:uuid_generate_v4();uniqueIndex"`
 }
 
 var Proxy *httputil.ReverseProxy

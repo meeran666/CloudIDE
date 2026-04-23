@@ -69,7 +69,6 @@ func copyDirContents(srcDir, dstDir string) error {
 }
 func createDistination(path string) error {
 	// path := "../user_environment" + golet_id
-	fmt.Println(path)
 	err := os.Mkdir(path, 0755)
 	return err
 }
@@ -79,15 +78,15 @@ func InitHandler(w http.ResponseWriter, r *http.Request) {
 	err := r.ParseForm()
 	if err != nil {
 		fmt.Println(err.Error())
+
 		http.Error(w, err.Error(), 400)
 		return
 	}
 
 	// Get values
 	golet_id := r.FormValue("golet_id")
-	stack := r.FormValue("stack")
 	fmt.Println(golet_id)
-
+	stack := r.FormValue("stack")
 	source := "../base_stacks/" + stack
 	destination := "../user_environment/" + golet_id
 	err = createDistination(destination)
@@ -101,8 +100,8 @@ func InitHandler(w http.ResponseWriter, r *http.Request) {
 	fmt.Println("All files and folders copied successfully")
 	err = ContainerCreater(golet_id)
 	if err != nil {
-		fmt.Println("service creation failed:" + err.Error())
-		http.Error(w, "service creation failed:"+err.Error(), 400)
+		fmt.Println("container creation failed:" + err.Error())
+		http.Error(w, "container creation failed:"+err.Error(), 400)
 		return
 	}
 	fmt.Println("service created successfully")
