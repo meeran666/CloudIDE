@@ -13,10 +13,7 @@ import (
 	"github.com/google/uuid"
 	"github.com/resend/resend-go/v2"
 	"golang.org/x/crypto/bcrypt"
-	"gorm.io/gorm"
 )
-
-var db *gorm.DB
 
 // ─────────────────────────────────────────────────────────────
 

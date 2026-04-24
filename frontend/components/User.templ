@@ -41,6 +41,7 @@ templ Form() {
 			>
 				<option value="Node">Node Stack</option>
 				<option value="React">React Stack</option>
+				<option value="React">Go Stack</option>
 			</select>
 		</div>
 		<!-- Buttons -->
@@ -66,7 +67,11 @@ templ Form() {
 templ ContexualMunu(stacks []models.Stack) {
 	<div class=" w-full max-h-250 min-h-200  rounded-2xl   gap-5 items-center justify-center flex-wrap flex">
 		for _, item := range stacks {
-			<div class="h-60 w-80 text-sm">
+			{{ hx_post := "/user_recreation?username=" + item.Username + "&workspace_name=" + item.WorkspaceName }}
+			<div
+				hx-post={ hx_post }
+				class="h-60 w-80 text-sm"
+			>
 				<div class="bg-zinc-800 rounded-tl-2xl rounded-tr-2xl w-full h-8/10 flex justify-center items-center">
 					<img class="w-30 h-30" src="/public/nodejs.png" alt="nodejs" class=""/>
 				</div>

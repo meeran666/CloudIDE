@@ -31,7 +31,7 @@ func Form() templ.Component {
 			templ_7745c5c3_Var1 = templ.NopComponent
 		}
 		ctx = templ.ClearChildren(ctx)
-		templ_7745c5c3_Err = templruntime.WriteString(templ_7745c5c3_Buffer, 1, "<form hx-get=\"/userBackend\" hx-target=\"#body\" hx-swap=\"innerHTML\" @click.outside=\"open = false\" x-show=\"open\" x-transition class=\"fixed top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 bg-slate-800 text-white p-6 w-96 rounded-2xl shadow-2xl flex flex-col gap-5 border border-slate-700\"><!-- Title --><h2 class=\"text-xl font-semibold text-center\">Create Workspace</h2><!-- Workspace Name --><div class=\"flex flex-col gap-1 w-full\"><label class=\"text-sm text-slate-300\">Workspace Name</label> <input type=\"text\" name=\"workspace_name\" placeholder=\"weber\" value=\"weber\" class=\"px-3 py-2 rounded-lg bg-slate-700 border border-slate-600 focus:outline-none focus:ring-2 focus:ring-blue-500 placeholder:text-slate-400\"></div><!-- Stack Selection --><div class=\"flex flex-col gap-1 w-full\"><label class=\"text-sm text-slate-300\">Select Stack</label> <select name=\"stack\" class=\"px-3 py-2 rounded-lg bg-slate-700 border border-slate-600 focus:outline-none focus:ring-2 focus:ring-blue-500\"><option value=\"Node\">Node Stack</option> <option value=\"React\">React Stack</option></select></div><!-- Buttons --><div class=\"flex justify-end gap-3 mt-2\"><button type=\"button\" @click=\"open = false\" class=\"px-4 py-2 rounded-lg bg-slate-600 hover:bg-slate-500 transition\">Cancel</button> <button type=\"submit\" class=\"px-4 py-2 rounded-lg bg-blue-600 hover:bg-blue-500 transition font-medium\">Create</button></div></form>")
+		templ_7745c5c3_Err = templruntime.WriteString(templ_7745c5c3_Buffer, 1, "<form hx-get=\"/userBackend\" hx-target=\"#body\" hx-swap=\"innerHTML\" @click.outside=\"open = false\" x-show=\"open\" x-transition class=\"fixed top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 bg-slate-800 text-white p-6 w-96 rounded-2xl shadow-2xl flex flex-col gap-5 border border-slate-700\"><!-- Title --><h2 class=\"text-xl font-semibold text-center\">Create Workspace</h2><!-- Workspace Name --><div class=\"flex flex-col gap-1 w-full\"><label class=\"text-sm text-slate-300\">Workspace Name</label> <input type=\"text\" name=\"workspace_name\" placeholder=\"weber\" value=\"weber\" class=\"px-3 py-2 rounded-lg bg-slate-700 border border-slate-600 focus:outline-none focus:ring-2 focus:ring-blue-500 placeholder:text-slate-400\"></div><!-- Stack Selection --><div class=\"flex flex-col gap-1 w-full\"><label class=\"text-sm text-slate-300\">Select Stack</label> <select name=\"stack\" class=\"px-3 py-2 rounded-lg bg-slate-700 border border-slate-600 focus:outline-none focus:ring-2 focus:ring-blue-500\"><option value=\"Node\">Node Stack</option> <option value=\"React\">React Stack</option> <option value=\"React\">Go Stack</option></select></div><!-- Buttons --><div class=\"flex justify-end gap-3 mt-2\"><button type=\"button\" @click=\"open = false\" class=\"px-4 py-2 rounded-lg bg-slate-600 hover:bg-slate-500 transition\">Cancel</button> <button type=\"submit\" class=\"px-4 py-2 rounded-lg bg-blue-600 hover:bg-blue-500 transition font-medium\">Create</button></div></form>")
 		if templ_7745c5c3_Err != nil {
 			return templ_7745c5c3_Err
 		}
@@ -65,51 +65,65 @@ func ContexualMunu(stacks []models.Stack) templ.Component {
 			return templ_7745c5c3_Err
 		}
 		for _, item := range stacks {
-			templ_7745c5c3_Err = templruntime.WriteString(templ_7745c5c3_Buffer, 3, "<div class=\"h-60 w-80 text-sm\"><div class=\"bg-zinc-800 rounded-tl-2xl rounded-tr-2xl w-full h-8/10 flex justify-center items-center\"><img class=\"w-30 h-30\" src=\"/public/nodejs.png\" alt=\"nodejs\" class=\"\"></div><div class=\"bg-zinc-900 p-3 rounded-bl-2xl rounded-br-2xl\"><div class=\"rounded-xl w-45 h-auto text-lg\">")
+			hx_post := "/user_recreation?username=" + item.Username + "&workspace_name=" + item.WorkspaceName
+			templ_7745c5c3_Err = templruntime.WriteString(templ_7745c5c3_Buffer, 3, "<div hx-post=\"")
 			if templ_7745c5c3_Err != nil {
 				return templ_7745c5c3_Err
 			}
 			var templ_7745c5c3_Var3 string
-			templ_7745c5c3_Var3, templ_7745c5c3_Err = templ.JoinStringErrs(item.WorkspaceName)
+			templ_7745c5c3_Var3, templ_7745c5c3_Err = templ.JoinStringErrs(hx_post)
 			if templ_7745c5c3_Err != nil {
-				return templ.Error{Err: templ_7745c5c3_Err, FileName: `components/User.templ`, Line: 74, Col: 69}
+				return templ.Error{Err: templ_7745c5c3_Err, FileName: `components/User.templ`, Line: 72, Col: 21}
 			}
 			_, templ_7745c5c3_Err = templ_7745c5c3_Buffer.WriteString(templ.EscapeString(templ_7745c5c3_Var3))
 			if templ_7745c5c3_Err != nil {
 				return templ_7745c5c3_Err
 			}
-			templ_7745c5c3_Err = templruntime.WriteString(templ_7745c5c3_Buffer, 4, "</div><span class=\"rounded-xl w-45 h-auto\">")
+			templ_7745c5c3_Err = templruntime.WriteString(templ_7745c5c3_Buffer, 4, "\" class=\"h-60 w-80 text-sm\"><div class=\"bg-zinc-800 rounded-tl-2xl rounded-tr-2xl w-full h-8/10 flex justify-center items-center\"><img class=\"w-30 h-30\" src=\"/public/nodejs.png\" alt=\"nodejs\" class=\"\"></div><div class=\"bg-zinc-900 p-3 rounded-bl-2xl rounded-br-2xl\"><div class=\"rounded-xl w-45 h-auto text-lg\">")
 			if templ_7745c5c3_Err != nil {
 				return templ_7745c5c3_Err
 			}
 			var templ_7745c5c3_Var4 string
-			templ_7745c5c3_Var4, templ_7745c5c3_Err = templ.JoinStringErrs(item.Stack)
+			templ_7745c5c3_Var4, templ_7745c5c3_Err = templ.JoinStringErrs(item.WorkspaceName)
 			if templ_7745c5c3_Err != nil {
-				return templ.Error{Err: templ_7745c5c3_Err, FileName: `components/User.templ`, Line: 75, Col: 54}
+				return templ.Error{Err: templ_7745c5c3_Err, FileName: `components/User.templ`, Line: 79, Col: 69}
 			}
 			_, templ_7745c5c3_Err = templ_7745c5c3_Buffer.WriteString(templ.EscapeString(templ_7745c5c3_Var4))
 			if templ_7745c5c3_Err != nil {
 				return templ_7745c5c3_Err
 			}
-			templ_7745c5c3_Err = templruntime.WriteString(templ_7745c5c3_Buffer, 5, "</span> <span class=\"rounded-xl w-45 h-auto pl-20\">")
+			templ_7745c5c3_Err = templruntime.WriteString(templ_7745c5c3_Buffer, 5, "</div><span class=\"rounded-xl w-45 h-auto\">")
 			if templ_7745c5c3_Err != nil {
 				return templ_7745c5c3_Err
 			}
 			var templ_7745c5c3_Var5 string
-			templ_7745c5c3_Var5, templ_7745c5c3_Err = templ.JoinStringErrs(item.Lastupdated.Format("2006-01-02 15:04:05"))
+			templ_7745c5c3_Var5, templ_7745c5c3_Err = templ.JoinStringErrs(item.Stack)
 			if templ_7745c5c3_Err != nil {
-				return templ.Error{Err: templ_7745c5c3_Err, FileName: `components/User.templ`, Line: 76, Col: 96}
+				return templ.Error{Err: templ_7745c5c3_Err, FileName: `components/User.templ`, Line: 80, Col: 54}
 			}
 			_, templ_7745c5c3_Err = templ_7745c5c3_Buffer.WriteString(templ.EscapeString(templ_7745c5c3_Var5))
 			if templ_7745c5c3_Err != nil {
 				return templ_7745c5c3_Err
 			}
-			templ_7745c5c3_Err = templruntime.WriteString(templ_7745c5c3_Buffer, 6, "</span></div></div>")
+			templ_7745c5c3_Err = templruntime.WriteString(templ_7745c5c3_Buffer, 6, "</span> <span class=\"rounded-xl w-45 h-auto pl-20\">")
+			if templ_7745c5c3_Err != nil {
+				return templ_7745c5c3_Err
+			}
+			var templ_7745c5c3_Var6 string
+			templ_7745c5c3_Var6, templ_7745c5c3_Err = templ.JoinStringErrs(item.Lastupdated.Format("2006-01-02 15:04:05"))
+			if templ_7745c5c3_Err != nil {
+				return templ.Error{Err: templ_7745c5c3_Err, FileName: `components/User.templ`, Line: 81, Col: 96}
+			}
+			_, templ_7745c5c3_Err = templ_7745c5c3_Buffer.WriteString(templ.EscapeString(templ_7745c5c3_Var6))
+			if templ_7745c5c3_Err != nil {
+				return templ_7745c5c3_Err
+			}
+			templ_7745c5c3_Err = templruntime.WriteString(templ_7745c5c3_Buffer, 7, "</span></div></div>")
 			if templ_7745c5c3_Err != nil {
 				return templ_7745c5c3_Err
 			}
 		}
-		templ_7745c5c3_Err = templruntime.WriteString(templ_7745c5c3_Buffer, 7, "<div @click=\"open = true\" class=\"h-60 w-80 text-sm rounded-2xl bg-zinc-800 flex justify-center items-center\"><img class=\"w-30 h-30\" src=\"/public/plus.png\" alt=\"nodejs\" class=\"\"></div></div>")
+		templ_7745c5c3_Err = templruntime.WriteString(templ_7745c5c3_Buffer, 8, "<div @click=\"open = true\" class=\"h-60 w-80 text-sm rounded-2xl bg-zinc-800 flex justify-center items-center\"><img class=\"w-30 h-30\" src=\"/public/plus.png\" alt=\"nodejs\" class=\"\"></div></div>")
 		if templ_7745c5c3_Err != nil {
 			return templ_7745c5c3_Err
 		}
@@ -133,12 +147,12 @@ func User(stacks []models.Stack) templ.Component {
 			}()
 		}
 		ctx = templ.InitializeContext(ctx)
-		templ_7745c5c3_Var6 := templ.GetChildren(ctx)
-		if templ_7745c5c3_Var6 == nil {
-			templ_7745c5c3_Var6 = templ.NopComponent
+		templ_7745c5c3_Var7 := templ.GetChildren(ctx)
+		if templ_7745c5c3_Var7 == nil {
+			templ_7745c5c3_Var7 = templ.NopComponent
 		}
 		ctx = templ.ClearChildren(ctx)
-		templ_7745c5c3_Err = templruntime.WriteString(templ_7745c5c3_Buffer, 8, "<div x-data=\"{ open: false }\" class=\"bg-stone-900 text-white w-full h-full\">")
+		templ_7745c5c3_Err = templruntime.WriteString(templ_7745c5c3_Buffer, 9, "<div x-data=\"{ open: false }\" class=\"bg-stone-900 text-white w-full h-full\">")
 		if templ_7745c5c3_Err != nil {
 			return templ_7745c5c3_Err
 		}
@@ -150,7 +164,7 @@ func User(stacks []models.Stack) templ.Component {
 		if templ_7745c5c3_Err != nil {
 			return templ_7745c5c3_Err
 		}
-		templ_7745c5c3_Err = templruntime.WriteString(templ_7745c5c3_Buffer, 9, "</div>")
+		templ_7745c5c3_Err = templruntime.WriteString(templ_7745c5c3_Buffer, 10, "</div>")
 		if templ_7745c5c3_Err != nil {
 			return templ_7745c5c3_Err
 		}

@@ -85,8 +85,10 @@ func InitHandler(w http.ResponseWriter, r *http.Request) {
 
 	// Get values
 	golet_id := r.FormValue("golet_id")
-	fmt.Println(golet_id)
 	stack := r.FormValue("stack")
+
+	fmt.Println("golet_id", golet_id)
+	fmt.Println(stack)
 	source := "../base_stacks/" + stack
 	destination := "../user_environment/" + golet_id
 	err = createDistination(destination)
@@ -94,11 +96,11 @@ func InitHandler(w http.ResponseWriter, r *http.Request) {
 	if err != nil {
 		fmt.Println("Copy failed:" + err.Error())
 		http.Error(w, "Copy failed:"+err.Error(), 400)
-
 		return
 	}
+
 	fmt.Println("All files and folders copied successfully")
-	err = ContainerCreater(golet_id)
+	err = ContainerCreater(golet_id, stack)
 	if err != nil {
 		fmt.Println("container creation failed:" + err.Error())
 		http.Error(w, "container creation failed:"+err.Error(), 400)

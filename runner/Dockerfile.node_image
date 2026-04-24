@@ -16,10 +16,11 @@ COPY . .
 RUN CGO_ENABLED=0 go build -o /go-api-app .
 
 # --- Run Stage ---
-# Use a minimal base image, like scratch or alpine, for the final image
-FROM golang:latest
+# Use a minimal base node image
+FROM node:latest
 
-# Set the working directory to root
+
+# Set the working directory to root1
 WORKDIR /root/
 
 # Copy the built binary from the 'builder' stage into the new image

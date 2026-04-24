@@ -18,7 +18,7 @@ func PreviewProxy(w http.ResponseWriter, r *http.Request) {
 	}
 
 	golet_id := parts[2]
-	targetURL := "http://" + "down." + golet_id + ".localhost:3006"
+	targetURL := "http://" + "preview." + golet_id + ".localhost:3006"
 	target, _ := url.Parse(targetURL)
 	fmt.Println(targetURL)
 

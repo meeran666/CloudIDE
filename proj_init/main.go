@@ -13,6 +13,7 @@ import (
 func main() {
 	mux := mux.NewRouter()
 	mux.HandleFunc("/user_creation", InitHandler).Methods("POST")
+	mux.HandleFunc("/user_recreation", UserRecreationHandler).Methods("POST")
 	port := "3002"
 	fmt.Println("🚀 Listening on port:", port)
 	log.Fatal(http.ListenAndServe(":"+port, mux))

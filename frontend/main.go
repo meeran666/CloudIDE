@@ -22,6 +22,7 @@ func main() {
 	mux.HandleFunc("/", routes.LandingPageHandler).Methods("GET")
 	mux.HandleFunc("/user", routes.AuthMiddleware(routes.UserHandler)).Methods("GET")
 	mux.HandleFunc("/userBackend", routes.AuthMiddleware(routes.UserBackendHandler)).Methods("GET")
+	mux.HandleFunc("/user_recreation", routes.AuthMiddleware(routes.UserRecreationHandler)).Methods("POST")
 	mux.HandleFunc("/file", routes.AuthMiddleware(routes.FileHandler)).Methods("POST")
 	mux.HandleFunc("/ws", routes.AuthMiddleware(routes.WsHandler)).Methods("GET")
 	mux.HandleFunc("/delete_service", routes.DeleteServiceProxy).Methods("POST")

@@ -43,7 +43,6 @@ func UserBackendHandler(w http.ResponseWriter, r *http.Request) {
 
 	username := claims["username"].(string)
 	// sending the request to orchestrator server for creating user space folder
-	data := url.Values{}
 	workspace_name := r.FormValue("workspace_name")
 	stack := r.FormValue("stack")
 	golet_id, err := updateStackInfo(workspace_name, stack, username)
@@ -60,6 +59,7 @@ func UserBackendHandler(w http.ResponseWriter, r *http.Request) {
 	}
 	golet_id = username + "-" + golet_id
 	// golet_id := "weber"
+	data := url.Values{}
 	data.Set("golet_id", golet_id)
 	data.Set("stack", stack)
 	// 2. Target URL
@@ -85,8 +85,8 @@ func UserBackendHandler(w http.ResponseWriter, r *http.Request) {
 		return
 	}
 
-	defer resp.Body.Close()
 	w.Header().Set("HX-Redirect", "/start?golet_id="+golet_id+"&workspace_name="+workspace_name)
+	defer resp.Body.Close()
 
 	fmt.Println("Status:", resp.Status)
 }

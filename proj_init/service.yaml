@@ -33,7 +33,7 @@ spec:
 
       containers:
         - name: runner
-          image: meeran666/ide_image
+          image: ide_image
           ports:
             - containerPort: 3006
             - containerPort: 3000
@@ -84,7 +84,7 @@ spec:
                 port:
                   number: 3006
 
-    - host: down.service_name.localhost
+    - host: preview.service_name.localhost
       http:
         paths:
           - path: /

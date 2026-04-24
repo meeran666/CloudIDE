@@ -22,8 +22,17 @@ import (
 	"k8s.io/client-go/tools/clientcmd"
 )
 
+func getter_image_name(stack string) string {
+	ide_image := map[string]string{
+		"Node": "meeran666/ide_image_node",
+		"Go":   "meeran666/ide_image_go",
+	}
+
+	return ide_image[stack]
+}
+
 // Read & parse YAML
-func readAndParseKubeYaml(filePath string, replId string) ([]map[string]interface{}, error) {
+func readAndParseKubeYaml(filePath, golet_id, ide_image string) ([]map[string]interface{}, error) {
 	fileContent, err := os.ReadFile(filePath)
 	if err != nil {
 		return nil, err
@@ -45,19 +54,17 @@ func readAndParseKubeYaml(filePath string, replId string) ([]map[string]interfac
 		}
 
 		docBytes, _ := yaml.Marshal(doc)
-		docString := strings.ReplaceAll(string(docBytes), "service_name", replId)
-
+		docString := strings.ReplaceAll(string(docBytes), "service_name", golet_id)
+		docString = strings.ReplaceAll(string(docString), "ide_image", ide_image)
 		var finalDoc map[string]interface{}
 		yaml.Unmarshal([]byte(docString), &finalDoc)
-
-		// fmt.Println(docString)
 
 		manifests = append(manifests, finalDoc)
 	}
 
 }
 
-func ContainerCreater(golet_id string) error {
+func ContainerCreater(golet_id, stack string) error {
 	// Load kubeconfig
 	kubeconfig := os.Getenv("KUBECONFIG")
 	if kubeconfig == "" {
@@ -75,12 +82,13 @@ func ContainerCreater(golet_id string) error {
 
 	namespace := "default"
 
-	manifests, err := readAndParseKubeYaml("./service.yaml", golet_id)
+	//call map function which tells you stack is mapped to which image name
+	ide_image := getter_image_name(stack)
+	manifests, err := readAndParseKubeYaml("./service.yaml", golet_id, ide_image)
 
 	if err != nil {
 		return err
 	}
-	fmt.Println(manifests)
 	for _, manifest := range manifests {
 		kind, ok := manifest["kind"].(string)
 		if !ok {
@@ -95,7 +103,6 @@ func ContainerCreater(golet_id string) error {
 			// yaml.Unmarshal(bytes, &deployment)
 			jsonBytes, _ := json.Marshal(manifest)
 			json.Unmarshal(jsonBytes, &deployment)
-			fmt.Println(deployment)
 
 			_, err := clientset.AppsV1().
 				Deployments(namespace).
@@ -110,7 +117,6 @@ func ContainerCreater(golet_id string) error {
 			var service corev1.Service
 			jsonBytes, _ := json.Marshal(manifest)
 			json.Unmarshal(jsonBytes, &service)
-			fmt.Println(service)
 
 			_, err := clientset.CoreV1().
 				Services(namespace).
