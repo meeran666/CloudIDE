@@ -6,11 +6,6 @@ import (
 	"github.com/gorilla/websocket"
 )
 
-var upgrader = websocket.Upgrader{
-	// Allow all origins for dev — restrict in production
-	CheckOrigin: func(r *http.Request) bool { return true },
-}
-
 func connectToServiceServer(golet_id string) (*websocket.Conn, error) {
 
 	//dev part
@@ -29,6 +24,11 @@ func connectToServiceServer(golet_id string) (*websocket.Conn, error) {
 }
 
 func WsHandler(w http.ResponseWriter, r *http.Request) {
+	var upgrader = websocket.Upgrader{
+		// Allow all origins for dev — restrict in production
+		CheckOrigin: func(r *http.Request) bool { return true },
+	}
+
 	golet_id := r.FormValue("golet_id")
 	// Upgrade frontend connection
 	clientConn, err := upgrader.Upgrade(w, r, nil)

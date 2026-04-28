@@ -23,6 +23,7 @@ templ Form() {
 			<label class="text-sm text-slate-300">Workspace Name</label>
 			<input
 				type="text"
+				x-model="workspace_name"
 				name="workspace_name"
 				placeholder="weber"
 				value="weber"
@@ -36,6 +37,7 @@ templ Form() {
 			<label class="text-sm text-slate-300">Select Stack</label>
 			<select
 				name="stack"
+				x-model="stack"
 				class="px-3 py-2 rounded-lg bg-slate-700 border border-slate-600 
 			       focus:outline-none focus:ring-2 focus:ring-blue-500"
 			>
@@ -99,4 +101,5 @@ templ User(stacks []models.Stack) {
 		@ContexualMunu(stacks)
 		@Form()
 	</div>
+	@Loading()
 }

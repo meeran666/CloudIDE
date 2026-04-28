@@ -31,7 +31,7 @@ func Form() templ.Component {
 			templ_7745c5c3_Var1 = templ.NopComponent
 		}
 		ctx = templ.ClearChildren(ctx)
-		templ_7745c5c3_Err = templruntime.WriteString(templ_7745c5c3_Buffer, 1, "<form hx-get=\"/userBackend\" hx-target=\"#body\" hx-swap=\"innerHTML\" @click.outside=\"open = false\" x-show=\"open\" x-transition class=\"fixed top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 bg-slate-800 text-white p-6 w-96 rounded-2xl shadow-2xl flex flex-col gap-5 border border-slate-700\"><!-- Title --><h2 class=\"text-xl font-semibold text-center\">Create Workspace</h2><!-- Workspace Name --><div class=\"flex flex-col gap-1 w-full\"><label class=\"text-sm text-slate-300\">Workspace Name</label> <input type=\"text\" name=\"workspace_name\" placeholder=\"weber\" value=\"weber\" class=\"px-3 py-2 rounded-lg bg-slate-700 border border-slate-600 focus:outline-none focus:ring-2 focus:ring-blue-500 placeholder:text-slate-400\"></div><!-- Stack Selection --><div class=\"flex flex-col gap-1 w-full\"><label class=\"text-sm text-slate-300\">Select Stack</label> <select name=\"stack\" class=\"px-3 py-2 rounded-lg bg-slate-700 border border-slate-600 focus:outline-none focus:ring-2 focus:ring-blue-500\"><option value=\"Node\">Node Stack</option> <option value=\"React\">React Stack</option> <option value=\"React\">Go Stack</option></select></div><!-- Buttons --><div class=\"flex justify-end gap-3 mt-2\"><button type=\"button\" @click=\"open = false\" class=\"px-4 py-2 rounded-lg bg-slate-600 hover:bg-slate-500 transition\">Cancel</button> <button type=\"submit\" class=\"px-4 py-2 rounded-lg bg-blue-600 hover:bg-blue-500 transition font-medium\">Create</button></div></form>")
+		templ_7745c5c3_Err = templruntime.WriteString(templ_7745c5c3_Buffer, 1, "<form hx-get=\"/userBackend\" hx-target=\"#body\" hx-swap=\"innerHTML\" @click.outside=\"open = false\" x-show=\"open\" x-transition class=\"fixed top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 bg-slate-800 text-white p-6 w-96 rounded-2xl shadow-2xl flex flex-col gap-5 border border-slate-700\"><!-- Title --><h2 class=\"text-xl font-semibold text-center\">Create Workspace</h2><!-- Workspace Name --><div class=\"flex flex-col gap-1 w-full\"><label class=\"text-sm text-slate-300\">Workspace Name</label> <input type=\"text\" x-model=\"workspace_name\" name=\"workspace_name\" placeholder=\"weber\" value=\"weber\" class=\"px-3 py-2 rounded-lg bg-slate-700 border border-slate-600 focus:outline-none focus:ring-2 focus:ring-blue-500 placeholder:text-slate-400\"></div><!-- Stack Selection --><div class=\"flex flex-col gap-1 w-full\"><label class=\"text-sm text-slate-300\">Select Stack</label> <select name=\"stack\" x-model=\"stack\" class=\"px-3 py-2 rounded-lg bg-slate-700 border border-slate-600 focus:outline-none focus:ring-2 focus:ring-blue-500\"><option value=\"Node\">Node Stack</option> <option value=\"React\">React Stack</option> <option value=\"React\">Go Stack</option></select></div><!-- Buttons --><div class=\"flex justify-end gap-3 mt-2\"><button type=\"button\" @click=\"open = false\" class=\"px-4 py-2 rounded-lg bg-slate-600 hover:bg-slate-500 transition\">Cancel</button> <button type=\"submit\" class=\"px-4 py-2 rounded-lg bg-blue-600 hover:bg-blue-500 transition font-medium\">Create</button></div></form>")
 		if templ_7745c5c3_Err != nil {
 			return templ_7745c5c3_Err
 		}
@@ -73,7 +73,7 @@ func ContexualMunu(stacks []models.Stack) templ.Component {
 			var templ_7745c5c3_Var3 string
 			templ_7745c5c3_Var3, templ_7745c5c3_Err = templ.JoinStringErrs(hx_post)
 			if templ_7745c5c3_Err != nil {
-				return templ.Error{Err: templ_7745c5c3_Err, FileName: `components/User.templ`, Line: 72, Col: 21}
+				return templ.Error{Err: templ_7745c5c3_Err, FileName: `components/User.templ`, Line: 74, Col: 21}
 			}
 			_, templ_7745c5c3_Err = templ_7745c5c3_Buffer.WriteString(templ.EscapeString(templ_7745c5c3_Var3))
 			if templ_7745c5c3_Err != nil {
@@ -86,7 +86,7 @@ func ContexualMunu(stacks []models.Stack) templ.Component {
 			var templ_7745c5c3_Var4 string
 			templ_7745c5c3_Var4, templ_7745c5c3_Err = templ.JoinStringErrs(item.WorkspaceName)
 			if templ_7745c5c3_Err != nil {
-				return templ.Error{Err: templ_7745c5c3_Err, FileName: `components/User.templ`, Line: 79, Col: 69}
+				return templ.Error{Err: templ_7745c5c3_Err, FileName: `components/User.templ`, Line: 81, Col: 69}
 			}
 			_, templ_7745c5c3_Err = templ_7745c5c3_Buffer.WriteString(templ.EscapeString(templ_7745c5c3_Var4))
 			if templ_7745c5c3_Err != nil {
@@ -99,7 +99,7 @@ func ContexualMunu(stacks []models.Stack) templ.Component {
 			var templ_7745c5c3_Var5 string
 			templ_7745c5c3_Var5, templ_7745c5c3_Err = templ.JoinStringErrs(item.Stack)
 			if templ_7745c5c3_Err != nil {
-				return templ.Error{Err: templ_7745c5c3_Err, FileName: `components/User.templ`, Line: 80, Col: 54}
+				return templ.Error{Err: templ_7745c5c3_Err, FileName: `components/User.templ`, Line: 82, Col: 54}
 			}
 			_, templ_7745c5c3_Err = templ_7745c5c3_Buffer.WriteString(templ.EscapeString(templ_7745c5c3_Var5))
 			if templ_7745c5c3_Err != nil {
@@ -112,7 +112,7 @@ func ContexualMunu(stacks []models.Stack) templ.Component {
 			var templ_7745c5c3_Var6 string
 			templ_7745c5c3_Var6, templ_7745c5c3_Err = templ.JoinStringErrs(item.Lastupdated.Format("2006-01-02 15:04:05"))
 			if templ_7745c5c3_Err != nil {
-				return templ.Error{Err: templ_7745c5c3_Err, FileName: `components/User.templ`, Line: 81, Col: 96}
+				return templ.Error{Err: templ_7745c5c3_Err, FileName: `components/User.templ`, Line: 83, Col: 96}
 			}
 			_, templ_7745c5c3_Err = templ_7745c5c3_Buffer.WriteString(templ.EscapeString(templ_7745c5c3_Var6))
 			if templ_7745c5c3_Err != nil {
@@ -165,6 +165,10 @@ func User(stacks []models.Stack) templ.Component {
 			return templ_7745c5c3_Err
 		}
 		templ_7745c5c3_Err = templruntime.WriteString(templ_7745c5c3_Buffer, 10, "</div>")
+		if templ_7745c5c3_Err != nil {
+			return templ_7745c5c3_Err
+		}
+		templ_7745c5c3_Err = Loading().Render(ctx, templ_7745c5c3_Buffer)
 		if templ_7745c5c3_Err != nil {
 			return templ_7745c5c3_Err
 		}
