@@ -29,7 +29,7 @@ func VerifyAccount(username string) templ.Component {
 			templ_7745c5c3_Var1 = templ.NopComponent
 		}
 		ctx = templ.ClearChildren(ctx)
-		templ_7745c5c3_Err = templruntime.WriteString(templ_7745c5c3_Buffer, 1, "<div class=\"flex h-[94vh] items-center justify-center bg-gray-100\"><div class=\"w-full max-w-md space-y-8 rounded-lg bg-white p-8 shadow-md\" x-data=\"{ loading: false }\"><div class=\"text-center\"><h1 class=\"mb-6 text-4xl font-extrabold tracking-tight lg:text-5xl\">Verify Your Account</h1><p class=\"mb-4\">Enter the verification code sent to your email</p></div><form class=\"space-y-6\" hx-post=\"/verify-code-backend\" hx-target=\"#verify-response\" hx-swap=\"innerHTML\" x-on:submit=\"loading = true\"><input type=\"hidden\" name=\"username\" value=\"")
+		templ_7745c5c3_Err = templruntime.WriteString(templ_7745c5c3_Buffer, 1, "<div class=\"flex h-dvh items-center justify-center bg-gray-100\"><div class=\"w-full max-w-md space-y-8 rounded-lg bg-white p-8 shadow-md\" x-data=\"{ loading: false }\"><div class=\"text-center\"><h1 class=\"mb-6 text-4xl font-extrabold tracking-tight lg:text-5xl\">Verify Your Account</h1><p class=\"mb-4\">Enter the verification code sent to your email</p></div><form class=\"space-y-6\" hx-post=\"/verify_code_backend\" hx-target=\"#verify-response\" hx-swap=\"innerHTML\" x-on:submit=\"loading = true\"><input type=\"hidden\" name=\"username\" value=\"")
 		if templ_7745c5c3_Err != nil {
 			return templ_7745c5c3_Err
 		}

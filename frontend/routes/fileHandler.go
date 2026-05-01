@@ -8,6 +8,7 @@ import (
 
 func FileHandler(w http.ResponseWriter, r *http.Request) {
 	// Read incoming body
+	golet_id := r.FormValue("golet_id")
 	body, err := io.ReadAll(r.Body)
 	if err != nil {
 		http.Error(w, "failed to read request", 400)
@@ -16,7 +17,7 @@ func FileHandler(w http.ResponseWriter, r *http.Request) {
 	defer r.Body.Close()
 
 	// prod part
-	golet_id := "weber"
+	// golet_id := "weber"
 	targetURL := "http://" + golet_id + ".localhost:3006/file"
 
 	//dev part

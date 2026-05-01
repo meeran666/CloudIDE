@@ -1,7 +1,7 @@
 package components
 
 templ VerifyAccount(username string) {
-	<div class="flex h-[94vh] items-center justify-center bg-gray-100">
+	<div class="flex h-dvh items-center justify-center bg-gray-100">
 		<div
 			class="w-full max-w-md space-y-8 rounded-lg bg-white p-8 shadow-md"
 			x-data="{ loading: false }"
@@ -16,7 +16,7 @@ templ VerifyAccount(username string) {
 			</div>
 			<form
 				class="space-y-6"
-				hx-post="/verify-code-backend"
+				hx-post="/verify_code_backend"
 				hx-target="#verify-response"
 				hx-swap="innerHTML"
 				x-on:submit="loading = true"

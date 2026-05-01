@@ -78,7 +78,7 @@ func IDEBase(Dirprofile []models.Dirprofile, golet_id, workspace_name string) te
 		if templ_7745c5c3_Err != nil {
 			return templ_7745c5c3_Err
 		}
-		templ_7745c5c3_Err = templruntime.WriteString(templ_7745c5c3_Buffer, 5, "</ul></div><div x-data=\"{ tab: 'editor' }\" class=\"grow h-screen transition-all duration-300 ml-0\" :class=\"open ? 'ml-80' : 'ml-0'\"><div class=\"h-5 w-80 bg-amber-500 flex gap-2\"><span class=\"w-40 h-5 grow-0 bg-amber-400\" :class=\"{ 'bg-amber-900': tab === 'editor' }\" @click=\"tab = 'editor'\">editor + terminal</span> <span class=\"w-20 h-5 grow-0 bg-amber-400\" :class=\"{ 'bg-amber-900': tab === 'preview' }\" @click=\"tab = 'preview'\">preview </span></div><div x-show=\"tab === 'editor'\" class=\"flex flex-col h-screen\">")
+		templ_7745c5c3_Err = templruntime.WriteString(templ_7745c5c3_Buffer, 5, "</ul></div><div x-data=\"{ tab: 'editor' }\" class=\"grow h-screen transition-all duration-300 ml-0\" :class=\"open ? 'ml-80' : 'ml-0'\"><div class=\"h-5 w-full bg-indigo-950 text-yellow-400 flex gap-2\"><span class=\"w-40 h-5 grow-0 flex justify-center items-center\" :class=\"{ 'bg-slate-950 border-t-2 border-left-2 border-r-2 border-black': tab === 'editor' }\" @click=\"tab = 'editor'\">editor + terminal</span> <span class=\"w-20 h-5 grow-0 flex justify-center items-center\" :class=\"{ 'bg-slate-950 border-t-2 border-left-2 border-r-2 border-black': tab === 'preview' }\" @click=\"tab = 'preview'\">preview </span></div><div x-show=\"tab === 'editor'\" class=\"flex flex-col h-screen\">")
 		if templ_7745c5c3_Err != nil {
 			return templ_7745c5c3_Err
 		}

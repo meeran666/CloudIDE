@@ -2,7 +2,7 @@ package components
 
 templ SignupPage() {
 	<div
-		class="flex h-[94vh] items-center justify-center bg-[rgb(2,48,32)]"
+		class="flex h-dvh items-center justify-center bg-[rgb(2,48,32)]"
 		x-data="signup()"
 	>
 		<div class="w-full max-w-md space-y-8 bg-white p-8 shadow-md md:rounded-lg">
@@ -99,7 +99,7 @@ templ SignupPage() {
 					this.message = '';
 
 					try {
-						const res = await fetch(`/check-username-unique?username=${this.username}`);
+						const res = await fetch(`/check_username_unique?username=${this.username}`);
 						const data = await res.json(); // assuming plain text response
 						this.message = data.message;
 					} catch (e) {

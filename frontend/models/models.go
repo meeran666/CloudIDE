@@ -32,7 +32,7 @@ type OutputMessage struct {
 type Stack struct {
 	Username      string `gorm:"not null;uniqueIndex:idx_user_workspace"`
 	WorkspaceName string `gorm:"not null;uniqueIndex:idx_user_workspace"`
-	Stack         string `gorm:"check:stack IN ('React','Node');not null"`
+	Stack         string `gorm:"check:stack IN ('Go','Node','Python','HTML');not null"`
 	Lastupdated   time.Time
 	GoletID       uuid.UUID `gorm:"type:uuid;default:uuid_generate_v4();uniqueIndex"`
 }

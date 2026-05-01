@@ -1,7 +1,7 @@
 package components
 
 templ Signin() {
-	<div class="flex h-[94vh] items-center justify-center bg-[rgb(2,48,32)]">
+	<div class="flex h-dvh items-center justify-center bg-[rgb(2,48,32)]">
 		<div
 			class="w-full max-w-md space-y-8 bg-white p-8 shadow-md md:rounded-lg"
 			x-data="{ loading: false }"
@@ -48,19 +48,10 @@ templ Signin() {
 			<div id="auth-response"></div>
 			<!-- LINKS -->
 			<div class="flex">
-				<a href="/forgot-password" class="text-blue-600">Forgot Password?</a>
+				<a href="/forgotpassword" class="text-blue-600">Forgot Password?</a>
 				<div class="grow"></div>
-				<a href="/sign-up" class="text-blue-600">Sign up</a>
+				<a href="/signup" class="text-blue-600">Sign up</a>
 			</div>
-			<!-- GOOGLE LOGIN -->
-			<button
-				hx-get="/auth/google"
-				hx-trigger="click"
-				class="bg-black text-white h-10 w-full rounded-md flex items-center justify-center gap-2"
-			>
-				<img src="/public/google.png" class="h-5 w-5"/>
-				Log in with Google
-			</button>
 		</div>
 	</div>
 }

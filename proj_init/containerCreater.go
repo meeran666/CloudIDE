@@ -24,8 +24,10 @@ import (
 
 func getter_image_name(stack string) string {
 	ide_image := map[string]string{
-		"Node": "meeran666/ide_image_node",
-		"Go":   "meeran666/ide_image_go",
+		"Node":   "meeran666/ide_image_node",
+		"Go":     "meeran666/ide_image_go",
+		"Python": "meeran666/ide_image_python",
+		"HTML":   "meeran666/ide_image_html",
 	}
 
 	return ide_image[stack]

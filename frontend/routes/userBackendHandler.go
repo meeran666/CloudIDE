@@ -100,7 +100,6 @@ func UserBackendHandler(w http.ResponseWriter, r *http.Request) {
 	}
 
 	golet_id = username + "-" + golet_id
-	// golet_id := "meeran-e20fce22-dc22-439f-901f-4bf59a71662d"
 
 	helpers.Clients.Lock()
 	helpers.Clients.M[golet_id] = &helpers.Client{Conn: conn}
