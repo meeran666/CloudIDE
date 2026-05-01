@@ -11,6 +11,7 @@ import (
 	"time"
 
 	"github.com/golang-jwt/jwt/v5"
+	"github.com/gorilla/websocket"
 	"github.com/jackc/pgx/v5/pgconn"
 )
 
@@ -34,7 +35,49 @@ func updateStackInfo(workspace_name, stack, username string) (string, error) {
 	return newStack.GoletID.String(), nil
 }
 
+func serviceInitHandler(golet_id, workspace_name, stack string) error {
+
+	data := url.Values{}
+	data.Set("golet_id", golet_id)
+	data.Set("stack", stack)
+	data.Set("workspace_name", workspace_name)
+	// 2. Target URL
+	apiUrl := "http://localhost:3002/user_creation"
+	// 3. Create request with encoded body
+	req, err := http.NewRequest("POST", apiUrl, strings.NewReader(data.Encode()))
+	if err != nil {
+		return err
+
+	}
+	// 4. Set mandatory header
+	req.Header.Add("Content-Type", "application/x-www-form-urlencoded")
+
+	// 5. Send
+	client := &http.Client{}
+	resp, err := client.Do(req)
+	if err != nil {
+
+		return err
+	}
+
+	defer resp.Body.Close()
+
+	fmt.Println("Status:", resp.Status)
+	return nil
+}
+
 func UserBackendHandler(w http.ResponseWriter, r *http.Request) {
+	workspace_name := r.FormValue("workspace_name")
+	stack := r.FormValue("stack")
+	var upgrader = websocket.Upgrader{
+		CheckOrigin: func(r *http.Request) bool { return true },
+	}
+
+	conn, err := upgrader.Upgrade(w, r, nil)
+	if err != nil {
+		return
+	}
+
 	claims, ok := r.Context().Value(models.UserContextKey).(jwt.MapClaims)
 
 	if !ok {
@@ -43,8 +86,6 @@ func UserBackendHandler(w http.ResponseWriter, r *http.Request) {
 
 	username := claims["username"].(string)
 	// sending the request to orchestrator server for creating user space folder
-	workspace_name := r.FormValue("workspace_name")
-	stack := r.FormValue("stack")
 	golet_id, err := updateStackInfo(workspace_name, stack, username)
 	if err != nil {
 		var pgErr *pgconn.PgError
@@ -57,36 +98,19 @@ func UserBackendHandler(w http.ResponseWriter, r *http.Request) {
 			}
 		}
 	}
+
 	golet_id = username + "-" + golet_id
-	// golet_id := "weber"
-	data := url.Values{}
-	data.Set("golet_id", golet_id)
-	data.Set("stack", stack)
-	// 2. Target URL
-	apiUrl := "http://localhost:3002/user_creation"
+	// golet_id := "meeran-e20fce22-dc22-439f-901f-4bf59a71662d"
 
-	// 3. Create request with encoded body
-	req, err := http.NewRequest("POST", apiUrl, strings.NewReader(data.Encode()))
-	if err != nil {
-		fmt.Println("Error:", err)
-		http.Error(w, ":"+err.Error(), 400)
-		return
+	helpers.Clients.Lock()
+	helpers.Clients.M[golet_id] = &helpers.Client{Conn: conn}
+	helpers.Clients.Unlock()
 
-	}
-	// 4. Set mandatory header
-	req.Header.Add("Content-Type", "application/x-www-form-urlencoded")
-
-	// 5. Send
-	client := &http.Client{}
-	resp, err := client.Do(req)
+	err = serviceInitHandler(golet_id, workspace_name, stack)
 	if err != nil {
 		fmt.Println("Error:", err)
 		http.Error(w, ":"+err.Error(), 400)
 		return
 	}
 
-	w.Header().Set("HX-Redirect", "/start?golet_id="+golet_id+"&workspace_name="+workspace_name)
-	defer resp.Body.Close()
-
-	fmt.Println("Status:", resp.Status)
 }

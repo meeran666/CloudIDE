@@ -1,117 +1,20 @@
-# apiVersion: apps/v1
-# kind: Deployment
-# metadata:
-#   name: service_name
-#   labels:
-#     app: service_name
-# spec:
-#   replicas: 1
-#   selector:
-#     matchLabels:
-#       app: service_name
-#   template:
-#     metadata:
-#       labels:
-#         app: service_name
-#     spec:
-#       volumes:
-#         - name: workspace-volume
-#           emptyDir: {}
-
-#       initContainers:
-#         - name: file-fetcher
-#           image: meeran666/file_accepter
-#           env:
-#             - name: BASE_FOLDER
-#               value: "user1"
-#             - name: MODE
-#               value: "init"
-#           volumeMounts:
-#             - name: workspace-volume
-#               mountPath: /workspace
-#       containers:
-#         - name: runner
-#           image: meeran666/ide_image
-#           ports:
-#             - containerPort: 3003
-#             - containerPort: 3000
-#           volumeMounts:
-#             - name: workspace-volume
-#               mountPath: /workspace
-#           resources:
-#             requests:
-#               cpu: "1"
-#               memory: "1Gi"
-#             limits:
-#               cpu: "1"
-#               memory: "1Gi"
-
-# ---
-# apiVersion: v1
-# kind: Service
-# metadata:
-#   name: service_name
-# spec:
-#   selector:
-#     app: service_name
-#   ports:
-#     - protocol: TCP
-#       name: ws
-#       port: 3003
-#       targetPort: 3003
-#     - protocol: TCP
-#       name: user
-#       port: 3000
-#       targetPort: 3000
-
-# ---
-# apiVersion: networking.k8s.io/v1
-# kind: Ingress
-# metadata:
-#   name: service_name
-# spec:
-#   ingressClassName: nginx
-#   rules:
-#     - host: service_name.localhost
-#       http:
-#         paths:
-#           - path: /
-#             pathType: Prefix
-#             backend:
-#               service:
-#                 name: service_name
-#                 port:
-#                   number: 3003
-
-#     - host: down.service_name.localhost
-#       http:
-#         paths:
-#           - path: /
-#             pathType: Prefix
-#             backend:
-#               service:
-#                 name: service_name
-#                 port:
-#                   number: 3000
-
-
 
 
 apiVersion: apps/v1
 kind: Deployment
 metadata:
-  name: weber
+  name: meeran-e20fce22-dc22-439f-901f-4bf59a71662d
   labels:
-    app: weber
+    app: meeran-e20fce22-dc22-439f-901f-4bf59a71662d
 spec:
   replicas: 1
   selector:
     matchLabels:
-      app: weber
+      app: meeran-e20fce22-dc22-439f-901f-4bf59a71662d
   template:
     metadata:
       labels:
-        app: weber
+        app: meeran-e20fce22-dc22-439f-901f-4bf59a71662d
     spec:   
 
       volumes:
@@ -123,7 +26,7 @@ spec:
           image: meeran666/file_accepter
           env:
             - name: BASE_FOLDER
-              value: "weber"
+              value: "meeran-e20fce22-dc22-439f-901f-4bf59a71662d"
             - name: MODE
               value: "init"
           volumeMounts:
@@ -132,10 +35,15 @@ spec:
 
       containers:
         - name: runner
-          image: meeran666/ide_image
+          image: meeran666/ide_image_node
           ports:
             - containerPort: 3006
             - containerPort: 3000
+          env:
+            - name: GOLET_ID
+              value: "meeran-e20fce22-dc22-439f-901f-4bf59a71662d"
+            - name: WORKSPACE_NAME
+              value: "solar "
           volumeMounts:
             - name: workspace-volume
               mountPath: /workspace
@@ -150,10 +58,10 @@ spec:
 apiVersion: v1
 kind: Service
 metadata:
-  name: weber
+  name: meeran-e20fce22-dc22-439f-901f-4bf59a71662d
 spec:
   selector:
-    app: weber
+    app: meeran-e20fce22-dc22-439f-901f-4bf59a71662d
   ports:
     - protocol: TCP
       name: ws
@@ -168,28 +76,28 @@ spec:
 apiVersion: networking.k8s.io/v1
 kind: Ingress
 metadata:
-  name: weber
+  name: meeran-e20fce22-dc22-439f-901f-4bf59a71662d
 spec:
   ingressClassName: nginx
   rules:
-    - host: weber.localhost
+    - host: meeran-e20fce22-dc22-439f-901f-4bf59a71662d.localhost
       http:
         paths:
           - path: /
             pathType: Prefix
             backend:
               service:
-                name: weber
+                name: meeran-e20fce22-dc22-439f-901f-4bf59a71662d
                 port:
                   number: 3006
 
-    - host: down.weber.localhost
+    - host: down.meeran-e20fce22-dc22-439f-901f-4bf59a71662d.localhost
       http:
         paths:
           - path: /
             pathType: Prefix
             backend:
               service:
-                name: weber
+                name: meeran-e20fce22-dc22-439f-901f-4bf59a71662d
                 port:
                   number: 3000

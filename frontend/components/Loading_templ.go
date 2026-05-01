@@ -29,7 +29,7 @@ func Loading() templ.Component {
 			templ_7745c5c3_Var1 = templ.NopComponent
 		}
 		ctx = templ.ClearChildren(ctx)
-		templ_7745c5c3_Err = templruntime.WriteString(templ_7745c5c3_Buffer, 1, "<div x-ref=\"wsbox\" hx-ext=\"ws\" x-show=\"loading\" x-init=\"\n        $watch('loading', value => {\n            if (value) {\n                $refs.wsbox.setAttribute(\n                    'ws-connect',\n                    '/store_ws_conn?workspace_name=' + workspace_name\n                );\n                htmx.process($refs.wsbox);\n            }\n        })\n    \"><div id=\"notifications\">Loading...</div></div>")
+		templ_7745c5c3_Err = templruntime.WriteString(templ_7745c5c3_Buffer, 1, "<div id=\"notifications\" x-show=\"loading\" class=\"bg-slate-600 w-dvw h-dvh\">Loading...</div>")
 		if templ_7745c5c3_Err != nil {
 			return templ_7745c5c3_Err
 		}

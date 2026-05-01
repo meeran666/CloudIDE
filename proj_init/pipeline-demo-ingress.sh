@@ -1,7 +1,7 @@
 # Define colors
 BLUE='\e[34m'
 NC='\033[0m' # No Color (Reset)
-DEPLOYMENT_NAME="weber"
+DEPLOYMENT_NAME="meeran-e20fce22-dc22-439f-901f-4bf59a71662d"
 
 echo -e  "${BLUE}kubectl delete deployment "$DEPLOYMENT_NAME" ${NC}"
 kubectl delete deployment "$DEPLOYMENT_NAME" 

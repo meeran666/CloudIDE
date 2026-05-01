@@ -67,6 +67,7 @@ func copyDirContents(srcDir, dstDir string) error {
 
 	return nil
 }
+
 func createDistination(path string) error {
 	// path := "../user_environment" + golet_id
 	err := os.Mkdir(path, 0755)
@@ -86,9 +87,8 @@ func InitHandler(w http.ResponseWriter, r *http.Request) {
 	// Get values
 	golet_id := r.FormValue("golet_id")
 	stack := r.FormValue("stack")
-
-	fmt.Println("golet_id", golet_id)
-	fmt.Println(stack)
+	workspace_name := r.FormValue("workspace_name")
+	fmt.Println("stack", stack, golet_id, workspace_name)
 	source := "../base_stacks/" + stack
 	destination := "../user_environment/" + golet_id
 	err = createDistination(destination)
@@ -100,7 +100,7 @@ func InitHandler(w http.ResponseWriter, r *http.Request) {
 	}
 
 	fmt.Println("All files and folders copied successfully")
-	err = ContainerCreater(golet_id, stack)
+	err = ContainerCreater(golet_id, stack, workspace_name)
 	if err != nil {
 		fmt.Println("container creation failed:" + err.Error())
 		http.Error(w, "container creation failed:"+err.Error(), 400)

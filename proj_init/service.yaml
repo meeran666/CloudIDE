@@ -37,6 +37,11 @@ spec:
           ports:
             - containerPort: 3006
             - containerPort: 3000
+          env:
+            - name: GOLET_ID
+              value: service_name
+            - name: WORKSPACE_NAME
+              value: workspace_name
           volumeMounts:
             - name: workspace-volume
               mountPath: /workspace

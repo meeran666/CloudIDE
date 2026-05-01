@@ -32,7 +32,7 @@ func getter_image_name(stack string) string {
 }
 
 // Read & parse YAML
-func readAndParseKubeYaml(filePath, golet_id, ide_image string) ([]map[string]interface{}, error) {
+func readAndParseKubeYaml(filePath, golet_id, ide_image, workspace_name string) ([]map[string]interface{}, error) {
 	fileContent, err := os.ReadFile(filePath)
 	if err != nil {
 		return nil, err
@@ -56,6 +56,7 @@ func readAndParseKubeYaml(filePath, golet_id, ide_image string) ([]map[string]in
 		docBytes, _ := yaml.Marshal(doc)
 		docString := strings.ReplaceAll(string(docBytes), "service_name", golet_id)
 		docString = strings.ReplaceAll(string(docString), "ide_image", ide_image)
+		docString = strings.ReplaceAll(string(docString), "workspace_name", workspace_name)
 		var finalDoc map[string]interface{}
 		yaml.Unmarshal([]byte(docString), &finalDoc)
 
@@ -64,7 +65,7 @@ func readAndParseKubeYaml(filePath, golet_id, ide_image string) ([]map[string]in
 
 }
 
-func ContainerCreater(golet_id, stack string) error {
+func ContainerCreater(golet_id, stack, workspace_name string) error {
 	// Load kubeconfig
 	kubeconfig := os.Getenv("KUBECONFIG")
 	if kubeconfig == "" {
@@ -84,7 +85,7 @@ func ContainerCreater(golet_id, stack string) error {
 
 	//call map function which tells you stack is mapped to which image name
 	ide_image := getter_image_name(stack)
-	manifests, err := readAndParseKubeYaml("./service.yaml", golet_id, ide_image)
+	manifests, err := readAndParseKubeYaml("./service.yaml", golet_id, ide_image, workspace_name)
 
 	if err != nil {
 		return err

@@ -21,19 +21,17 @@ func main() {
 	mux.HandleFunc("/signinBackend", routes.SigninBackendHandler).Methods("POST")
 	mux.HandleFunc("/", routes.LandingPageHandler).Methods("GET")
 	mux.HandleFunc("/user", routes.AuthMiddleware(routes.UserHandler)).Methods("GET")
-	mux.HandleFunc("/userBackend", routes.AuthMiddleware(routes.UserBackendHandler)).Methods("GET")
 	mux.HandleFunc("/user_recreation", routes.AuthMiddleware(routes.UserRecreationHandler)).Methods("POST")
 	mux.HandleFunc("/file", routes.AuthMiddleware(routes.FileHandler)).Methods("POST")
 	mux.HandleFunc("/ws", routes.AuthMiddleware(routes.WsHandler)).Methods("GET")
-	mux.HandleFunc("/store_ws_conn", routes.AuthMiddleware(routes.StoreWsConnection)).Methods("GET")
+	mux.HandleFunc("/userBackend", routes.AuthMiddleware(routes.UserBackendHandler)).Methods("GET")
 	mux.HandleFunc("/delete_service", routes.DeleteServiceProxy).Methods("POST")
 	mux.PathPrefix("/preview").HandlerFunc(routes.PreviewProxy)
 	mux.HandleFunc("/file_create", routes.FileCreateProxy).Methods("POST")
 	mux.HandleFunc("/file_delete", routes.FileDeleteProxy).Methods("POST")
 
-	mux.HandleFunc("/start", routes.AuthMiddleware(routes.LoadingHandler)).Methods("GET")
-	mux.HandleFunc("/notify_handler", routes.AuthMiddleware(routes.NotifyHandler)).Methods("GET")
-	// mux.HandleFunc("/ide_page", routes.AuthMiddleware(routes.IDEHandler)).Methods("GET")
+	mux.HandleFunc("/start", routes.AuthMiddleware(routes.IDEHandler)).Methods("GET")
+	mux.HandleFunc("/notify", routes.NotifyHandler).Methods("GET")
 	mux.HandleFunc("/browse", routes.BrowseHandler).Methods("POST")
 	mux.PathPrefix("/public/").Handler(
 		http.StripPrefix("/public/", http.FileServer(http.Dir("public"))),

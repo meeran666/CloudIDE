@@ -1,7 +1,6 @@
 package routes
 
 import (
-	"fmt"
 	"log"
 	"net/http"
 	"net/http/httputil"
@@ -20,7 +19,6 @@ func PreviewProxy(w http.ResponseWriter, r *http.Request) {
 	golet_id := parts[2]
 	targetURL := "http://" + "preview." + golet_id + ".localhost:3006"
 	target, _ := url.Parse(targetURL)
-	fmt.Println(targetURL)
 
 	proxy := &httputil.ReverseProxy{
 		Rewrite: func(pr *httputil.ProxyRequest) {

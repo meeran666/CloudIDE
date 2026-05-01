@@ -15,7 +15,6 @@ type DeleteRequest struct {
 }
 
 func FileDeleteHandler(w http.ResponseWriter, r *http.Request) {
-	fmt.Println("value23")
 	var req DeleteRequest
 	err := json.NewDecoder(r.Body).Decode(&req)
 	if err != nil {

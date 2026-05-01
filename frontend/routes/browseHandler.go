@@ -26,10 +26,7 @@ func BrowseHandler(w http.ResponseWriter, r *http.Request) {
 	}
 	defer resp.Body.Close()
 
-	fmt.Println(models.DirprofileArr)
 	err = json.NewDecoder(resp.Body).Decode(&models.DirprofileArr)
-	fmt.Println(models.DirprofileArr)
-
 	if err != nil {
 		fmt.Println(err)
 		// do a response of err to frontend in future

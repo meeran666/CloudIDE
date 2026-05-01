@@ -8,7 +8,9 @@ import (
 func UserRecreationHandler(w http.ResponseWriter, r *http.Request) {
 	golet_id := r.FormValue("golet_id")
 	stack := r.FormValue("stack")
-	err := ContainerCreater(golet_id, stack)
+	workspace_name := r.FormValue("workspace_name")
+
+	err := ContainerCreater(golet_id, stack, workspace_name)
 	if err != nil {
 		fmt.Println("container creation failed:" + err.Error())
 		http.Error(w, "container creation failed:"+err.Error(), 400)

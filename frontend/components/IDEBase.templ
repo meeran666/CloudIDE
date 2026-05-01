@@ -3,66 +3,65 @@ package components
 import "frontend/models"
 
 templ IDEBase(Dirprofile []models.Dirprofile, golet_id, workspace_name string) {
-	<div id="notifications" hx-swap-oob="innerHTML">
-		<div class="w-screen h-9 flex  items-center  bg-zinc-500">
-			<div
-				class=" w-6 h-6 flex justify-center items-center  rounded "
-				@click="open = !open"
-			>
-				<img src="/public/sidebar.png" alt="sidebar" class="w-5  h-5"/>
-			</div>
-		</div>
+	<div class="w-screen h-9 flex  items-center  bg-zinc-500">
 		<div
-			id="file_structure_editor_wrapper"
-			x-data={ `{ golet_id: "` + golet_id + `", selected_element: null }` }
-			x-init="$nextTick(() => { selected_element = $refs.file_structure_header })"
-			class="flex h-screen"
+			class=" w-6 h-6 flex justify-center items-center  rounded "
+			@click="open = !open"
 		>
-			<div
-				:class="open ? 'translate-x-0' : '-translate-x-full'"
-				class="w-80 shrink-0 fixed h-screen transition-transform duration-300 bg-gray-900 text-white"
+			<img src="/public/sidebar.png" alt="sidebar" class="w-5  h-5"/>
+		</div>
+	</div>
+	<div
+		id="file_structure_editor_wrapper"
+		x-data={ `{ golet_id: "` + golet_id + `", selected_element: null }` }
+		x-init="$nextTick(() => { selected_element = $refs.file_structure_header })"
+		class="flex h-screen"
+	>
+		<div
+			:class="open ? 'translate-x-0' : '-translate-x-full'"
+			class="w-80 shrink-0 fixed h-screen transition-transform duration-300 bg-gray-900 text-white"
+		>
+			<li
+				x-ref="file_structure_header"
+				hx-vals={ `{"path": "" ,"isDir": "true"}` }
+				class="w-48 px-2  border-black border-2 text-white flex gap-3 items-center"
 			>
-				<li
-					x-ref="file_structure_header"
-					hx-vals={ `{"path": "" ,"isDir": "true"}` }
-					class="w-48 px-2  border-black border-2 text-white flex gap-3 items-center"
-				>
-					{ workspace_name }
-					<img src="/public/create_file.png" alt="create_file" class="text-white w-4  h-4" onclick="create_directory(this)"/>
-					<img src="/public/create_folder.png" alt="create_folder" class="text-white w-4  h-4" onclick="create_directory(this)"/>
-				</li>
-				<ul
-					class="w-full h-7"
-				>
-					@FileStructure("", Dirprofile, golet_id)
-				</ul>
+				{ workspace_name }
+				<img src="/public/create_file.png" alt="create_file" class="text-white w-4  h-4" onclick="create_directory(this)"/>
+				<img src="/public/create_folder.png" alt="create_folder" class="text-white w-4  h-4" onclick="create_directory(this)"/>
+			</li>
+			<ul
+				class="w-full h-7"
+			>
+				@FileStructure("", Dirprofile, golet_id)
+			</ul>
+		</div>
+		<div x-data="{ tab: 'editor' }" class="grow h-screen transition-all duration-300 ml-0" :class="open ? 'ml-80' : 'ml-0'">
+			<div class="h-5 w-80 bg-amber-500 flex gap-2">
+				<span
+					class="w-40 h-5 grow-0 bg-amber-400"
+					:class="{ 'bg-amber-900': tab === 'editor' }"
+					@click="tab = 'editor'"
+				>editor + terminal</span>
+				<span
+					class="w-20 h-5 grow-0 bg-amber-400"
+					:class="{ 'bg-amber-900': tab === 'preview' }"
+					@click="tab = 'preview'"
+				>preview </span>
 			</div>
-			<div x-data="{ tab: 'editor' }" class="grow h-screen transition-all duration-300 ml-0" :class="open ? 'ml-80' : 'ml-0'">
-				<div class="h-5 w-80 bg-amber-500 flex gap-2">
-					<span
-						class="w-40 h-5 grow-0 bg-amber-400"
-						:class="{ 'bg-amber-900': tab === 'editor' }"
-						@click="tab = 'editor'"
-					>editor + terminal</span>
-					<span
-						class="w-20 h-5 grow-0 bg-amber-400"
-						:class="{ 'bg-amber-900': tab === 'preview' }"
-						@click="tab = 'preview'"
-					>preview </span>
-				</div>
-				<div
-					x-show="tab === 'editor'"
-					class="flex flex-col h-screen"
-				>
-					@Editor()
-					@Terminal()
-				</div>
-				<div x-show="tab === 'preview'">
-					@Preview()
-				</div>
+			<div
+				x-show="tab === 'editor'"
+				class="flex flex-col h-screen"
+			>
+				@Editor()
+				@Terminal()
+			</div>
+			<div x-show="tab === 'preview'">
+				@Preview()
 			</div>
 		</div>
-		<script>
+	</div>
+	<script>
 
  document.addEventListener('alpine:initialized', () => {
 		function file_create_fetch(input, event, selected_element,isDirfunction) {
@@ -174,5 +173,4 @@ templ IDEBase(Dirprofile []models.Dirprofile, golet_id, workspace_name string) {
         resetTimer()
     })
 	</script>
-	</div>
 }
