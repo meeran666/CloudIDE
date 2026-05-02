@@ -89,9 +89,6 @@ templ Form() {
                 // ✅ update Alpine state
                 this.golet_id = data.golet_id;
                 this.workspace_name = data.workspace_name;
-				console.log(data)
-
-                console.log('WS received:', data);
 
                 // 🔥 call backend after WS response
               	window.location.href = `/start?golet_id=${this.golet_id}&workspace_name=${this.workspace_name}`;

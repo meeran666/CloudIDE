@@ -41,6 +41,7 @@ func serviceInitHandler(golet_id, workspace_name, stack string) error {
 	data.Set("golet_id", golet_id)
 	data.Set("stack", stack)
 	data.Set("workspace_name", workspace_name)
+
 	// 2. Target URL
 	apiUrl := "http://localhost:3002/user_creation"
 	// 3. Create request with encoded body
@@ -69,6 +70,7 @@ func serviceInitHandler(golet_id, workspace_name, stack string) error {
 func UserBackendHandler(w http.ResponseWriter, r *http.Request) {
 	workspace_name := r.FormValue("workspace_name")
 	stack := r.FormValue("stack")
+
 	var upgrader = websocket.Upgrader{
 		CheckOrigin: func(r *http.Request) bool { return true },
 	}
@@ -101,6 +103,7 @@ func UserBackendHandler(w http.ResponseWriter, r *http.Request) {
 
 	golet_id = username + "-" + golet_id
 
+	// golet_id := "weber"
 	helpers.Clients.Lock()
 	helpers.Clients.M[golet_id] = &helpers.Client{Conn: conn}
 	helpers.Clients.Unlock()

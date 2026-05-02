@@ -39,8 +39,9 @@ func NotifyHandler(w http.ResponseWriter, r *http.Request) {
 		"golet_id":       golet_id,
 		"workspace_name": workspace_name,
 	}
-	fmt.Println("payload", payload)
+
 	data, err := json.Marshal(payload)
+	fmt.Println("payload", payload)
 	if err != nil {
 		http.Error(w, "json error", 500)
 		return

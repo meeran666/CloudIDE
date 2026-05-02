@@ -13,36 +13,35 @@ spec:
     metadata:
       labels:
         app: service_name
-    spec:
+    spec:   
+
       volumes:
         - name: workspace-volume
           emptyDir: {}
 
-        - name: code-volume
-          configMap:
-            name: service-code
-
       initContainers:
-        - name: copy-local-code
-          image: busybox
-          command: ["/bin/sh", "-c"]
-          args:
-            - >
-              cp -r /config/* /workspace/ &&
-              echo "Code copied from ConfigMap";
+        - name: file-fetcher
+          image: meeran666/file_accepter
+          env:
+            - name: BASE_FOLDER
+              value: service_name
+            - name: MODE
+              value: "init"
           volumeMounts:
-            - name: code-volume
-              mountPath: /config
-
             - name: workspace-volume
               mountPath: /workspace
 
       containers:
         - name: runner
-          image: 100xdevs/runner:latest
+          image: ide_image
           ports:
-            - containerPort: 3001
+            - containerPort: 3006
             - containerPort: 3000
+          env:
+            - name: GOLET_ID
+              value: service_name
+            - name: WORKSPACE_NAME
+              value: workspace_name
           volumeMounts:
             - name: workspace-volume
               mountPath: /workspace
@@ -64,12 +63,13 @@ spec:
   ports:
     - protocol: TCP
       name: ws
-      port: 3001
-      targetPort: 3001
+      port: 3006
+      targetPort: 3006
     - protocol: TCP
       name: user
       port: 3000
       targetPort: 3000
+
 ---
 apiVersion: networking.k8s.io/v1
 kind: Ingress
@@ -78,23 +78,24 @@ metadata:
 spec:
   ingressClassName: nginx
   rules:
-  - host: service_name.moviemania.wiki
-    http:
-      paths:
-      - path: /
-        pathType: Prefix
-        backend:
-          service:
-            name: service_name
-            port:
-              number: 3001
-  - host: service_name.autogpt-cloud.com
-    http:
-      paths:
-      - path: /
-        pathType: Prefix
-        backend:
-          service:
-            name: service_name
-            port:
-              number: 3000 
+    - host: service_name.localhost
+      http:
+        paths:
+          - path: /
+            pathType: Prefix
+            backend:
+              service:
+                name: service_name
+                port:
+                  number: 3006
+
+    - host: preview.service_name.localhost
+      http:
+        paths:
+          - path: /
+            pathType: Prefix
+            backend:
+              service:
+                name: service_name
+                port:
+                  number: 3000

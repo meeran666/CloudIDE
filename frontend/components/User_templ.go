@@ -31,7 +31,7 @@ func Form() templ.Component {
 			templ_7745c5c3_Var1 = templ.NopComponent
 		}
 		ctx = templ.ClearChildren(ctx)
-		templ_7745c5c3_Err = templruntime.WriteString(templ_7745c5c3_Buffer, 1, "<form x-data=\"{\n        workspace_name: '',\n        stack: 'Node',\n        golet_id: '',\n\n        startWS() {\n            loading = true;\n\n            const url = `/userBackend?workspace_name=${this.workspace_name}&stack=${this.stack}`;\n\n            // set ws-connect dynamically\n            this.$refs.wsbox.setAttribute('ws-connect', url);\n\n            // force htmx to process it\n            htmx.process(this.$refs.wsbox);\n        }\n    }\" @submit.prevent=\"startWS()\" @click.outside=\"open = false\" x-show=\"open\" x-transition class=\"fixed top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 bg-slate-800 text-white p-6 w-96 rounded-2xl shadow-2xl flex flex-col gap-5 border border-slate-700\"><!-- Title --><h2 class=\"text-xl font-semibold text-center\">Create Workspace</h2><!-- Workspace Name --><div class=\"flex flex-col gap-1 w-full\"><label class=\"text-sm text-slate-300\">Workspace Name</label> <input type=\"text\" x-model=\"workspace_name\" name=\"workspace_name\" placeholder=\"weber\" class=\"px-3 py-2 rounded-lg bg-slate-700 border border-slate-600 focus:outline-none focus:ring-2 focus:ring-blue-500 placeholder:text-slate-400\"></div><!-- Stack Selection --><div class=\"flex flex-col gap-1 w-full\"><label class=\"text-sm text-slate-300\">Select Stack</label> <select name=\"stack\" x-model=\"stack\" class=\"px-3 py-2 rounded-lg bg-slate-700 border border-slate-600 focus:outline-none focus:ring-2 focus:ring-blue-500\"><option value=\"Node\">Node Stack</option> <option value=\"Python\">Python Stack</option> <option value=\"Go\">Go Stack</option> <option value=\"HTML\">HTML Stack</option></select></div><!-- Buttons --><div class=\"flex justify-end gap-3 mt-2\"><button type=\"button\" @click=\"open = false\" class=\"px-4 py-2 rounded-lg bg-slate-600 hover:bg-slate-500 transition\">Cancel</button> <button type=\"submit\" class=\"px-4 py-2 rounded-lg bg-blue-600 hover:bg-blue-500 transition font-medium\">Create</button></div><!-- WebSocket handler (INSIDE form) --><div x-ref=\"wsbox\" hx-ext=\"ws\" x-init=\"\n            $refs.wsbox.addEventListener('htmx:wsAfterMessage', (event) => {\n                const data = JSON.parse(event.detail.message);\n\n                // ✅ update Alpine state\n                this.golet_id = data.golet_id;\n                this.workspace_name = data.workspace_name;\n\t\t\t\tconsole.log(data)\n\n                console.log('WS received:', data);\n\n                // 🔥 call backend after WS response\n              \twindow.location.href = `/start?golet_id=${this.golet_id}&workspace_name=${this.workspace_name}`;\n            });\n        \"></div></form>")
+		templ_7745c5c3_Err = templruntime.WriteString(templ_7745c5c3_Buffer, 1, "<form x-data=\"{\n        workspace_name: '',\n        stack: 'Node',\n        golet_id: '',\n\n        startWS() {\n            loading = true;\n\n            const url = `/userBackend?workspace_name=${this.workspace_name}&stack=${this.stack}`;\n\n            // set ws-connect dynamically\n            this.$refs.wsbox.setAttribute('ws-connect', url);\n\n            // force htmx to process it\n            htmx.process(this.$refs.wsbox);\n        }\n    }\" @submit.prevent=\"startWS()\" @click.outside=\"open = false\" x-show=\"open\" x-transition class=\"fixed top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 bg-slate-800 text-white p-6 w-96 rounded-2xl shadow-2xl flex flex-col gap-5 border border-slate-700\"><!-- Title --><h2 class=\"text-xl font-semibold text-center\">Create Workspace</h2><!-- Workspace Name --><div class=\"flex flex-col gap-1 w-full\"><label class=\"text-sm text-slate-300\">Workspace Name</label> <input type=\"text\" x-model=\"workspace_name\" name=\"workspace_name\" placeholder=\"weber\" class=\"px-3 py-2 rounded-lg bg-slate-700 border border-slate-600 focus:outline-none focus:ring-2 focus:ring-blue-500 placeholder:text-slate-400\"></div><!-- Stack Selection --><div class=\"flex flex-col gap-1 w-full\"><label class=\"text-sm text-slate-300\">Select Stack</label> <select name=\"stack\" x-model=\"stack\" class=\"px-3 py-2 rounded-lg bg-slate-700 border border-slate-600 focus:outline-none focus:ring-2 focus:ring-blue-500\"><option value=\"Node\">Node Stack</option> <option value=\"Python\">Python Stack</option> <option value=\"Go\">Go Stack</option> <option value=\"HTML\">HTML Stack</option></select></div><!-- Buttons --><div class=\"flex justify-end gap-3 mt-2\"><button type=\"button\" @click=\"open = false\" class=\"px-4 py-2 rounded-lg bg-slate-600 hover:bg-slate-500 transition\">Cancel</button> <button type=\"submit\" class=\"px-4 py-2 rounded-lg bg-blue-600 hover:bg-blue-500 transition font-medium\">Create</button></div><!-- WebSocket handler (INSIDE form) --><div x-ref=\"wsbox\" hx-ext=\"ws\" x-init=\"\n            $refs.wsbox.addEventListener('htmx:wsAfterMessage', (event) => {\n                const data = JSON.parse(event.detail.message);\n\n                // ✅ update Alpine state\n                this.golet_id = data.golet_id;\n                this.workspace_name = data.workspace_name;\n\n                // 🔥 call backend after WS response\n              \twindow.location.href = `/start?golet_id=${this.golet_id}&workspace_name=${this.workspace_name}`;\n            });\n        \"></div></form>")
 		if templ_7745c5c3_Err != nil {
 			return templ_7745c5c3_Err
 		}
@@ -84,7 +84,7 @@ func ContexualMenu(stacks []models.Stack) templ.Component {
 			var templ_7745c5c3_Var3 string
 			templ_7745c5c3_Var3, templ_7745c5c3_Err = templ.JoinStringErrs(hx_post)
 			if templ_7745c5c3_Err != nil {
-				return templ.Error{Err: templ_7745c5c3_Err, FileName: `components/User.templ`, Line: 122, Col: 21}
+				return templ.Error{Err: templ_7745c5c3_Err, FileName: `components/User.templ`, Line: 119, Col: 21}
 			}
 			_, templ_7745c5c3_Err = templ_7745c5c3_Buffer.WriteString(templ.EscapeString(templ_7745c5c3_Var3))
 			if templ_7745c5c3_Err != nil {
@@ -97,7 +97,7 @@ func ContexualMenu(stacks []models.Stack) templ.Component {
 			var templ_7745c5c3_Var4 string
 			templ_7745c5c3_Var4, templ_7745c5c3_Err = templ.JoinStringErrs(container_image)
 			if templ_7745c5c3_Err != nil {
-				return templ.Error{Err: templ_7745c5c3_Err, FileName: `components/User.templ`, Line: 126, Col: 49}
+				return templ.Error{Err: templ_7745c5c3_Err, FileName: `components/User.templ`, Line: 123, Col: 49}
 			}
 			_, templ_7745c5c3_Err = templ_7745c5c3_Buffer.WriteString(templ.EscapeString(templ_7745c5c3_Var4))
 			if templ_7745c5c3_Err != nil {
@@ -110,7 +110,7 @@ func ContexualMenu(stacks []models.Stack) templ.Component {
 			var templ_7745c5c3_Var5 string
 			templ_7745c5c3_Var5, templ_7745c5c3_Err = templ.JoinStringErrs(item.WorkspaceName)
 			if templ_7745c5c3_Err != nil {
-				return templ.Error{Err: templ_7745c5c3_Err, FileName: `components/User.templ`, Line: 129, Col: 69}
+				return templ.Error{Err: templ_7745c5c3_Err, FileName: `components/User.templ`, Line: 126, Col: 69}
 			}
 			_, templ_7745c5c3_Err = templ_7745c5c3_Buffer.WriteString(templ.EscapeString(templ_7745c5c3_Var5))
 			if templ_7745c5c3_Err != nil {
@@ -123,7 +123,7 @@ func ContexualMenu(stacks []models.Stack) templ.Component {
 			var templ_7745c5c3_Var6 string
 			templ_7745c5c3_Var6, templ_7745c5c3_Err = templ.JoinStringErrs(item.Stack)
 			if templ_7745c5c3_Err != nil {
-				return templ.Error{Err: templ_7745c5c3_Err, FileName: `components/User.templ`, Line: 130, Col: 54}
+				return templ.Error{Err: templ_7745c5c3_Err, FileName: `components/User.templ`, Line: 127, Col: 54}
 			}
 			_, templ_7745c5c3_Err = templ_7745c5c3_Buffer.WriteString(templ.EscapeString(templ_7745c5c3_Var6))
 			if templ_7745c5c3_Err != nil {
@@ -136,7 +136,7 @@ func ContexualMenu(stacks []models.Stack) templ.Component {
 			var templ_7745c5c3_Var7 string
 			templ_7745c5c3_Var7, templ_7745c5c3_Err = templ.JoinStringErrs(item.Lastupdated.Format("2006-01-02 15:04:05"))
 			if templ_7745c5c3_Err != nil {
-				return templ.Error{Err: templ_7745c5c3_Err, FileName: `components/User.templ`, Line: 131, Col: 96}
+				return templ.Error{Err: templ_7745c5c3_Err, FileName: `components/User.templ`, Line: 128, Col: 96}
 			}
 			_, templ_7745c5c3_Err = templ_7745c5c3_Buffer.WriteString(templ.EscapeString(templ_7745c5c3_Var7))
 			if templ_7745c5c3_Err != nil {

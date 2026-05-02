@@ -23,7 +23,6 @@ func notify() {
 	fmt.Println("golet_id", golet_id)
 	remoteServerURL := "http://100.66.155.68:3001/notify" + "?golet_id=" + golet_id + "&workspace_name=" + workspace_name
 	resp, err := http.Get(remoteServerURL)
-	fmt.Println("err", err)
 	if err != nil {
 		fmt.Println("Request failed:", err)
 		return
@@ -42,7 +41,7 @@ func main() {
 	mux.HandleFunc("/file_create", routes.FileCreateHandler).Methods("POST")
 	mux.HandleFunc("/file_delete", routes.FileDeleteHandler).Methods("POST")
 
-	port := "3006"
+	port := "3014"
 	fmt.Println("🚀 Listening on port:", port)
 
 	//  Run notify in background
